@@ -13,7 +13,7 @@
 
 #include "mc33984_drv.h"
 
-struct _SPI_DRV SPI[];
+
 
 void MC33983_DRV_init(void)
 {

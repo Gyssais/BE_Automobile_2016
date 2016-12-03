@@ -16,7 +16,6 @@
 
 /*************** Public function            **********/
 
-
 // configure the adc, configure the pin AD_PIN for analog input, and perform continuously a software triggered conversion.
 void adc_example()
 {
