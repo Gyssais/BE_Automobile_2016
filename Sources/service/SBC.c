@@ -96,37 +96,31 @@ void Init_SBC_DBG(void)
 		vuint32_t i;
 		uint16_t TData;
 		uint16_t RData;
+		uint16_t ID_prod;
 		initDSPI_1();
 		initCAN1();
 		
 		// Demande ID produit
 		TData = 0x2580;
 		SPI[1].write(&TData);
-		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
-		
 		SPI[1].read(&RData);
+		ID_prod = RData;
 				
 		TData = 0xDF80; // Read Vreg register H
 		SPI[1].write(&TData);
-		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
+		SPI[1].read(&RData);
 		
 		TData = 0x5A00; // Enter in Normal Mode
 		SPI[1].write(&TData);
-		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
-		
+				
 		TData = 0x5E90; // Voltage regulator config: 5V_CAN and Vaux
 		SPI[1].write(&TData);
-		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
-		
+				
 		TData = 0x60C0; // Config CAN: Set CAN in TxRx Mode, fast slew rate
 		SPI[1].write(&TData);
-		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
-		
+				
 		TData = 0x1800;
 		SPI[1].write(&TData);
-		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
-	
-	
 }
 
 
