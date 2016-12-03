@@ -3,6 +3,9 @@
  *
  *  Created on: Jan 18, 2015
  *      Author: Antoine
+ *      
+ *  Modified by: Gido van Wijk
+ *  Date: December 2016
  */
 
 #include "MPC5604B.h"
@@ -81,33 +84,49 @@ void ReadDataDSPI_1(void) {
   	DSPI_1.POPR.R; 					/* Read data received by slave SPI 						*/
   	DSPI_1.SR.R = 0x80020000;       /* Clear TCF, RDRF flags by writing 1 to them 			*/
 }
-void Init_SBC_DBG(void) 			/* Send SPI commands for activating CAN Transciever		*/
-{
-	
-	vuint32_t i;
-	
-	initDSPI_1();
-	initCAN1();
-	
-  	DSPI_1.PUSHR.R = 0x0001DF80; 
-    ReadDataDSPI_1();            	/* A dummy read after each command						*/
-  	for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
-  	
-  	DSPI_1.PUSHR.R = 0x00015A00; 
-    ReadDataDSPI_1();				            
-  	for (i=0; i<200; i++) {}
 
-  	DSPI_1.PUSHR.R = 0x00015E90; 
-    ReadDataDSPI_1();            
-  	for (i=0; i<200; i++) {}
-  	
-  	DSPI_1.PUSHR.R = 0x000160C0; 
-    ReadDataDSPI_1();            
-  	for (i=0; i<200; i++) {}	
-  	
-  	DSPI_1.PUSHR.R = 0x00021800; 
-    ReadDataDSPI_1();            
-  	for (i=0; i<200; i++) {}	
+/* Init_SBC_DBG
+ * 
+ * Func: This function initialises the CAN in device debug mode
+ * !! POWER UP WITH DBG PIN AT 8-10V !!
+ * Disconnect J4 and connect J5
+ */
+void Init_SBC_DBG(void) 			
+{
+		vuint32_t i;
+		uint16_t TData;
+		uint16_t RData;
+		initDSPI_1();
+		initCAN1();
+		
+		// Demande ID produit
+		TData = 0x2580;
+		SPI[1].write(&TData);
+		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
+		
+		SPI[1].read(&RData);
+				
+		TData = 0xDF80; // Read Vreg register H
+		SPI[1].write(&TData);
+		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
+		
+		TData = 0x5A00; // Enter in Normal Mode
+		SPI[1].write(&TData);
+		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
+		
+		TData = 0x5E90; // Voltage regulator config: 5V_CAN and Vaux
+		SPI[1].write(&TData);
+		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
+		
+		TData = 0x60C0; // Config CAN: Set CAN in TxRx Mode, fast slew rate
+		SPI[1].write(&TData);
+		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
+		
+		TData = 0x1800;
+		SPI[1].write(&TData);
+		for (i=0; i<200; i++) {}		/* Wait a while for operations to be completed			*/
+	
+	
 }
 
 
