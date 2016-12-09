@@ -30,19 +30,19 @@ uint16_t Read_voltage_value(void){
 	return 0;
 }
 
-void initDSPI_1(void)
+/*void initDSPI_1(void)
 {
-	DSPI_1.MCR.R = 0x80010001;		/* Set Master Mode, CS select at LOW, HALT=1			*/   
-	DSPI_1.CTAR[0].R = 0x78024424;	/* Set timing: Tcsc=Tasc=4탎, Tdt= 1탎, BR=100kbits/s 	*/
+	DSPI_1.MCR.R = 0x80010001;		// Set Master Mode, CS select at LOW, HALT=1			   
+	DSPI_1.CTAR[0].R = 0x78024424;	// Set timing: Tcsc=Tasc=4탎, Tdt= 1탎, BR=100kbits/s 	
   
- 	DSPI_1.MCR.B.HALT = 0x0;	    /* Exit HALT mode: go from STOPPED to RUNNING state		*/
+ 	DSPI_1.MCR.B.HALT = 0x0;	    // Exit HALT mode: go from STOPPED to RUNNING state		
  	
- 	SIU.PCR[113].R = 0x0A04;        /* MPC56xxB: Config pad as DSPI_0 SOUT output - PH1		*/
- 	SIU.PCR[112].R = 0x0103;        /* MPC56xxB: Config pad as DSPI_0 SIN input - PH0 		*/
- 		SIU.PSMI[8].R = 2;          /* MPC56xxB: Select PCR 112 for DSPI_1 SIN input 		*/
- 	SIU.PCR[114].R = 0x0A04;        /* MPC56xxB: Config pad as DSPI_0 SCK output - PH2 		*/
- 	SIU.PCR[115].R = 0x0A04;        /* MPC56xxB: Config pad as DSPI_0 PCS0 output - PH3 	*/
-}
+ 	SIU.PCR[113].R = 0x0A04;        // MPC56xxB: Config pad as DSPI_0 SOUT output - PH1		
+ 	SIU.PCR[112].R = 0x0103;        // MPC56xxB: Config pad as DSPI_0 SIN input - PH0 		
+ 	SIU.PSMI[8].R = 2;      	    // MPC56xxB: Select PCR 112 for DSPI_1 SIN input 		
+ 	SIU.PCR[114].R = 0x0A04;        // MPC56xxB: Config pad as DSPI_0 SCK output - PH2 		
+ 	SIU.PCR[115].R = 0x0A04;        // MPC56xxB: Config pad as DSPI_0 PCS0 output - PH3 	
+}*/
 
 //FlexCAN1 initialisation
 	void initCAN1 (void) {
@@ -78,12 +78,13 @@ void initDSPI_1(void)
 	/* Leave Freeze mode			*/
 	CAN_1.MCR.R = 0x00000007;       /* Negate FlexCAN1 halt state for the 8 first message buffers */
 }
-	
+
+/*
 void ReadDataDSPI_1(void) {
-	while (DSPI_1.SR.B.RFDF != 1){} /* Wait for Receive FIFO Drain Flag = 1 				*/
-  	DSPI_1.POPR.R; 					/* Read data received by slave SPI 						*/
-  	DSPI_1.SR.R = 0x80020000;       /* Clear TCF, RDRF flags by writing 1 to them 			*/
-}
+	while (DSPI_1.SR.B.RFDF != 1){} // Wait for Receive FIFO Drain Flag = 1 				
+  	DSPI_1.POPR.R; 					// Read data received by slave SPI 						
+  	DSPI_1.SR.R = 0x80020000;       // Clear TCF, RDRF flags by writing 1 to them 			
+}*/
 
 /* Init_SBC_DBG
  * 
@@ -100,7 +101,7 @@ void Init_SBC_DBG(void)
 		initDSPI_1();
 		initCAN1();
 		
-		// Demande ID produit
+		// Demande ID produit (Commande 'test')
 		TData = 0x2580;
 		SPI[1].write(&TData);
 		SPI[1].read(&RData);
@@ -122,11 +123,6 @@ void Init_SBC_DBG(void)
 		TData = 0x1800;
 		SPI[1].write(&TData);
 }
-
-
-
-
-
 
 void TransmitMsg(uint8_t * TxData, uint8_t length, uint16_t MsgID) {
 	uint8_t	i;
