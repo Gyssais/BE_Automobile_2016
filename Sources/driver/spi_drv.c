@@ -400,7 +400,7 @@ void _spi_drv_clr_flags(uint8_t i)
 	SPI[i].DSPI->RSER.B.TCFRE = 0;
 	SPI[i].DSPI->MCR.B.CLR_RXF = 1;
 	SPI[i].DSPI->MCR.B.CLR_TXF = 1;
-	SPI[i].DSPI->SR.R |= 0x9A0A0000;
+	SPI[i].DSPI->SR.R |= 0x8A0A0000;   // 
 }
 
 
