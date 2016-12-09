@@ -8,6 +8,8 @@
 #ifndef ADC_H_
 #define ADC_H_
 
+#include "IntcInterrupts.h"
+
 // ADC error code
 #define WRONG_PIN			-1
 #define CHANNEL_DISABLED 	-2
@@ -18,15 +20,16 @@
 #define ADC_MIN				0
 
 
-int setupAdc();
-int setupPin(int pin);
+int setupAdc(); /* init the adc, disable all channel */
+int setupPin(int pin); /* enable the analog channel corresponding to the give channel */
 int pinToAdcChannel(int pin, char * channel, char *type);
 void enableADC();
 void startConversion();
-int analogRead(int pin);
+int analogRead(int pin); /* start a conversion and return the result. the pin must be configured before with setupPin()*/
 
 
-int setupAnalogWatchdog(int pin, int high_threshold, int low_threshold, int watchdog);
+int setupAnalogWatchdog(int pin, unsigned int high_threshold, unsigned int low_threshold, int watchdog);
+int setupAnalogWatchdogISR(INTCInterruptFn isr);
 void startAnalogWatchdog(int watchdog);
 void stopAnalogWatchdog(int watchdog);
 

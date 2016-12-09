@@ -31,6 +31,33 @@ void adc_example()
 	}
 }
 
+
+void adc_wtch_isr()
+{
+	unsigned long flag = ADC.WTISR.R;
+}
+
+void adc_watchdog_example()
+{
+	int result;
+		
+	result = setupAdc();
+	result =  setupPin(AD_PIN);
+	
+	result = setupAnalogWatchdog(AD_PIN, 700, 100, 0); // high_treshold =700, low = 100, first watchdog (0)
+	result = setupAnalogWatchdogISR(adc_wtch_isr);
+	startAnalogWatchdog(0);
+	
+	enableADC();
+	
+	
+	while(1)
+		{
+			result = analogRead(AD_PIN);
+		}
+}
+
+
  int main(void) {
 
 	 
@@ -62,8 +89,8 @@ void adc_example()
 		
 	 }   */
 
-	 adc_example(); // To test
-
+	// adc_example(); // To test
+	 adc_watchdog_example();
 }
 	 
 				
