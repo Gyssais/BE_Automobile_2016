@@ -12,6 +12,7 @@
 #include "define.h"
 #include "spi_drv.h"
 #include "Buttons_management.h"
+#include "pin.h"
 
 /*************** Private function prototype **********/
 
@@ -23,31 +24,25 @@
  int main(void) {
 	 disableWatchdog();
 	 initModesAndClock();
-	
-	 SIU.PCR[68].R = 0x0200;
-	 SIU.PCR[69].R = 0x0200;
-	 SIU.PCR[70].R = 0x0200;
-	 SIU.PCR[64].R = 0x0100;
-	 SIU.PCR[65].R = 0x0100; 
-	 SIU.PCR[66].R = 0x0100;
-	
+	 
+	 init_LED();
+	 init_buttons();
 	 
 	 while(1) {
-		 if( lock_door() == 1) {
-			SIU.GPDO[68].R = 1; 
+		 if(lock_door() == 1) {
+			LED_on(1); 
 		 }
-		 else SIU.GPDO[68].R = 0;
+		 else LED_off(1);
 		 
 		 if(det_rain() == 1){
-			 SIU.GPDO[69].R= 1;}
-		 else SIU.GPDO[69].R = 0;
-		 
-		 if(bat_min() == 1)
-			 
-		 {   SIU.GPDO[70].R = 1;
+			 LED_on(2);
 		 }
-			else SIU.GPDO[70].R = 0;
-		
+		 else LED_off(2);
+		 
+		 if(bat_min() == 1) {   
+			 LED_on(3);
+		 }
+		 else LED_off(3);
 	 }
 	
 	
