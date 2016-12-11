@@ -140,6 +140,8 @@ int analogRead(int pin)
 }
 
 
+
+
 /* All the watchdog share the same ISR, be careful to check which watchdog has raised the ISR */
 int setupAnalogWatchdogISR(INTCInterruptFn isr)
 {	
@@ -180,4 +182,16 @@ void stopAnalogWatchdog(int watchdog)
 {
 	ADC.TRC[watchdog].B.THREN = 0;
 }
+
+
+
+/* setup the adc channel to be used by the PIT3 channel through CTU. */
+void setup_CTU_PIT(unsigned int adc_channel)
+{
+	// TODO check CTU channel mapping
+	CTU.EVTCFGR[23].B.CHANNELVALUE = adc_channel;
+	CTU.EVTCFGR[23].B.CLR_FLAG = 1;
+	CTU.EVTCFGR[23].B.TM = 1;
+}
+
 

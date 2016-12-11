@@ -34,4 +34,7 @@ void startAnalogWatchdog(int watchdog);
 void stopAnalogWatchdog(int watchdog);
 
 
+/* setup the adc channel to be used by the PIT3 channel through CTU. */
+void setup_CTU_PIT(unsigned int adc_channel);
+
 #endif /* ADC_H_ */
