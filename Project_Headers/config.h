@@ -59,4 +59,10 @@
 
 
 
+
+#define  BIT_VER_DOOR		0x01
+#define  BIT_DET_BAT	    0x02
+#define  BIT_DET_RAIN		0x04
+
+
 #endif /* CONFIG_H_ */
