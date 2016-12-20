@@ -9,11 +9,11 @@
 #include "MPC5604B.h"
 
 
-void setupChannelPIT(unsigned int channel, unsigned int period)
+void setupChannelPIT(unsigned int channel, unsigned int period_ms)
 {
 	if(PIT.PITMCR.B.MDIS == 1) PIT.PITMCR.B.MDIS = 0; // enable PIT
 	
-	PIT.CH[channel].LDVAL.R = (period * F_PIT); // set the reload value
+	PIT.CH[channel].LDVAL.R = (period_ms * F_PIT)/1000; // set the reload value //TODO unité/conversion à préciser
 	PIT.CH[channel].TCTRL.B.TIE = 1; // enable interrupt from this channel
 			
 }

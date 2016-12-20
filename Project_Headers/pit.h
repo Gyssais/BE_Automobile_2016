@@ -9,9 +9,9 @@
 #define PIT_H_
 
 
-#define F_PIT 10000000  // Hz
+#define F_PIT 16000000  // Hz  //TODO A verifier (system clock = internal RC oscillator ?)
 
-void setupChannelPIT(unsigned int channel, unsigned int period); // setup the corresponding channel to generate an interrupt every period
+void setupChannelPIT(unsigned int channel, unsigned int period_ms); // setup the corresponding channel to generate an interrupt every period
 void startChannelPIT(unsigned int channel);
 void stopChannelPIT(unsigned int channel);
 

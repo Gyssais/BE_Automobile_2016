@@ -183,13 +183,18 @@ void stopAnalogWatchdog(int watchdog)
 	ADC.TRC[watchdog].B.THREN = 0;
 }
 
-
+int adcChannelToCTUChannel(unsigned int adc_channel)
+{
+	if(adc_channel <= 15) return adc_channel;
+	else if(adc_channel >31 && adc_channel <=47) return (adc_channel-16);
+	
+	return 0;
+}
 
 /* setup the adc channel to be used by the PIT3 channel through CTU. */
 void setup_CTU_PIT(unsigned int adc_channel)
 {
-	// TODO check CTU channel mapping
-	CTU.EVTCFGR[23].B.CHANNELVALUE = adc_channel;
+	CTU.EVTCFGR[23].B.CHANNELVALUE = adcChannelToCTUChannel(adc_channel);
 	CTU.EVTCFGR[23].B.CLR_FLAG = 1;
 	CTU.EVTCFGR[23].B.TM = 1;
 }

@@ -11,6 +11,7 @@
 #include "adc.h"
 #include "define.h"
 #include "spi_drv.h"
+#include "pit.h"
 
 /*************** Private function prototype **********/
 
@@ -35,6 +36,23 @@ void adc_example()
 void adc_wtch_isr()
 {
 	unsigned long flag = ADC.WTISR.R;
+}
+
+
+// configure PIT, CTU and ADC to trigger a conversion on AD_PIN every 100ms
+void ctu_trigger_example()
+{
+	int result;
+		
+	result = setupAdc();
+	result = setupPin(AD_PIN);
+	
+	setup_CTU_PIT(0); 	// link the PIT to the ADC channel 0 (PB4) through the CTU
+	setupChannelPIT(3, 100);  // use PIT_3, the only to be linked to the CTU. period =100ms.
+	startChannelPIT(3);
+	
+	enableADC();
+	
 }
 
 void adc_watchdog_example()
