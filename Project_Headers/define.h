@@ -19,5 +19,7 @@
 #define AD_PIN PB_4
 
 void adc_example();
+void ctu_trigger_example();
+void adc_watchdog_example();
 
 #endif /* DEFINE_H_ */
