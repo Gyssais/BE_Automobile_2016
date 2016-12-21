@@ -22,8 +22,8 @@ void adc_example()
 {
 	int result;
 	
-	result = setupAdc();
-	result =  setupPin(AD_PIN);
+	result = setupADC();
+	result =  setupPin_ADC(AD_PIN);
 	enableADC();
 	
 	while(1)
@@ -44,11 +44,11 @@ void ctu_trigger_example()
 {
 	int result;
 		
-	result = setupAdc();
-	result = setupPin(AD_PIN);
+	result = setupADC();
+	result = setupPin_ADC(AD_PIN);
 	
-	setup_CTU_PIT(0); 	// link the PIT to the ADC channel 0 (PB4) through the CTU
-	setupChannelPIT(3, 100);  // use PIT_3, the only to be linked to the CTU. period =100ms.
+	setupChannel_CTU_trigger(0); 	// link the PIT to the ADC channel 0 (PB4) through the CTU
+	setupChannelPIT(3, 100);  // use PIT_3, the only one to be linked to the CTU. period =100ms.
 	startChannelPIT(3);
 	
 	enableADC();
@@ -59,11 +59,11 @@ void adc_watchdog_example()
 {
 	int result;
 		
-	result = setupAdc();
-	result =  setupPin(AD_PIN);
+	result = setupADC();
+	result =  setupPin_ADC(AD_PIN);
 	
 	result = setupAnalogWatchdog(AD_PIN, 700, 100, 0); // high_treshold =700, low = 100, first watchdog (0)
-	result = setupAnalogWatchdogISR(adc_wtch_isr);
+	attachInterrupt_ADC_WTCH(adc_wtch_isr, 7);
 	startAnalogWatchdog(0);
 	
 	enableADC();
