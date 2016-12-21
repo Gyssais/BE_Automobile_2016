@@ -12,19 +12,19 @@
 #include "define.h"
 #include "spi_drv.h"
 #include "pit.h"
+#include "Buttons_management.h"
+#include "pin.h"
 
 /*************** Private function prototype **********/
 
 /*************** Public function            **********/
 
 
-
  int main(void) {
-
 	 
-	 disableWatchdog();
-	 initModesAndClock();
-	 
+	disableWatchdog();
+	initModesAndClock();
+	
 }
 	 
 				
