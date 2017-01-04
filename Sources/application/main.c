@@ -11,7 +11,8 @@
 #include "adc.h"
 #include "define.h"
 #include "spi_drv.h"
-//#include "Buttons_management.h"
+#include "pit.h"
+#include "Buttons_management.h"
 
 /*************** Private function prototype **********/
 
