@@ -25,6 +25,8 @@
 	disableWatchdog();
 	initModesAndClock();
 	
+	ctu_trigger_example();
+	
 }
 	 
 				

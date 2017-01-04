@@ -41,6 +41,10 @@ void ctu_trigger_example()
 {
 	int result;
 	init_LED();
+	LED_off(1);
+	LED_off(2);
+	LED_off(3);
+	LED_off(4);
 	
 	result = setupADC();
 	result = setupPin_ADC(AD_PIN);
@@ -52,7 +56,7 @@ void ctu_trigger_example()
 	
 	setupChannel_CTU_trigger(0); 	// link the PIT to the ADC channel 0 (PB4) through the CTU
 	
-	setupChannelPIT(3, 100);  // use PIT_3, the only one to be linked to the CTU. period =100ms.
+	setupChannelPIT(3, 5000);  // use PIT_3, the only one to be linked to the CTU. period =100ms.
 	startChannelPIT(3);	
 }
 
