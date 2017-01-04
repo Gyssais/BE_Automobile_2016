@@ -31,7 +31,12 @@ void adc_wtch_isr()
 
 void adc_eoc_isr()
 {
-	//toggle LED_1
+	/* clear interrupt flags */
+	
+	ADC.ISR.B.EOCTU = 1;  // in this example, the interrupt source can only be the EOC from a CTU triggered conversion.
+	ADC.CEOCFR[0].B.EOC_CH0 =1; // here, we use only the channel 0.
+	
+	/* toggle LED_1 */
 	if(SIU.GPDO[PE_4].R == 1) SIU.GPDO[PE_4].R = 0;
 	else SIU.GPDO[PE_4].R = 1;
 	
@@ -52,7 +57,8 @@ void ctu_trigger_example()
 	
 	setupChannel_CTU_trigger(0); 	// link the PIT to the ADC channel 0 (PB4) through the CTU and enable CTU
 	
-	setupChannelPIT(3, 10000);  // use PIT_3, the only one to be linked to the CTU. period =100ms.
+	setupChannelPIT(3, 500);  // use PIT_3, the only one to be linked to the CTU. period =100ms.
+	
 	startChannelPIT(3);	
 }
 

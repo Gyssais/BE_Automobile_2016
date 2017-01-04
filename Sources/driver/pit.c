@@ -15,7 +15,7 @@ void setupChannelPIT(unsigned int channel, unsigned int period_ms)
 	PIT.PITMCR.B.FRZ =0; // no freeze the timer when in debug mode
 
 	
-	PIT.CH[channel].LDVAL.R = (period_ms * F_PIT)/1000; // set the reload value //TODO unité/conversion à préciser
+	PIT.CH[channel].LDVAL.R = period_ms *( F_PIT/1000); // set the reload value 
 	PIT.CH[channel].TCTRL.B.TIE = 0; // disable interrupt from this channel. not needed to trigger the CTU.
 			
 }
