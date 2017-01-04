@@ -1,6 +1,20 @@
 #include "MPC5604B.h"
 #include "Buttons_management.h"
 #include "pin.h"
+#include "adc.h"
+
+void init_speed_button()
+{
+    setupADC();
+    setupPin_ADC(PB_10);
+    enableADC();
+}
+
+
+uint8_t read_speed()  
+{ 
+    return analogRead(PB_10)/32;
+}
 
 
 void init_LED()

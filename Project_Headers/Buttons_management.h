@@ -1,6 +1,15 @@
 #ifndef Buttons_H_
 #define Buttons_H_
 
+/* 
+ * Initialisation de l'ADC pour lecture vitesse (potentiomètre de la carte)
+ */
+void init_speed_button();
+
+/*
+ * Lecture vitesse via potentiomètre
+ */
+uint8_t read_speed();
 
 /*
  * Initialisation LEDs de la carte
