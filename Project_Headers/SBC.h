@@ -17,7 +17,6 @@ void Data_treatment_BCM(uint8_t length , uint8_t * data);
 void Data_treatment_LCM( uint8_t length , uint8_t * data);
 void Init_SBC_DBG(void);
 
-void initDSPI_1(void);
 void initCAN1 (void);
 
 
