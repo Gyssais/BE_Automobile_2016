@@ -125,6 +125,8 @@ void initModesAndClock(void) {
     ME.PCTL[32].B.RUN_CFG = 5; //ADC_0
     // ADC_0 actifs en RUN0 et en RUN1 et RUN2
     
+    ME.PCTL[57].B.RUN_CFG =5; // CTU
+    
 #ifdef LCM
     ME.PCTL[92].B.RUN_CFG = 5 ;
     ME.PCTL[92].B.LP_CFG = 1;

@@ -14,6 +14,7 @@
 #include "pit.h"
 #include "Buttons_management.h"
 #include "pin.h"
+#include "current_monitoring.h"
 
 /*************** Private function prototype **********/
 
@@ -24,6 +25,15 @@
 	 
 	disableWatchdog();
 	initModesAndClock();
+
+	//adc_eoc_example();
+	
+	 ctu_trigger_example();
+	
+	while(1)
+	{
+		
+	}
 	
 }
 	 

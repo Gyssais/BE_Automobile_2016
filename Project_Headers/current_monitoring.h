@@ -20,5 +20,7 @@
 void adc_example();
 void ctu_trigger_example();
 void adc_watchdog_example();
+void adc_eoc_example();
+void adc_eoc_isr();
 
 #endif /* CURRENT_MONITORING_H_ */

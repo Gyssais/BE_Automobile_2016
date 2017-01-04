@@ -223,9 +223,14 @@ int ADCChannelToCTUChannel(unsigned int adc_channel)
 /* setup the adc channel to be used by the PIT3 channel through CTU. */
 void setupChannel_CTU_trigger(unsigned int adc_channel)
 {
-	CTU.EVTCFGR[23].B.CHANNELVALUE = ADCChannelToCTUChannel(adc_channel);
-	CTU.EVTCFGR[23].B.CLR_FLAG = 1;
-	CTU.EVTCFGR[23].B.TM = 1;
+	int channel;
+	channel = ADCChannelToCTUChannel(adc_channel);
+	
+	ADC.MCR.B.CTUEN =1; // enable CTU to trigger conversion
+	
+	CTU.EVTCFGR[23].B.CHANNELVALUE = channel;
+	//CTU.EVTCFGR[23].B.CLR_FLAG = 0;	//TODO find out what's for
+	CTU.EVTCFGR[23].B.TM = 1;	// enable CTU trigger
 }
 
 

@@ -50,10 +50,28 @@ void ctu_trigger_example()
 	
 	enableADC();
 	
-	setupChannel_CTU_trigger(0); 	// link the PIT to the ADC channel 0 (PB4) through the CTU
+	setupChannel_CTU_trigger(0); 	// link the PIT to the ADC channel 0 (PB4) through the CTU and enable CTU
 	
-	setupChannelPIT(3, 100);  // use PIT_3, the only one to be linked to the CTU. period =100ms.
+	setupChannelPIT(3, 10000);  // use PIT_3, the only one to be linked to the CTU. period =100ms.
 	startChannelPIT(3);	
+}
+
+
+void adc_eoc_example()
+{
+	int result;
+	init_LED();
+	
+	result = setupADC();
+	result = setupPin_ADC(AD_PIN);
+	
+	setupPin_ADC_Interrupt(PB_4, EOC_MASK);	// enable EOC_CTU interrupt from pin PB_4 
+	attachInterrupt_ADC_EOC(adc_eoc_isr, 8);	// set the ISR to be called for adc EOC interrupt
+	enableADC();
+	
+	startConversion();
+	
+	
 }
 
 void adc_watchdog_example()
