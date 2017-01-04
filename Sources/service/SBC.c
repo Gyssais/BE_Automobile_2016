@@ -87,7 +87,6 @@ void Init_SBC_DBG(void)
 		uint16_t ID_prod;
 				
 		// Demande ID produit
-		initDSPI_1();
 		initCAN1();
 		
 		TData = 0x2580;
