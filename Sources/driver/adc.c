@@ -39,7 +39,7 @@ int setupADC()
 
 
 //external channels not supported
-int pinToADCChannel(unsigned int pin, char * channel, char *type)
+int pinToADCChannel_and_Type(unsigned int pin, char * channel, char *type)
 {
 	 // precision channels
 	  if(pin >= PB_4 && pin <=PB_7) 
@@ -76,6 +76,14 @@ int pinToADCChannel(unsigned int pin, char * channel, char *type)
 		  }
 	
 	  else return WRONG_PIN;
+}
+
+
+int pinToADCChannel(unsigned int pin)
+{
+	char channel, type;
+	int result = pinToADCChannel_and_Type(pin, &channel, &type);
+	return result;
 }
 
 void enableADC()
@@ -145,7 +153,7 @@ int analogRead(unsigned int pin)
 	char channel;
 	char channel_type;
 	 
-	if(pinToADCChannel(pin,&channel, &channel_type) !=0 ) return WRONG_PIN; // check if the pin corresponds to a valid channel
+	if(pinToADCChannel_and_Type(pin,&channel, &channel_type) !=0 ) return WRONG_PIN; // check if the pin corresponds to a valid channel
 	if(!(ADC.NCMR[channel_type].R & (1<<channel)))  return CHANNEL_DISABLED; // check if the channel is enabled in the NCMR register.
 	
 	
@@ -186,7 +194,7 @@ int setupAnalogWatchdog(int pin, unsigned int high_threshold, unsigned int low_t
 	char channel_type;
 	
 	/* check all the arguments */
-	if(pinToADCChannel(pin,&channel, &channel_type) !=0 ) return WRONG_PIN; // check if the pin corresponds to a valid channel
+	if(pinToADCChannel_and_Type(pin,&channel, &channel_type) !=0 ) return WRONG_PIN; // check if the pin corresponds to a valid channel
 	if(watchdog <0 || watchdog > 3) return WRONG_WATCHDOG;	
 	
 	if(high_threshold < ADC_MAX) ADC.WTIMR.R |= (0x10 << watchdog); /* enable ISR trigger on high threshold if the high threshold is < max */
