@@ -10,6 +10,10 @@
 int cm_initialize()
 {
 	int result;
+	cm_buffer_counter = 0;
+	
+	cm_adc_channel = pinToADCChannel(CM_PIN);
+	if(cm_adc_channel <0) return cm_adc_channel;
 	
 	/* pin initialization */
 	result = setupADC();
@@ -39,3 +43,60 @@ int cm_initialize()
 	enableADC();	
 	return 0;	
 }
+
+
+void cm_adc_eoctu_isr()
+{
+	/* clear interrupt flags */
+		
+	ADC.ISR.B.EOCTU = 1;  // Clear ADC global flag. In this application, the interrupt source can only be the EOC from a CTU triggered conversion.
+	ADC.CEOCFR[0].R  = (1<<cm_adc_channel); // Clear the channel flag
+	
+	/* get the new adc value and append it in the circular buffer */
+	if(ADC.CDR[cm_adc_channel].B.VALID ==1) // if data is valid
+		{
+			current_buffer[cm_buffer_counter] = ADC.CDR[cm_adc_channel].B.CDATA;
+			
+			cm_buffer_counter++;
+			if(cm_buffer_counter >= BUFFER_SIZE) cm_buffer_counter =0; // loop circular buffer
+		}
+
+}
+
+
+/* this isr will be called each time the motor current exceed a configured value */
+void cm_adc_watchdog_isr()
+{
+	int i;
+	/* turn off the motor */
+	//turn_off_motor();
+	
+	/* stop PIT timer while handling data */
+	stopChannelPIT(CM_PIT);
+	
+	/* analyse the current_buffer data to determine if it's a pinch or a normal closure */
+	
+	/* moving average to smooth the data */
+	for(i=0; i<BUFFER_SIZE; i++)
+	{
+		if(cm_buffer_counter >=BUFFER_SIZE) cm_buffer_counter =0;
+		
+		current_buffer[cm_buffer_counter] = mving_avr(current_buffer[cm_buffer_counter]);
+	}
+	
+	
+	startChannelPIT(CM_PIT);
+}
+
+
+uint16_t mving_avr(uint16_t new_data)
+{
+	static valMoy =0;
+	
+	valMoy = valMoy + new_data-(moving_avr_buffer[(moving_avr_counter-1)&(MOVING_AVR_DEPTH-1)]);
+	moving_avr_counter = (moving_avr_counter+1)&(MOVING_AVR_DEPTH-1);
+	moving_avr_buffer[moving_avr_counter]=new_data;
+	
+	return valMoy << MOVING_AVR_DEPTH;
+}
+

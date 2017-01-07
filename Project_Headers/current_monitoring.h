@@ -31,13 +31,22 @@
 #define CM_WTCH					0
 #define CM_PIT					3
 
+/* constant for data analysis */
+#define MOVING_AVR_DEPTH		8 // must be a power of two.
 
-extern uint16_t current_buffer[BUFFER_SIZE];
+extern uint16_t moving_avr_buffer[MOVING_AVR_DEPTH] = {0};
+extern uint16_t moving_avr_counter;
+
+extern uint16_t current_buffer[BUFFER_SIZE] = {0};  // circular buffer
+extern int cm_adc_channel;
+extern uint32_t cm_buffer_counter;
 
 /* functions prototype */
 
 void cm_adc_watchdog_isr();
 void cm_adc_eoctu_isr();
+
+uint16_t mving_avr(uint16_t data);
 
 int cm_initialize(); // initialize and start the monitoring of the motor's current.
 
