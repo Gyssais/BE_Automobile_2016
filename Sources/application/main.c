@@ -15,6 +15,8 @@
 #include "Buttons_management.h"
 #include "pin.h"
 #include "current_monitoring.h"
+#include "driver_example.h"
+
 
 /*************** Private function prototype **********/
 

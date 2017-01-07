@@ -15,12 +15,11 @@
 #include "define.h"
 #include "MPC5604B.h"
 #include "IntcInterrupts.h"
+#include "Buttons_management.h"
 
-/* driver example */
-void adc_example();
-void ctu_trigger_example();
-void adc_watchdog_example();
-void adc_eoc_example();
-void adc_eoc_isr();
+
+
+#define CURRENT_SAMPLING_RATE 10 //ms
+
 
 #endif /* CURRENT_MONITORING_H_ */
