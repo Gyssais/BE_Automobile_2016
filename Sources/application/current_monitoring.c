@@ -7,6 +7,9 @@
 
 #include "current_monitoring.h"
 
+uint16_t current_buffer[BUFFER_SIZE] = {0}; // circular buffer
+uint16_t moving_avr_buffer[MOVING_AVR_DEPTH] = {0};
+
 int cm_initialize()
 {
 	int result;
@@ -68,13 +71,20 @@ void cm_adc_eoctu_isr()
 void cm_adc_watchdog_isr()
 {
 	int i;
+	
+	/* clear interrupt flags */			
+	ADC.WTISR.R = (1 << (CM_WTCH+4));
+	
+	
 	/* turn off the motor */
 	//turn_off_motor();
 	
 	/* stop PIT timer while handling data */
 	stopChannelPIT(CM_PIT);
 	
-	/* analyse the current_buffer data to determine if it's a pinch or a normal closure */
+	
+	
+	//// analyse the current_buffer data to determine if it's a pinch or a normal closure ////
 	
 	/* moving average to smooth the data */
 	for(i=0; i<BUFFER_SIZE; i++)
@@ -91,12 +101,12 @@ void cm_adc_watchdog_isr()
 
 uint16_t mving_avr(uint16_t new_data)
 {
-	static valMoy =0;
+	static int32_t valMoy =0;
 	
-	valMoy = valMoy + new_data-(moving_avr_buffer[(moving_avr_counter-1)&(MOVING_AVR_DEPTH-1)]);
+	valMoy = valMoy + new_data-(moving_avr_buffer[(moving_avr_counter+1)&(MOVING_AVR_DEPTH-1)]);
 	moving_avr_counter = (moving_avr_counter+1)&(MOVING_AVR_DEPTH-1);
 	moving_avr_buffer[moving_avr_counter]=new_data;
 	
-	return valMoy << MOVING_AVR_DEPTH;
+	return (valMoy << AVR_SHIFT);
 }
 

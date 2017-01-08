@@ -30,7 +30,7 @@
 
 	//adc_eoc_example();
 	
-	 ctu_trigger_example();
+	//ctu_trigger_example();
 	
 	while(1)
 	{
