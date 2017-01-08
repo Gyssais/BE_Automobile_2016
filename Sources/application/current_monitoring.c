@@ -70,7 +70,8 @@ void cm_adc_eoctu_isr()
 /* this isr will be called each time the motor current exceed a configured value */
 void cm_adc_watchdog_isr()
 {
-	int i;
+	int i = 0;
+	int closed = 0;
 	
 	/* clear interrupt flags */			
 	ADC.WTISR.R = (1 << (CM_WTCH+4));
@@ -87,11 +88,41 @@ void cm_adc_watchdog_isr()
 	//// analyse the current_buffer data to determine if it's a pinch or a normal closure ////
 	
 	/* moving average to smooth the data */
-	for(i=0; i<BUFFER_SIZE; i++)
+
+	while(i<BUFFER_SIZE)
 	{
 		if(cm_buffer_counter >=BUFFER_SIZE) cm_buffer_counter =0;
 		
-		current_buffer[cm_buffer_counter] = mving_avr(current_buffer[cm_buffer_counter]);
+		current_buffer[cm_buffer_counter] = mving_avr(current_buffer[cm_buffer_counter]);	
+		cm_buffer_counter++;
+		i++;
+	}
+	
+	i =0;
+	
+	/* derivative */
+	while(i< BUFFER_SIZE)
+	{
+		if(cm_buffer_counter >=BUFFER_SIZE) cm_buffer_counter =0;
+		
+		if(cm_buffer_counter == 0) current_buffer[0] -= current_buffer[BUFFER_SIZE-1];
+		current_buffer[cm_buffer_counter] -= current_buffer[cm_buffer_counter-1];
+		
+		if(current_buffer[cm_buffer_counter] >= current_buffer[cm_buffer_counter]) closed =1; // if the the current variation goes that far, we consider the windows is closed
+			
+		cm_buffer_counter++;
+		i++;	               
+	}
+	
+	
+	
+	if(closed)
+	{
+		// case windows has closed normally
+	}
+	else 
+	{
+		// case pinch has occured
 	}
 	
 	
@@ -109,4 +140,5 @@ uint16_t mving_avr(uint16_t new_data)
 	
 	return (valMoy << AVR_SHIFT);
 }
+
 

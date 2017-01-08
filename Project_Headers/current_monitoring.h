@@ -33,7 +33,7 @@
 #define CM_PIT					3
 
 
-
+#define CLOSE_THRH				38
 
 
 extern uint16_t moving_avr_counter;
