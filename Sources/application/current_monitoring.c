@@ -10,6 +10,11 @@
 uint16_t current_buffer[BUFFER_SIZE] = {0}; // circular buffer
 uint16_t moving_avr_buffer[MOVING_AVR_DEPTH] = {0};
 
+uint16_t moving_avr_counter;
+int cm_adc_channel;
+uint32_t cm_buffer_counter;
+
+
 int cm_initialize()
 {
 	int result;

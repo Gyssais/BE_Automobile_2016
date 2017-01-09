@@ -41,7 +41,7 @@ int analogRead(unsigned int pin); /* start a conversion and return the result. t
 void attachInterrupt_ADC_EOC(INTCInterruptFn isr, unsigned char priority);
 
 
-int setupAnalogWatchdog(int pin, unsigned int high_threshold, unsigned int low_threshold, int watchdog);
+int setupAnalogWatchdog(int pin, unsigned int high_threshold, int low_threshold, int watchdog);
 void attachInterrupt_ADC_WTCH(INTCInterruptFn isr, unsigned char priority);
 void startAnalogWatchdog(int watchdog);
 void stopAnalogWatchdog(int watchdog);

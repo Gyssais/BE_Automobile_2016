@@ -24,13 +24,16 @@
 
 
  int main(void) {
-	 
+	int result;
 	disableWatchdog();
 	initModesAndClock();
 
 	//adc_eoc_example();
 	
 	//ctu_trigger_example();
+	
+	result = BUFFER_SIZE;
+	result = cm_initialize();
 	
 	while(1)
 	{

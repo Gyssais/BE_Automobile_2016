@@ -20,7 +20,7 @@
 
 #define CURRENT_SAMPLING_RATE	10 		//ms
 #define BUFFER_TIME_LENGTH		3000 	//ms
-#define BUFFER_SIZE				(uint32_t)(BUFFER_TIME_LENGTH/BUFFER_TIME_LENGTH)
+#define BUFFER_SIZE				(uint32_t)(BUFFER_TIME_LENGTH/CURRENT_SAMPLING_RATE)
 #define MOVING_AVR_DEPTH		8 // must be a power of two.
 #define AVR_SHIFT				3 // = log2(MOVING_AVR_DEPTH)
 
@@ -34,12 +34,6 @@
 
 
 #define CLOSE_THRH				38
-
-
-extern uint16_t moving_avr_counter;
-
-extern int cm_adc_channel;
-extern uint32_t cm_buffer_counter;
 
 /* functions prototype */
 

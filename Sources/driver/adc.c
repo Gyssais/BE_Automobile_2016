@@ -188,7 +188,7 @@ void attachInterrupt_ADC_WTCH(INTCInterruptFn isr, unsigned char priority)
 }
  
 
-int setupAnalogWatchdog(int pin, unsigned int high_threshold, unsigned int low_threshold, int watchdog)
+int setupAnalogWatchdog(int pin, unsigned int high_threshold, int low_threshold, int watchdog)
 {
 	char channel;
 	char channel_type;
@@ -197,14 +197,18 @@ int setupAnalogWatchdog(int pin, unsigned int high_threshold, unsigned int low_t
 	if(pinToADCChannel_and_Type(pin,&channel, &channel_type) !=0 ) return WRONG_PIN; // check if the pin corresponds to a valid channel
 	if(watchdog <0 || watchdog > 3) return WRONG_WATCHDOG;	
 	
-	if(high_threshold < ADC_MAX) ADC.WTIMR.R |= (0x10 << watchdog); /* enable ISR trigger on high threshold if the high threshold is < max */
-	if(low_threshold > ADC_MIN)  ADC.WTIMR.R |= (0x1 << watchdog); /* enable ISR trigger on low  threshold if the low threshold is > min */
-	
-	
-	
 	ADC.TRC[watchdog].B.THRCH = channel; // set the channel
 	ADC.THRHLR[watchdog].B.THRH = high_threshold; // set the threshold
 	ADC.THRHLR[watchdog].B.THRL = low_threshold;
+	
+	
+	if(high_threshold < ADC_MAX) ADC.WTIMR.R |= (0x10 << watchdog);/* enable ISR trigger on high threshold if the high threshold is < max */
+	else ADC.THRHLR[watchdog].B.THRH = ADC_MAX;
+	if(low_threshold > ADC_MIN)  ADC.WTIMR.R |= (0x1 << watchdog); /* enable ISR trigger on low  threshold if the low threshold is > min */
+	else ADC.THRHLR[watchdog].B.THRL = 0;
+	
+	
+	
 	
 	
 	return 0;	
