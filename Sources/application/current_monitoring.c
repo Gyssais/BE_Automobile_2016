@@ -111,7 +111,7 @@ void cm_adc_watchdog_isr()
 		if(cm_buffer_counter >=BUFFER_SIZE) cm_buffer_counter =0;
 		
 		if(cm_buffer_counter == 0) current_buffer[0] -= current_buffer[BUFFER_SIZE-1];
-		current_buffer[cm_buffer_counter] -= current_buffer[cm_buffer_counter-1];
+		else current_buffer[cm_buffer_counter] -= current_buffer[cm_buffer_counter-1];
 		
 		if(current_buffer[cm_buffer_counter] >= current_buffer[cm_buffer_counter]) closed =1; // if the the current variation goes that far, we consider the windows is closed
 			
@@ -143,7 +143,7 @@ uint16_t mving_avr(uint16_t new_data)
 	moving_avr_counter = (moving_avr_counter+1)&(MOVING_AVR_DEPTH-1);
 	moving_avr_buffer[moving_avr_counter]=new_data;
 	
-	return (valMoy << AVR_SHIFT);
+	return (valMoy >> AVR_SHIFT);
 }
 
 
