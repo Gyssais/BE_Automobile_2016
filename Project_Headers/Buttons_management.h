@@ -9,7 +9,7 @@ void init_speed_button();
 /*
  * Lecture vitesse via potentiomètre
  */
-uint8_t read_speed();
+uint16_t read_speed();
 
 /*
  * Initialisation LEDs de la carte
@@ -59,5 +59,5 @@ void LED_off(uint8_t);
  * Nécessaires : 	disableWatchdog(); et initModesAndClock(); début du programme
  */
  void test_buttons_management();
-
+ void test_speed();
 #endif Buttons_H_

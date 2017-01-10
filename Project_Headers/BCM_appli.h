@@ -22,8 +22,8 @@ void scheduler_BCM(void);
 void appli_BCM();
 
 
-void door_management();
-void window_management();
-void send_informations();
+void door_management();// locking door management 
+void window_management();//the rise of the door window glass’s 
+void send_informations();// send information (rain,battery,speed)
 
 #endif /* BCM_APPLI_H_ */
