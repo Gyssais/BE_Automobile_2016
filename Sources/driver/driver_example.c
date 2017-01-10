@@ -10,10 +10,16 @@
 #include "gpio.h"
 
 
+
 void eirq0_isr()
 {
+	
+	if((SIU.ISR.R & 0x1)) stop_Hbridge(); // if isr raised by PA_3
+	if((SIU.ISR.R & 0x2)) start_Hbridge(DOWN_HB);//if isr raised by PA_6
+	if((SIU.ISR.R & 0x4)) start_Hbridge(UP_HB);//if isr raised by PA_7
+	
 	/* clear interrupt flag */
-	// clear all isr
+		// clear all isr
 	SIU.ISR.R = 0xFFFF;
 	
 	/* toggle LED_1 */
@@ -29,6 +35,25 @@ void gpio_isr_example()
 	result = setup_EIRQ0_pin(PA_3, RISING);
 	attachInterrupt_EIRQ0(eirq0_isr, 4);
 }
+
+
+void h_bridge_test()
+{
+	int result =0;
+	init_Hbridge();
+	init_LED();
+	
+	pinMode(PA_3, INPUT);
+	pinMode(PA_6, INPUT);
+	pinMode(PA_7, INPUT);
+	
+	result = setup_EIRQ0_pin(PA_3, RISING);
+	result = setup_EIRQ0_pin(PA_6, RISING);
+	result = setup_EIRQ0_pin(PA_7, RISING);
+	
+	attachInterrupt_EIRQ0(eirq0_isr, 4);
+}
+
 
 
 /* functions for a simple driver for MC33887 H-bridge. */

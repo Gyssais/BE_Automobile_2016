@@ -34,8 +34,8 @@
 	//result = BUFFER_SIZE;
 	//result = cm_initialize();
 	
-	gpio_isr_example();
-	
+	//gpio_isr_example();
+	h_bridge_test();
 	while(1)
 	{
 		

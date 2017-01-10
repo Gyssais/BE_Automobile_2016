@@ -26,6 +26,7 @@ void adc_eoc_example();
 void adc_eoc_isr();
 void test_filter();
 void gpio_isr_example();
+void h_bridge_test();
 
 /* functions for a simple driver for MC33887 H-bridge. */
 
