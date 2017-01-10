@@ -7,7 +7,28 @@
 
 #include "driver_example.h"
 #include "current_monitoring.h"
+#include "gpio.h"
 
+
+void eirq0_isr()
+{
+	/* clear interrupt flag */
+	// clear all isr
+	SIU.ISR.R = 0xFFFF;
+	
+	/* toggle LED_1 */
+	if(SIU.GPDO[PE_4].R == 1) SIU.GPDO[PE_4].R = 0;
+	else SIU.GPDO[PE_4].R = 1;
+	
+}
+
+void gpio_isr_example()
+{	int result =0;
+	pinMode(PA_3, INPUT);
+	init_LED();
+	result = setup_EIRQ0_pin(PA_3, RISING);
+	attachInterrupt_EIRQ0(eirq0_isr, 4);
+}
 
 
 /* functions for a simple driver for MC33887 H-bridge. */

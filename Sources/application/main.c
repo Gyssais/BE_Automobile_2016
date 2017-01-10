@@ -34,7 +34,7 @@
 	//result = BUFFER_SIZE;
 	//result = cm_initialize();
 	
-	test_filter();
+	gpio_isr_example();
 	
 	while(1)
 	{

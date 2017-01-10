@@ -16,7 +16,7 @@
 #include "MPC5604B.h"
 #include "IntcInterrupts.h"
 #include "Buttons_management.h"
-
+#include "gpio.h"
 
 /* driver example */
 void adc_example();
@@ -25,7 +25,7 @@ void adc_watchdog_example();
 void adc_eoc_example();
 void adc_eoc_isr();
 void test_filter();
-
+void gpio_isr_example();
 
 /* functions for a simple driver for MC33887 H-bridge. */
 
