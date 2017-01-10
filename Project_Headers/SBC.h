@@ -8,6 +8,8 @@
 #ifndef SBC_H_
 #define SBC_H_
 
+#include "MPC5604B.h"
+
 uint8_t get_flag_frame_received(void);
 void reset_flag_frame_received(void);
 uint16_t Read_voltage_value(void);
