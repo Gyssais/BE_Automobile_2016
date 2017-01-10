@@ -16,7 +16,7 @@
 #include "MPC5604B.h"
 #include "IntcInterrupts.h"
 #include "Buttons_management.h"
-
+#include "driver_example.h"
 
 #define CURRENT_SAMPLING_RATE	10 		//ms
 #define BUFFER_TIME_LENGTH		3000 	//ms
@@ -39,9 +39,9 @@
 
 void cm_adc_watchdog_isr();
 void cm_adc_eoctu_isr();
-
+void hbridge_tempo_isr();
+int cm_initialize(); // initialize and start the monitoring of the motor's current.
 uint16_t mving_avr(uint16_t data);
 
-int cm_initialize(); // initialize and start the monitoring of the motor's current.
 
 #endif /* CURRENT_MONITORING_H_ */

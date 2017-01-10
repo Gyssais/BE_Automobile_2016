@@ -15,6 +15,7 @@ int cm_adc_channel;
 uint32_t cm_buffer_counter;
 
 
+
 int cm_initialize()
 {
 	int result;
@@ -45,7 +46,8 @@ int cm_initialize()
 	
 	setupChannel_CTU_trigger(result); 	// link the PIT to the ADC channel corresponding to CM_PIN through the CTU and enable CTU
 	setupChannelPIT(CM_PIT, CURRENT_SAMPLING_RATE);  // use PIT_3, the only one to be linked to the CTU
-	startChannelPIT(CM_PIT);
+	
+	//startChannelPIT(CM_PIT); // the PIT will be started by the hbridge_tempo_isr() in order to not detect the motor start pick current
 	
 	
 	enableADC();	
@@ -146,4 +148,7 @@ uint16_t mving_avr(uint16_t new_data)
 	return (valMoy >> AVR_SHIFT);
 }
 
-
+void hbridge_tempo_isr()
+{
+	startChannelPIT(CM_PIT);
+}

@@ -14,9 +14,23 @@
 void eirq0_isr()
 {
 	
-	if((SIU.ISR.R & 0x1)) stop_Hbridge(); // if isr raised by PA_3
-	if((SIU.ISR.R & 0x2)) start_Hbridge(DOWN_HB);//if isr raised by PA_6
-	if((SIU.ISR.R & 0x4)) start_Hbridge(UP_HB);//if isr raised by PA_7
+	if((SIU.ISR.R & 0x1))  // if isr raised by PA_3
+	{
+		stop_Hbridge(); 
+	}
+	
+	if((SIU.ISR.R & 0x2)) //if isr raised by PA_6
+	{
+		if(window_state == STOPPED) {start_Hbridge(DOWN_HB); window_state = DOWN;}
+		else if(window_state == DOWN) {stop_Hbridge(); window_state = STOPPED;}
+		
+	}
+	
+	if((SIU.ISR.R & 0x4)) //if isr raised by PA_7
+	{
+		if(window_state == STOPPED) { start_Hbridge(UP_HB);  window_state = UP;}
+		else if(window_state == UP) {stop_Hbridge(); window_state = STOPPED;}
+	}
 	
 	/* clear interrupt flag */
 		// clear all isr
@@ -61,6 +75,8 @@ void h_bridge_test()
 
 void init_Hbridge()
 {
+	
+	
 	SIU.PCR[IN1_HB].R = 0x0200;  // out
 	SIU.PCR[IN2_HB].R = 0x0200;  // out
 	SIU.PCR[EN_HB].R = 0x0200;	 // out
