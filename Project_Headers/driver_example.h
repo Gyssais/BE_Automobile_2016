@@ -24,6 +24,21 @@ void ctu_trigger_example();
 void adc_watchdog_example();
 void adc_eoc_example();
 void adc_eoc_isr();
+void test_filter();
 
+
+/* functions for a simple driver for MC33887 H-bridge. */
+
+#define IN1_HB		PC_1
+#define IN2_HB		PC_2
+#define EN_HB		PC_3
+#define D2_HB		PC_4
+
+#define DOWN_HB		0
+#define UP_HB		1
+
+void init_Hbridge();
+void stop_Hbridge();
+void start_Hbridge(int sens);
 
 #endif /* DRIVER_EXAMPLE_H_ */

@@ -14,7 +14,7 @@
 #include "pit.h"
 #include "Buttons_management.h"
 #include "current_monitoring.h"
-
+#include "driver_example.h"
 
 /*************** Private function prototype **********/
 
@@ -26,10 +26,22 @@
 	disableWatchdog();
 	initModesAndClock();
 
-	initialise_SPI_DRIVER();
-	SPI[1].init(SPI_BAUD_62500, SPI_DELAY_DEFAULT);
-	Init_SBC_DBG();
-   
+
+	//adc_eoc_example();
+	
+	//ctu_trigger_example();
+	
+	//result = BUFFER_SIZE;
+	//result = cm_initialize();
+	
+	test_filter();
+	
+	while(1)
+	{
+		
+	}
+	
+
 }
 	 
 				
