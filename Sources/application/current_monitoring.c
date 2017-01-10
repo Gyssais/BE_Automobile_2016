@@ -7,59 +7,143 @@
 
 #include "current_monitoring.h"
 
-void adc_example()
+uint16_t current_buffer[BUFFER_SIZE] = {0}; // circular buffer
+uint16_t moving_avr_buffer[MOVING_AVR_DEPTH] = {0};
+
+uint16_t moving_avr_counter;
+int cm_adc_channel;
+uint32_t cm_buffer_counter;
+
+
+int cm_initialize()
 {
 	int result;
+	cm_buffer_counter = 0;
 	
+	cm_adc_channel = pinToADCChannel(CM_PIN);
+	if(cm_adc_channel <0) return cm_adc_channel;
+	
+	/* pin initialization */
 	result = setupADC();
-	result =  setupPin_ADC(AD_PIN);
-	enableADC();
+	result = setupPin_ADC(CM_PIN);
+	result = setupPin_ADC_Interrupt(CM_PIN, EOCTU_MASK);	// enable EOC_CTU interrupt from pin PB_4 
+	if(result !=0) return result;
 	
-	while(1)
-	{
-		result = analogRead(AD_PIN);
-	}
+	/* EOC global interrupt enabled */
+	attachInterrupt_ADC_EOC(cm_adc_eoctu_isr, EOCTU_ISR_PRIORITY);	// set the ISR to be called for adc EOCTU interrupt
+	
+	/* watchdog*/
+	result = setupAnalogWatchdog(CM_PIN, CM_WTCH_HIGH_T, CM_WTCH_LOW_T, CM_WTCH); 
+	if(result !=0) return result;
+	
+	attachInterrupt_ADC_WTCH(cm_adc_watchdog_isr, WTCH_ISR_PRIORITY);
+	startAnalogWatchdog(CM_WTCH);
+	
+	/* PIT & CTU*/
+	result = pinToADCChannel(CM_PIN);
+	if(result < 0) return result;
+	
+	setupChannel_CTU_trigger(result); 	// link the PIT to the ADC channel corresponding to CM_PIN through the CTU and enable CTU
+	setupChannelPIT(CM_PIT, CURRENT_SAMPLING_RATE);  // use PIT_3, the only one to be linked to the CTU
+	startChannelPIT(CM_PIT);
+	
+	
+	enableADC();	
+	return 0;	
 }
 
 
-void adc_wtch_isr()
+void cm_adc_eoctu_isr()
 {
-	unsigned long flag = ADC.WTISR.R;
-}
-
-
-// configure PIT, CTU and ADC to trigger a conversion on AD_PIN every 100ms
-void ctu_trigger_example()
-{
-	int result;
+	/* clear interrupt flags */
 		
-	result = setupADC();
-	result = setupPin_ADC(AD_PIN);
+	ADC.ISR.B.EOCTU = 1;  // Clear ADC global flag. In this application, the interrupt source can only be the EOC from a CTU triggered conversion.
+	ADC.CEOCFR[0].R  = (1<<cm_adc_channel); // Clear the channel flag
 	
-	setupChannel_CTU_trigger(0); 	// link the PIT to the ADC channel 0 (PB4) through the CTU
-	setupChannelPIT(3, 100);  // use PIT_3, the only one to be linked to the CTU. period =100ms.
-	startChannelPIT(3);
-	
-	enableADC();
-	
-}
-
-void adc_watchdog_example()
-{
-	int result;
-		
-	result = setupADC();
-	result =  setupPin_ADC(AD_PIN);
-	
-	result = setupAnalogWatchdog(AD_PIN, 700, 100, 0); // high_treshold =700, low = 100, first watchdog (0)
-	attachInterrupt_ADC_WTCH(adc_wtch_isr, 7);
-	startAnalogWatchdog(0);
-	
-	enableADC();
-	
-	
-	while(1)
+	/* get the new adc value and append it in the circular buffer */
+	if(ADC.CDR[cm_adc_channel].B.VALID ==1) // if data is valid
 		{
-			result = analogRead(AD_PIN);
+			current_buffer[cm_buffer_counter] = ADC.CDR[cm_adc_channel].B.CDATA;
+			
+			cm_buffer_counter++;
+			if(cm_buffer_counter >= BUFFER_SIZE) cm_buffer_counter =0; // loop circular buffer
 		}
+
 }
+
+
+/* this isr will be called each time the motor current exceed a configured value */
+void cm_adc_watchdog_isr()
+{
+	int i = 0;
+	int closed = 0;
+	
+	/* clear interrupt flags */			
+	ADC.WTISR.R = (1 << (CM_WTCH+4));
+	
+	
+	/* turn off the motor */
+	//turn_off_motor();
+	
+	/* stop PIT timer while handling data */
+	stopChannelPIT(CM_PIT);
+	
+	
+	
+	//// analyse the current_buffer data to determine if it's a pinch or a normal closure ////
+	
+	/* moving average to smooth the data */
+
+	while(i<BUFFER_SIZE)
+	{
+		if(cm_buffer_counter >=BUFFER_SIZE) cm_buffer_counter =0;
+		
+		current_buffer[cm_buffer_counter] = mving_avr(current_buffer[cm_buffer_counter]);	
+		cm_buffer_counter++;
+		i++;
+	}
+	
+	i =0;
+	
+	/* derivative */
+	while(i< BUFFER_SIZE)
+	{
+		if(cm_buffer_counter >=BUFFER_SIZE) cm_buffer_counter =0;
+		
+		if(cm_buffer_counter == 0) current_buffer[0] -= current_buffer[BUFFER_SIZE-1];
+		else current_buffer[cm_buffer_counter] -= current_buffer[cm_buffer_counter-1];
+		
+		if(current_buffer[cm_buffer_counter] >= current_buffer[cm_buffer_counter]) closed =1; // if the the current variation goes that far, we consider the windows is closed
+			
+		cm_buffer_counter++;
+		i++;	               
+	}
+	
+	
+	
+	if(closed)
+	{
+		// case windows has closed normally
+	}
+	else 
+	{
+		// case pinch has occured
+	}
+	
+	
+	startChannelPIT(CM_PIT);
+}
+
+
+uint16_t mving_avr(uint16_t new_data)
+{
+	static int32_t valMoy =0;
+	
+	valMoy = valMoy + new_data-(moving_avr_buffer[(moving_avr_counter+1)&(MOVING_AVR_DEPTH-1)]);
+	moving_avr_counter = (moving_avr_counter+1)&(MOVING_AVR_DEPTH-1);
+	moving_avr_buffer[moving_avr_counter]=new_data;
+	
+	return (valMoy >> AVR_SHIFT);
+}
+
+

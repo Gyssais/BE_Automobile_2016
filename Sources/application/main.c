@@ -13,6 +13,8 @@
 #include "spi_drv.h"
 #include "pit.h"
 #include "Buttons_management.h"
+#include "current_monitoring.h"
+
 
 /*************** Private function prototype **********/
 
@@ -20,13 +22,14 @@
 
 
  int main(void) {
-	 
+
 	disableWatchdog();
 	initModesAndClock();
+
 	initialise_SPI_DRIVER();
 	SPI[1].init(SPI_BAUD_62500, SPI_DELAY_DEFAULT);
 	Init_SBC_DBG();
-	
+   
 }
 	 
 				
