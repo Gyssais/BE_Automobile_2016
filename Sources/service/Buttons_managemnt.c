@@ -68,7 +68,7 @@ uint8_t bouton4()
 }
 
 
-void LED_on(uint8_t numLED)
+void LED_off(uint8_t numLED)
 {
 	switch(numLED)
 	{
@@ -88,7 +88,7 @@ void LED_on(uint8_t numLED)
 }
 
 
-void LED_off(uint8_t numLED)
+void LED_on(uint8_t numLED)
 {
 	switch(numLED)
 	{

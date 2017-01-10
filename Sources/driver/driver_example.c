@@ -21,14 +21,24 @@ void eirq0_isr()
 	
 	if((SIU.ISR.R & 0x2)) //if isr raised by PA_6
 	{
-		if(window_state == STOPPED) {start_Hbridge(DOWN_HB); window_state = DOWN;}
+		if(window_state == STOPPED) 
+		{
+			start_Hbridge(DOWN_HB); 
+			window_state = DOWN;
+			startChannelPIT(CM_PIT_TEMPO);
+		}
 		else if(window_state == DOWN) {stop_Hbridge(); window_state = STOPPED;}
 		
 	}
 	
 	if((SIU.ISR.R & 0x4)) //if isr raised by PA_7
 	{
-		if(window_state == STOPPED) { start_Hbridge(UP_HB);  window_state = UP;}
+		if(window_state == STOPPED) 
+		{ 
+		start_Hbridge(UP_HB); 
+		window_state = UP;
+		startChannelPIT(CM_PIT_TEMPO);
+		}
 		else if(window_state == UP) {stop_Hbridge(); window_state = STOPPED;}
 	}
 	
@@ -54,8 +64,12 @@ void gpio_isr_example()
 void h_bridge_test()
 {
 	int result =0;
-	init_Hbridge();
+	
 	init_LED();
+	
+	LED_off(4); // debug
+	
+	init_Hbridge();
 	
 	pinMode(PA_3, INPUT);
 	pinMode(PA_6, INPUT);
@@ -64,6 +78,8 @@ void h_bridge_test()
 	result = setup_EIRQ0_pin(PA_3, RISING);
 	result = setup_EIRQ0_pin(PA_6, RISING);
 	result = setup_EIRQ0_pin(PA_7, RISING);
+	
+	
 	
 	attachInterrupt_EIRQ0(eirq0_isr, 4);
 }
@@ -95,6 +111,8 @@ void stop_Hbridge()
 	SIU.GPDO[IN1_HB].B.PDO = 0;
 	SIU.GPDO[IN2_HB].B.PDO = 0;
 	SIU.GPDO[D2_HB].B.PDO = 0;
+	
+	stopChannelPIT(CM_PIT);
 }
 
 void start_Hbridge(int sens)

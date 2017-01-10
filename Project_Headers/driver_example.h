@@ -30,10 +30,10 @@ void h_bridge_test();
 
 /* functions for a simple driver for MC33887 H-bridge. */
 
-#define IN1_HB		PC_1
-#define IN2_HB		PC_2
-#define EN_HB		PC_3
-#define D2_HB		PC_4
+#define IN1_HB		PC_4
+#define IN2_HB		PC_5
+#define EN_HB		PC_6
+#define D2_HB		PC_7
 
 #define DOWN_HB		0
 #define UP_HB		1

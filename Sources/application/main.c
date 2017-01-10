@@ -22,7 +22,7 @@
 
 
  int main(void) {
-
+	 int result =0;
 	disableWatchdog();
 	initModesAndClock();
 
@@ -35,6 +35,7 @@
 	//result = cm_initialize();
 	
 	//gpio_isr_example();
+	result = cm_initialize();
 	h_bridge_test();
 	while(1)
 	{

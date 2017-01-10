@@ -7,10 +7,10 @@
 
 #include "current_monitoring.h"
 
-uint16_t current_buffer[BUFFER_SIZE] = {0}; // circular buffer
-uint16_t moving_avr_buffer[MOVING_AVR_DEPTH] = {0};
+int16_t current_buffer[BUFFER_SIZE] = {0}; // circular buffer
+int16_t moving_avr_buffer[MOVING_AVR_DEPTH] = {0};
 
-uint16_t moving_avr_counter;
+int16_t moving_avr_counter;
 int cm_adc_channel;
 uint32_t cm_buffer_counter;
 
@@ -47,6 +47,8 @@ int cm_initialize()
 	setupChannel_CTU_trigger(result); 	// link the PIT to the ADC channel corresponding to CM_PIN through the CTU and enable CTU
 	setupChannelPIT(CM_PIT, CURRENT_SAMPLING_RATE);  // use PIT_3, the only one to be linked to the CTU
 	
+	setupChannelPIT(CM_PIT_TEMPO, CM_TEMPO);
+	setupISRChannelPIT(CM_PIT_TEMPO, hbridge_tempo_isr, PIT_TEMPO_PRIORITY);
 	//startChannelPIT(CM_PIT); // the PIT will be started by the hbridge_tempo_isr() in order to not detect the motor start pick current
 	
 	
@@ -78,14 +80,14 @@ void cm_adc_eoctu_isr()
 void cm_adc_watchdog_isr()
 {
 	int i = 0;
-	int closed = 0;
+	int closed = 0; 
 	
 	/* clear interrupt flags */			
 	ADC.WTISR.R = (1 << (CM_WTCH+4));
 	
 	
 	/* turn off the motor */
-	//turn_off_motor();
+	stop_Hbridge();
 	
 	/* stop PIT timer while handling data */
 	stopChannelPIT(CM_PIT);
@@ -95,7 +97,7 @@ void cm_adc_watchdog_isr()
 	//// analyse the current_buffer data to determine if it's a pinch or a normal closure ////
 	
 	/* moving average to smooth the data */
-
+	cm_buffer_counter++; // start the filter after the current pic
 	while(i<BUFFER_SIZE)
 	{
 		if(cm_buffer_counter >=BUFFER_SIZE) cm_buffer_counter =0;
@@ -115,7 +117,7 @@ void cm_adc_watchdog_isr()
 		if(cm_buffer_counter == 0) current_buffer[0] -= current_buffer[BUFFER_SIZE-1];
 		else current_buffer[cm_buffer_counter] -= current_buffer[cm_buffer_counter-1];
 		
-		if(current_buffer[cm_buffer_counter] >= current_buffer[cm_buffer_counter]) closed =1; // if the the current variation goes that far, we consider the windows is closed
+		if((int16_t)current_buffer[cm_buffer_counter] >= CLOSE_THRH) closed =1; // if the the current variation goes that far, we consider the windows is closed
 			
 		cm_buffer_counter++;
 		i++;	               
@@ -126,18 +128,20 @@ void cm_adc_watchdog_isr()
 	if(closed)
 	{
 		// case windows has closed normally
+		LED_on(4);
 	}
 	else 
 	{
 		// case pinch has occured
+		LED_off(4);
 	}
 	
 	
-	startChannelPIT(CM_PIT);
+	//startChannelPIT(CM_PIT); //TODO decide if the current monitoring should run when the windows is stopped
 }
 
 
-uint16_t mving_avr(uint16_t new_data)
+int16_t mving_avr(int16_t new_data)
 {
 	static int32_t valMoy =0;
 	
@@ -150,5 +154,9 @@ uint16_t mving_avr(uint16_t new_data)
 
 void hbridge_tempo_isr()
 {
+	/* clear interrupt flag */
+	PIT.CH[CM_PIT_TEMPO].TFLG.B.TIF =1;
+	
+	stopChannelPIT(CM_PIT_TEMPO);
 	startChannelPIT(CM_PIT);
 }

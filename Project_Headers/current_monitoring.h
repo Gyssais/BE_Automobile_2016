@@ -27,12 +27,13 @@
 #define CM_PIN 					PB_4
 #define WTCH_ISR_PRIORITY		10
 #define EOCTU_ISR_PRIORITY		5
+#define PIT_TEMPO_PRIORITY		6
 #define CM_WTCH_HIGH_T			900
 #define CM_WTCH_LOW_T			-1	// the low threshold trigger is not used, set a value < to ADC_MIN to disable
 #define CM_WTCH					0
 #define CM_PIT					3
-
-
+#define CM_PIT_TEMPO			1
+#define CM_TEMPO				20 // delay in ms before launching current  acquisition.
 #define CLOSE_THRH				38
 
 /* functions prototype */
@@ -41,7 +42,7 @@ void cm_adc_watchdog_isr();
 void cm_adc_eoctu_isr();
 void hbridge_tempo_isr();
 int cm_initialize(); // initialize and start the monitoring of the motor's current.
-uint16_t mving_avr(uint16_t data);
+int16_t mving_avr(int16_t data);
 
 
 #endif /* CURRENT_MONITORING_H_ */
