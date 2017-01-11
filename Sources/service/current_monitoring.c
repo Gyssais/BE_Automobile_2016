@@ -90,7 +90,7 @@ void cm_adc_watchdog_isr()
 	stop_Hbridge();
 	
 	/* stop PIT timer while handling data */
-	stopChannelPIT(CM_PIT);
+	stopChannelPIT(CM_PIT); // TODO harmonize CM_PIT stop
 	
 	
 	

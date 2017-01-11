@@ -112,7 +112,7 @@ void stop_Hbridge()
 	SIU.GPDO[IN2_HB].B.PDO = 0;
 	SIU.GPDO[D2_HB].B.PDO = 0;
 	
-	stopChannelPIT(CM_PIT);
+	stopChannelPIT(CM_PIT); // TODO harmonize CM_PIT stop
 }
 
 void start_Hbridge(int sens)

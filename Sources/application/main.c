@@ -21,6 +21,10 @@
 /*************** Public function            **********/
 
 
+//TODO : mettre tous les pins mapping dans define.h
+//TODO : faire un fichier windows.c et windows.h
+//TODO : changer le threshold du watchdog selon le sens du moteur
+
  int main(void) {
 	 int result =0;
 	disableWatchdog();
