@@ -13,6 +13,8 @@ MC33887_pinout window_HB = {IN1_W, IN2_W, D2_W, EN_W, FS_W};
 
 int init_window()
 {
+	window_state = STOPPED;
+	window_position = UNKNOW;
 	setupChannelPIT(PIT_MODE_W, PIT_MODE_W_TEMPO);
 	setup_buttons();
 	init_HBridge(&window_HB);
@@ -37,30 +39,40 @@ void buttons_isr()
 	
 	if((SIU.ISR.R & 0x1))  // if isr raised by PA_3
 	{
-		stop_Hbridge(); 
+		stop_HBridge(&window_HB); 
 	}
 	
-	if((SIU.ISR.R & 0x2)) //if isr raised by PA_6
+	if((SIU.ISR.R & 0x2) && SIU.GPDI[BUTTON_UP].B.PDI) //if isr raised by PA_6 rising edge
 	{
 		if(window_state == STOPPED) 
 		{
-			start_Hbridge(DOWN_HB); 
+			start_HBridge(&window_HB,SENS1); 
 			window_state = DOWN;
 			startChannelPIT(CM_PIT_WTCH_TEMPO);
 		}
-		else if(window_state == DOWN) {stop_Hbridge(); window_state = STOPPED;}
+		else if(window_state == DOWN) 
+		{
+			stop_HBridge(&window_HB);
+			stop_PITs();
+			window_state = STOPPED;
+		}
 		
 	}
 	
-	if((SIU.ISR.R & 0x4)) //if isr raised by PA_7
+	if((SIU.ISR.R & 0x4) && SIU.GPDI[BUTTON_DOWN].B.PDI) //if isr raised by PA_7 rising edge
 	{
 		if(window_state == STOPPED) 
 		{ 
-		start_Hbridge(UP_HB); 
-		window_state = UP;
-		startChannelPIT(CM_PIT_WTCH_TEMPO);
+			start_HBridge(&window_HB, SENS2); 
+			window_state = UP;
+			startChannelPIT(CM_PIT_WTCH_TEMPO);
 		}
-		else if(window_state == UP) {stop_Hbridge(); window_state = STOPPED;}
+		else if(window_state == UP) 
+		{
+			stop_HBridge(&window_HB);
+			stop_PITs();
+			window_state = STOPPED;
+		}
 	}
 	
 	/* clear interrupt flag */

@@ -15,6 +15,8 @@
 #include "Buttons_management.h"
 #include "current_monitoring.h"
 #include "driver_example.h"
+#include "window.h"
+
 
 /*************** Private function prototype **********/
 
@@ -41,8 +43,10 @@
 	//result = cm_initialize();
 	
 	//gpio_isr_example();
-	result = cm_initialize();
-	h_bridge_test();
+	
+	init_LED();
+	init_window();
+	
 	while(1)
 	{
 		

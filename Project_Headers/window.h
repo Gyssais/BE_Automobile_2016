@@ -28,4 +28,7 @@ void window_up();
 void window_down();
 void window_stop();
 
+
+extern MC33887_pinout window_HB;
+
 #endif /* WINDOW_H_ */

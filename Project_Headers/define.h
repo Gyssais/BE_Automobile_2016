@@ -33,8 +33,8 @@
 #define FB_W		PB_4
 
 //s window buttons
-#define BUTTON_UP	PA_3		
-#define BUTTON_DOWN PA_6
+#define BUTTON_UP	PA_6		
+#define BUTTON_DOWN PA_7
 
 
 /* DCM ISR priority */

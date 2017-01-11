@@ -87,7 +87,7 @@ void cm_adc_watchdog_isr()
 	
 	
 	/* turn off the motor */
-	stop_Hbridge();
+	stop_HBridge(&window_HB);
 	
 	/* stop all PIT timer */
 	stop_PITs();
@@ -116,7 +116,7 @@ void cm_adc_watchdog_isr()
 		if(cm_buffer_counter == 0) current_buffer[0] -= current_buffer[BUFFER_SIZE-1];
 		else current_buffer[cm_buffer_counter] -= current_buffer[cm_buffer_counter-1];
 		
-		if((int16_t)current_buffer[cm_buffer_counter] >= CLOSE_THRH_UP) closed =1; // if the the current variation goes that far, we consider the windows is closed
+		if((int16_t)current_buffer[cm_buffer_counter] >= CLOSE_THRH) closed =1; // if the the current variation goes that far, we consider the windows is closed
 			
 		cm_buffer_counter++;
 		i++;	               
@@ -134,6 +134,11 @@ void cm_adc_watchdog_isr()
 		// case pinch has occured
 		LED_off(4);
 	}
+	
+	if(window_state == UP) window_position = CLOSED;
+	if(window_state == DOWN) window_position =OPEN;
+	
+	window_state = STOPPED;
 	
 	
 	//startChannelPIT(CM_PIT); //TODO decide if the current monitoring should run when the windows is stopped
