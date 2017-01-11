@@ -10,6 +10,17 @@
 
 #include "define.h"
 #include "current_monitoring.h"
+#include "MC33887.h"
 #include "gpio.h"
+#include "pit.h"
+
+
+
+void button_irq();
+void pit_wtch_tempo_isr();
+
+void window_up();
+void window_down();
+void window_stop();
 
 #endif /* WINDOW_H_ */

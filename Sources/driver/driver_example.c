@@ -9,7 +9,7 @@
 #include "current_monitoring.h"
 #include "gpio.h"
 
-
+#define AD_PIN PB_4
 
 void eirq0_isr()
 {
@@ -25,7 +25,7 @@ void eirq0_isr()
 		{
 			start_Hbridge(DOWN_HB); 
 			window_state = DOWN;
-			startChannelPIT(CM_PIT_TEMPO);
+			startChannelPIT(CM_PIT_WTCH_TEMPO);
 		}
 		else if(window_state == DOWN) {stop_Hbridge(); window_state = STOPPED;}
 		
@@ -37,7 +37,7 @@ void eirq0_isr()
 		{ 
 		start_Hbridge(UP_HB); 
 		window_state = UP;
-		startChannelPIT(CM_PIT_TEMPO);
+		startChannelPIT(CM_PIT_WTCH_TEMPO);
 		}
 		else if(window_state == UP) {stop_Hbridge(); window_state = STOPPED;}
 	}
@@ -112,7 +112,7 @@ void stop_Hbridge()
 	SIU.GPDO[IN2_HB].B.PDO = 0;
 	SIU.GPDO[D2_HB].B.PDO = 0;
 	
-	stopChannelPIT(CM_PIT); // TODO harmonize CM_PIT stop
+	stopChannelPIT(CM_PIT_CTU); // TODO harmonize CM_PIT stop
 }
 
 void start_Hbridge(int sens)

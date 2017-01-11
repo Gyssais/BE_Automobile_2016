@@ -45,10 +45,10 @@ int cm_initialize()
 	if(result < 0) return result;
 	
 	setupChannel_CTU_trigger(result); 	// link the PIT to the ADC channel corresponding to CM_PIN through the CTU and enable CTU
-	setupChannelPIT(CM_PIT, CURRENT_SAMPLING_RATE);  // use PIT_3, the only one to be linked to the CTU
+	setupChannelPIT(CM_PIT_CTU, CURRENT_SAMPLING_RATE);  // use PIT_3, the only one to be linked to the CTU
 	
-	setupChannelPIT(CM_PIT_TEMPO, CM_TEMPO);
-	setupISRChannelPIT(CM_PIT_TEMPO, hbridge_tempo_isr, PIT_TEMPO_PRIORITY);
+	setupChannelPIT(CM_PIT_WTCH_TEMPO, CM_WTCH_TEMPO);
+	setupISRChannelPIT(CM_PIT_WTCH_TEMPO, pit_wtch_tempo_isr, PIT_WTCH_TEMPO_PRIORITY);
 	//startChannelPIT(CM_PIT); // the PIT will be started by the hbridge_tempo_isr() in order to not detect the motor start pick current
 	
 	
@@ -90,7 +90,7 @@ void cm_adc_watchdog_isr()
 	stop_Hbridge();
 	
 	/* stop PIT timer while handling data */
-	stopChannelPIT(CM_PIT); // TODO harmonize CM_PIT stop
+	stopChannelPIT(CM_PIT_CTU); // TODO harmonize CM_PIT stop
 	
 	
 	
@@ -152,11 +152,4 @@ int16_t mving_avr(int16_t new_data)
 	return (valMoy >> AVR_SHIFT);
 }
 
-void hbridge_tempo_isr()
-{
-	/* clear interrupt flag */
-	PIT.CH[CM_PIT_TEMPO].TFLG.B.TIF =1;
-	
-	stopChannelPIT(CM_PIT_TEMPO);
-	startChannelPIT(CM_PIT);
-}
+
