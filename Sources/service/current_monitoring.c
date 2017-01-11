@@ -89,15 +89,14 @@ void cm_adc_watchdog_isr()
 	/* turn off the motor */
 	stop_Hbridge();
 	
-	/* stop PIT timer while handling data */
-	stopChannelPIT(CM_PIT_CTU); // TODO harmonize CM_PIT stop
-	
+	/* stop all PIT timer */
+	stop_PITs();
 	
 	
 	//// analyse the current_buffer data to determine if it's a pinch or a normal closure ////
 	
 	/* moving average to smooth the data */
-	cm_buffer_counter++; // start the filter after the current pic
+	cm_buffer_counter++; // start the filter after the current peak  //TODO doesn't fix the last value getting low
 	while(i<BUFFER_SIZE)
 	{
 		if(cm_buffer_counter >=BUFFER_SIZE) cm_buffer_counter =0;
@@ -109,7 +108,7 @@ void cm_adc_watchdog_isr()
 	
 	i =0;
 	
-	/* derivative */
+	/* derivative */  // TODO to debug
 	while(i< BUFFER_SIZE)
 	{
 		if(cm_buffer_counter >=BUFFER_SIZE) cm_buffer_counter =0;
@@ -117,7 +116,7 @@ void cm_adc_watchdog_isr()
 		if(cm_buffer_counter == 0) current_buffer[0] -= current_buffer[BUFFER_SIZE-1];
 		else current_buffer[cm_buffer_counter] -= current_buffer[cm_buffer_counter-1];
 		
-		if((int16_t)current_buffer[cm_buffer_counter] >= CLOSE_THRH) closed =1; // if the the current variation goes that far, we consider the windows is closed
+		if((int16_t)current_buffer[cm_buffer_counter] >= CLOSE_THRH_UP) closed =1; // if the the current variation goes that far, we consider the windows is closed
 			
 		cm_buffer_counter++;
 		i++;	               

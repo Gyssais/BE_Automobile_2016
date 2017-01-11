@@ -29,10 +29,10 @@
 #define CM_WTCH_HIGH_T			900
 #define CM_WTCH_LOW_T			-1	// the low threshold trigger is not used, set a value < to ADC_MIN to disable
 #define CM_WTCH					0
-#define CM_PIT_CTU				3
-#define CM_PIT_WTCH_TEMPO		1
+#define CM_PIT_CTU				PIT_ADC
+#define CM_PIT_WTCH_TEMPO		PIT_WTCH_TEMPO
 #define CM_WTCH_TEMPO			20 // delay in ms before launching current  acquisition.
-#define CLOSE_THRH				38
+#define CLOSE_THRH_UP			38
 
 /* functions prototype */
 

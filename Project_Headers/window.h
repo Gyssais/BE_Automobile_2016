@@ -14,10 +14,15 @@
 #include "gpio.h"
 #include "pit.h"
 
+#define PIT_MODE_W_TEMPO	100 //ms
 
-
-void button_irq();
+void buttons_isr();
 void pit_wtch_tempo_isr();
+
+int setup_buttons();
+void stop_PITs();
+
+int init_window();
 
 void window_up();
 void window_down();

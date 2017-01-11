@@ -17,6 +17,10 @@
  */
 #ifdef DCM
 
+/* PIT utilization */
+#define PIT_ADC			3  // can't be changed !
+#define PIT_WTCH_TEMPO	1
+#define PIT_MODE_W		2 // PIT to select automatic or manuel mode. 
 
 /* DCM pin mapping */
 
@@ -28,7 +32,9 @@
 #define FS_W		PC_8
 #define FB_W		PB_4
 
-
+//s window buttons
+#define BUTTON_UP	PA_3		
+#define BUTTON_DOWN PA_6
 
 
 /* DCM ISR priority */
