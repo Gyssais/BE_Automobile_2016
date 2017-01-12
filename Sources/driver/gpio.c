@@ -94,7 +94,68 @@ int setup_EIRQ0_pin(int pin, int mode)
 
 int setup_EIRQ1_pin(int pin, int mode)
 {
-	return -1;
+	switch(pin)
+		{
+		case PC_14:
+			if(mode == RISING) SIU.IREER.R |=0x100;
+			else if (mode == FALLING)  SIU.IFEER.R |=0x100;
+			else if(mode == BOTH) {SIU.IREER.R |=0x100; SIU.IFEER.R |=0x100;}
+			else return WRONG_MODE;
+			SIU.IRER.R |=0x1;
+			break;
+		case PE_4:
+			if(mode == RISING) SIU.IREER.R |=0x200;
+			else if (mode == FALLING)  SIU.IFEER.R |=0x200;
+			else if(mode == BOTH) {SIU.IREER.R |=0x200; SIU.IFEER.R |=0x200;}
+			else return WRONG_MODE;
+			SIU.IRER.R |=0x2;
+			break;
+		case PE_10:
+			if(mode == RISING) SIU.IREER.R |=0x400;
+			else if (mode == FALLING)  SIU.IFEER.R |=0x400;
+			else if(mode == BOTH) {SIU.IREER.R |=0x400; SIU.IFEER.R |=0x400;}
+			else return WRONG_MODE;
+			SIU.IRER.R |=0x4;
+			break;
+		case PE_12:
+			if(mode == RISING) SIU.IREER.R |=0x800;
+			else if (mode == FALLING)  SIU.IFEER.R |=0x800;
+			else if(mode == BOTH) {SIU.IREER.R |=0x800; SIU.IFEER.R |=0x800;}
+			else return WRONG_MODE;
+			SIU.IRER.R |=0x8;
+			break;
+		case PE_14:
+			if(mode == RISING) SIU.IREER.R |=0x1000;
+			else if (mode == FALLING)  SIU.IFEER.R |=0x1000;
+			else if(mode == BOTH) {SIU.IREER.R |=0x1000; SIU.IFEER.R |=0x1000;}
+			else return WRONG_MODE;
+			SIU.IRER.R |=0x10;
+			break;
+		case PF_15:
+			if(mode == RISING) SIU.IREER.R |=0x2000;
+			else if (mode == FALLING)  SIU.IFEER.R |=0x2000;
+			else if(mode == BOTH) {SIU.IREER.R |=0x2000; SIU.IFEER.R |=0x2000;}
+			else return WRONG_MODE;
+			SIU.IRER.R |=0x20;
+			break;
+		case PG_1:
+			if(mode == RISING) SIU.IREER.R |=0x4000;
+			else if (mode == FALLING)  SIU.IFEER.R |=0x4000;
+			else if(mode == BOTH) {SIU.IREER.R |=0x4000; SIU.IFEER.R |=0x4000;}
+			else return WRONG_MODE;
+			SIU.IRER.R |=0x40;
+			break;
+		case PG_8:
+			if(mode == RISING) SIU.IREER.R |=0x8000;
+			else if (mode == FALLING)  SIU.IFEER.R |=0x8000;
+			else if(mode == BOTH) {SIU.IREER.R |=0x8000; SIU.IFEER.R |=0x8000;}
+			else return WRONG_MODE;
+			SIU.IRER.R |=0x80;
+			break;
+		default:
+			return WRONG_PIN;
+		}
+		return 0;
 }
 
 
