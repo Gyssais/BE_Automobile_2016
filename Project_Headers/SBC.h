@@ -8,13 +8,11 @@
 #ifndef SBC_H_
 #define SBC_H_
 
-#include "MPC5604B.h"
-
 uint8_t get_flag_frame_received(void);
 void reset_flag_frame_received(void);
 uint16_t Read_voltage_value(void);
 void TransmitMsg(uint8_t * TxData, uint8_t length, uint16_t MsgID);
-void ReceiveMsg(void);
+uint8_t ReceiveMsg(void);
 void Data_treatment_BCM(uint8_t length , uint8_t * data);
 void Data_treatment_LCM( uint8_t length , uint8_t * data);
 void Init_SBC_DBG(void);
