@@ -29,10 +29,25 @@ void pinMode(int pin, int mode);
 void digitalWrite(int pin, int value);
 int digitalRead(int pin); 
 
+int setup_EIRQ_pin(int pin, int mode);
+
+// old EIRQ functions
+/*
 int setup_EIRQ0_pin(int pin, int mode);
 int setup_EIRQ1_pin(int pin, int mode);
+*/
 
 void attachInterrupt_EIRQ0(INTCInterruptFn isr, unsigned char priority); // same ISR for the 8 source of EIRQ0. check in the ISR who raise the interrupt
 void attachInterrupt_EIRQ1(INTCInterruptFn isr, unsigned char priority); // same ISR for the 8 source of EIRQ1. check in the ISR who raise the interrupt
+
+// search in the look up table the corresponding irq number.
+char pin_to_EIRQ(int pin);
+
+
+// look up table for pin/eirq corresponding
+extern char eirq_to_pin[16];
+
+
+
 
 #endif /* GPIO_H_ */

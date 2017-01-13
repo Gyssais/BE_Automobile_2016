@@ -56,7 +56,7 @@ void gpio_isr_example()
 {	int result =0;
 	pinMode(PA_3, INPUT);
 	init_LED();
-	result = setup_EIRQ0_pin(PA_3, RISING);
+	result = setup_EIRQ_pin(PA_3, RISING);
 	attachInterrupt_EIRQ0(eirq0_isr, 4);
 }
 
@@ -75,9 +75,9 @@ void h_bridge_test()
 	pinMode(PA_6, INPUT);
 	pinMode(PA_7, INPUT);
 	
-	result = setup_EIRQ0_pin(PA_3, RISING);
-	result = setup_EIRQ0_pin(PA_6, RISING);
-	result = setup_EIRQ0_pin(PA_7, RISING);
+	result = setup_EIRQ_pin(PA_3, RISING);
+	result = setup_EIRQ_pin(PA_6, RISING);
+	result = setup_EIRQ_pin(PA_7, RISING);
 	
 	
 	

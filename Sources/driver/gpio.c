@@ -7,6 +7,19 @@
 
 #include "gpio.h"
 
+char eirq_to_pin[16] = {PA_3, PA_6, PA_7, PA_8, PA_14, PC_2, PC_3, PC_5, PC_14, PE_4, PE_10, PE_12, PE_14, PF_15, PG_1, PG_8};
+
+char pin_to_EIRQ(int pin)
+{
+	int i;
+	for(i=0;i<16;i++)
+	{
+		if(eirq_to_pin[i] == pin) return i;
+	}
+	
+	return WRONG_PIN;
+}
+
 
 void pinMode(int pin, int mode)
 {
@@ -25,6 +38,23 @@ int digitalRead(int pin)
 }
 
 
+
+int setup_EIRQ_pin(int pin, int mode)
+{
+	char irq = pin_to_EIRQ(pin);
+	if(irq == WRONG_PIN) return WRONG_PIN;
+	
+	if(mode == RISING) SIU.IREER.R |= (1<<irq);
+	else if(mode == FALLING) SIU.IFEER.R |= (1<<irq);
+	else if(mode == BOTH) {SIU.IREER.R |=(1<<irq); SIU.IFEER.R |=(1<<irq);}
+	else return WRONG_MODE;
+	
+	return 0;
+}
+
+
+// old setup_EIRQ function
+/*
 int setup_EIRQ0_pin(int pin, int mode)
 {
 	switch(pin)
@@ -157,7 +187,7 @@ int setup_EIRQ1_pin(int pin, int mode)
 		}
 		return 0;
 }
-
+*/
 
 void attachInterrupt_EIRQ0(INTCInterruptFn isr, unsigned char priority)
 {

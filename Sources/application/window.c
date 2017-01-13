@@ -22,8 +22,6 @@ int init_window()
 }
 
 
-
-
 void pit_wtch_tempo_isr()
 {
 	/* clear interrupt flag */
@@ -92,8 +90,8 @@ int setup_buttons()
 	pinMode(BUTTON_UP, INPUT);
 	pinMode(BUTTON_DOWN, INPUT);
 	
-	result = setup_EIRQ0_pin(BUTTON_UP, BOTH);
-	result = setup_EIRQ0_pin(BUTTON_DOWN, BOTH);
+	result = setup_EIRQ_pin(BUTTON_UP, BOTH);
+	result = setup_EIRQ_pin(BUTTON_DOWN, BOTH);
 	attachInterrupt_EIRQ0(buttons_isr, EIRQ0_PRIORITY);
 	
 	return result;
