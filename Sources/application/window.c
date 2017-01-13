@@ -10,9 +10,14 @@
 MC33887_pinout window_HB = {IN1_W, IN2_W, D2_W, EN_W, FS_W};
 
 
+char button_up_irq_mask; 
+char button_down_irq_mask;
 
 int init_window()
 {
+	button_up_irq_mask = (1<<pin_to_EIRQ(BUTTON_UP));
+	button_down_irq_mask = (1<<pin_to_EIRQ(BUTTON_DOWN));
+	
 	window_state = STOPPED;
 	window_position = UNKNOW;
 	setupChannelPIT(PIT_MODE_W, PIT_MODE_W_TEMPO);
@@ -40,13 +45,16 @@ void buttons_isr()
 		stop_HBridge(&window_HB); 
 	}
 	
-	if((SIU.ISR.R & 0x2) && SIU.GPDI[BUTTON_UP].B.PDI) //if isr raised by PA_6 rising edge
+	
+	/* if isr raised by BUTTON_UP rising edge */
+	if((SIU.ISR.R & button_up_irq_mask) && SIU.GPDI[BUTTON_UP].B.PDI) 
 	{
 		if(window_state == STOPPED) 
 		{
 			start_HBridge(&window_HB,SENS1); 
 			window_state = DOWN;
 			startChannelPIT(CM_PIT_WTCH_TEMPO);
+			startChannelPIT(PIT_MODE_W);
 		}
 		else if(window_state == DOWN) 
 		{
@@ -57,13 +65,16 @@ void buttons_isr()
 		
 	}
 	
-	if((SIU.ISR.R & 0x4) && SIU.GPDI[BUTTON_DOWN].B.PDI) //if isr raised by PA_7 rising edge
+	
+	/* if isr raised by BUTTON_DOWN rising edge */
+	if((SIU.ISR.R & button_down_irq_mask) && SIU.GPDI[BUTTON_DOWN].B.PDI) 
 	{
 		if(window_state == STOPPED) 
 		{ 
 			start_HBridge(&window_HB, SENS2); 
 			window_state = UP;
 			startChannelPIT(CM_PIT_WTCH_TEMPO);
+			startChannelPIT(PIT_MODE_W);
 		}
 		else if(window_state == UP) 
 		{
@@ -72,6 +83,42 @@ void buttons_isr()
 			window_state = STOPPED;
 		}
 	}
+	
+	/* if isr raised by BUTTON_UP falling edge  */
+	if((SIU.ISR.R & button_up_irq_mask) && (SIU.GPDI[BUTTON_UP].B.PDI== 0) ) 
+		{
+			if(window_state == UP)
+			{	
+				//  check if PIT_MOD_W > 100ms
+				stopChannelPIT(PIT_MODE_W);
+				/* if more than 100 ms has elapsed since the motor has started => manual mode => stop the motor. Else automatic mode */
+				if(PIT.CH[PIT_MODE_W].CVAL.R < MODE_W_THRESHOLD) 
+				{
+					stop_HBridge(&window_HB);
+					stop_PITs();
+					window_state = STOPPED;
+				}
+			}
+		}
+	
+	
+	/* if isr raised by BUTTON_DOWN falling edge */
+	if((SIU.ISR.R & button_down_irq_mask) && (SIU.GPDI[BUTTON_UP].B.PDI== 0) ) 
+		{
+			if(window_state == DOWN)
+			{
+				//  check if PIT_MOD_W > 100ms
+				stopChannelPIT(PIT_MODE_W);
+				/* if more than 100 ms has elapsed since the motor has started => manual mode => stop the motor. Else automatic mode */
+				if(PIT.CH[PIT_MODE_W].CVAL.R < MODE_W_THRESHOLD) 
+				{
+					stop_HBridge(&window_HB);
+					stop_PITs();
+					window_state = STOPPED;
+				}
+			}
+		
+		}
 	
 	/* clear interrupt flag */
 		// clear all isr
