@@ -43,7 +43,7 @@ void init()
 void Interrupt_Rx_CAN1 () {
 
 	uint8_t Data = ReceiveMsg();
-	if (Data==0xAA) {
+	if (Data==fermer_porte_G) {
 		if (LED_status==0) {
 			LED_on(1);
 			LED_status = 1;
@@ -70,7 +70,10 @@ void Interrupt_Rx_CAN1 () {
 
 	while (1)
 	{
-	#ifdef DCM
+		//door_management();//door locking
+		//window_management();//the rise of the door window glass’s 
+		//send_informations();// send information (rain,battery,speed)
+	#ifdef test_emission
 		if (bouton4()==1) {
 			TransmitMsg(&TxData, length, ID_BCM); //transmet message à BCM
 		}

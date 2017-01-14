@@ -166,6 +166,8 @@ void TransmitMsg(uint8_t * TxData, uint8_t length, uint16_t MsgID) {
 	CAN_1.BUF[0].CS.B.CODE =0b1100;        /* Activate msg. buf. to transmit data frame */ 
 }
 
+
+
 //Receive a message on MB 1 with data ID=ID_BCM, ID_DCM or ID_IC
 //Print 4 LSB bits of the first byte on PE4-PE7.
 uint8_t ReceiveMsg(void) {
