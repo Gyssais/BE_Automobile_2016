@@ -21,6 +21,7 @@
 #include "Driver_phare.h" 
 #include "SBC.h"
 #include "spi_drv.h"
+#include "define.h"
 
 #define SIZE_BUFFER_CAN 40
 
@@ -69,7 +70,13 @@ void initCAN1 (void) {
 	/* MB 1 will be RX buffer		*/
 	CAN_1.BUF[1].CS.B.IDE = 0; 		/* MB 1 will look for a standard ID (11 bits) */
 #ifdef BCM
-	CAN_1.BUF[1].ID.B.STD_ID = 555 ; /* MB 1 will look for ID = 555 */
+	CAN_1.BUF[1].ID.B.STD_ID = ID_BCM; /* MB 1 will look for ID = 111 */
+#endif
+#ifdef DCM
+	CAN_1.BUF[1].ID.B.STD_ID = ID_DCM; /* MB 1 will look for ID = 222 */
+#endif
+#ifdef IC
+	CAN_1.BUF[1].ID.B.STD_ID = IC_DCM; /* MB 1 will look for ID = 333 */
 #endif
 	CAN_1.BUF[1].CS.B.CODE = 4; 	 /* MB 1 set to RX EMPTY*/  
 
@@ -144,7 +151,7 @@ void TransmitMsg(uint8_t * TxData, uint8_t length, uint16_t MsgID) {
 	CAN_1.BUF[0].CS.B.CODE =0b1100;        /* Activate msg. buf. to transmit data frame */ 
 }
 
-//Receive a message on MB 1 with data ID 555
+//Receive a message on MB 1 with data ID=ID_BCM, ID_DCM or ID_IC
 //Print 4 LSB bits of the first byte on PE4-PE7.
 uint8_t ReceiveMsg(void) {
 	vuint8_t j;
