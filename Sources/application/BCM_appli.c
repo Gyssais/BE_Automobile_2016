@@ -28,14 +28,11 @@ uint8_t p=pluie;
  */
 void appli_BCM()
 {
-	while (1)
-	{
-		door_management();//door locking
-		window_management();//the rise of the door window glass’s 
-		send_informations();// send information (rain,battery,speed)
-		
-		// wait (mettre le micro en sommeil)
-	}
+
+	door_management();//door locking
+	window_management();//the rise of the door window glass’s 
+	send_informations();// send information (rain,battery,speed)
+	
 }
 
 

@@ -1,7 +1,7 @@
 /************ Include *********************/
 #include "MPC5604B.h"
 #include "IntcInterrupts.h"
-#include "config.h"
+#include "config.h" //TODO à supprimer (remplacé par define.h)
 #include "SBC.h"
 #include "Mode_manager.h"
 #include "MPC5604B_LED.h"
@@ -39,9 +39,13 @@ void init()
 	init_buttons();
 }
 
-
+/*
+ * Fonction de gestion de l'interruption sur reception d'un message par le CAN
+ * Utiliser la fonction ReceiveMsg() pour récupérer le message
+ */
 void Interrupt_Rx_CAN1 () {
 
+#ifdef TEST_RECEPTION
 	uint8_t Data = ReceiveMsg();
 	if (Data==fermer_porte_G) {
 		if (LED_status==0) {
@@ -53,32 +57,43 @@ void Interrupt_Rx_CAN1 () {
 			LED_status = 0;
 		}
 	}
+#endif
+#ifdef BCM
+	//TODO: Rx_management_bcm();
+#endif
+#ifdef DCM
+	//TODO: Rx_mangement_dcm();
+#endif
 }
 
 
  int main(void) {
-	 
+	
+#ifdef TEST_EMISSION
 	uint8_t TxData;
 	uint8_t length;
-	//uint8_t Data;
-	LED_status=0;
-	 
-	init();
-	
 	TxData = 0xAA;
 	length = 1;
+	LED_status=0;
+#endif
+	
+	init();
+	
+	
 
 	while (1)
 	{
-		//door_management();//door locking
-		//window_management();//the rise of the door window glass’s 
-		//send_informations();// send information (rain,battery,speed)
-	#ifdef test_emission
+#ifdef TEST_RECEPTION
 		if (bouton4()==1) {
 			TransmitMsg(&TxData, length, ID_BCM); //transmet message à BCM
 		}
-	#endif
-
+#endif
+#ifdef BCM
+		appli_bcm();
+#endif
+#ifdef DCM
+		//TODO: appli_dcm();
+#endif
 	}
 	
 }

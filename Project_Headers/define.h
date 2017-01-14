@@ -43,8 +43,10 @@ extern uint8_t LED_status;
  */
 #define LENGTH_FRAME 1
 
-// Informations
-//dictionnaire can
+// Codes des infos à transmettre par le CAN
+// Attention ! : la fonction TransmitMsg(...) prend en paramètre un pointeur sur la donnée à transmettre,
+// il faut donc définir une variable ayant la valeur définie par le #define (voir BCM_appli.c).
+// TODO Si quelqu'un a une meilleure, je prends
 
 // Statut portes : de DCM vers IC
 #define porte_G_verrouillee  		1
