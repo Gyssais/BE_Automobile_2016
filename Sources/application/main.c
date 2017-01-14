@@ -31,6 +31,7 @@ void init()
 	Init_SBC_DBG();
 	initCAN1();
 	
+	//TODO gpio.c ?
 	init_LED();
 	LED_off(1);
 	LED_off(2);
