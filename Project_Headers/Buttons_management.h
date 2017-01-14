@@ -1,6 +1,15 @@
 #ifndef Buttons_H_
 #define Buttons_H_
 
+/* 
+ * Initialisation de l'ADC pour lecture vitesse (potentiomètre de la carte)
+ */
+void init_speed_button();
+
+/*
+ * Lecture vitesse via potentiomètre
+ */
+uint16_t read_speed();
 
 /*
  * Initialisation LEDs de la carte
@@ -49,6 +58,7 @@ void LED_off(uint8_t);
  * Fonction de test de boutons et LEDs : Bouton 1 -> Allume LED 1, B2 -> LED 2,...
  * Nécessaires : 	disableWatchdog(); et initModesAndClock(); début du programme
  */
- void test_buttons_management();
-
+uint8_t Test_PIT();
+ void test_buttons_management(int );
+ void test_speed();
 #endif Buttons_H_

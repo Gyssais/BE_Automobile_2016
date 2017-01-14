@@ -33,14 +33,15 @@
 int setupADC(); /* init the adc, disable all channel */
 int setupPin_ADC(unsigned int pin); /* enable the analog channel corresponding to the given channel */
 int setupPin_ADC_Interrupt(unsigned int pin, unsigned int interrupt_flag); // set the global flags and enable the interrupt from the pin
-int pinToADCChannel(unsigned int pin, char * channel, char *type);
+int pinToADCChannel_and_Type(unsigned int pin, char * channel, char *type);
+int pinToADCChannel(unsigned int pin);
 void enableADC();
 void startConversion();
 int analogRead(unsigned int pin); /* start a conversion and return the result. the pin must be configured before with setupPin_ADC()*/
 void attachInterrupt_ADC_EOC(INTCInterruptFn isr, unsigned char priority);
 
 
-int setupAnalogWatchdog(int pin, unsigned int high_threshold, unsigned int low_threshold, int watchdog);
+int setupAnalogWatchdog(int pin, unsigned int high_threshold, int low_threshold, int watchdog);
 void attachInterrupt_ADC_WTCH(INTCInterruptFn isr, unsigned char priority);
 void startAnalogWatchdog(int watchdog);
 void stopAnalogWatchdog(int watchdog);
