@@ -49,7 +49,7 @@ void window_management(){
         	/*send close_window to DCM via the CAN*/
         	
             if(DCM_Stat=1 && t<5){
-            	/*it’s  what we want */
+            	/*it’s what we want */
             }
             else i++;
             

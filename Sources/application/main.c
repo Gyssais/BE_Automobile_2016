@@ -21,6 +21,7 @@
 /*************** Public function            **********/
 
 
+
 void init()
 {
 	disableWatchdog();
@@ -39,12 +40,28 @@ void init()
 }
 
 
+void Interrupt_Rx_CAN1 () {
+
+	uint8_t Data = ReceiveMsg();
+	if (Data==0xAA) {
+		if (LED_status==0) {
+			LED_on(1);
+			LED_status = 1;
+		}
+		else {
+			LED_off(1);
+			LED_status = 0;
+		}
+	}
+}
+
+
  int main(void) {
 	 
 	uint8_t TxData;
 	uint8_t length;
-	uint8_t Data;
-	uint8_t LED_status=0;
+	//uint8_t Data;
+	LED_status=0;
 	 
 	init();
 	
@@ -56,19 +73,6 @@ void init()
 	#ifdef DCM
 		if (bouton4()==1) {
 			TransmitMsg(&TxData, length, ID_BCM); //transmet message à BCM
-		}
-	#endif
-	#ifdef BCM
-		Data = ReceiveMsg();
-		if (Data==TxData) {
-			if (LED_status==0) {
-				LED_on(1);
-				LED_status = 1;
-			}
-			else {
-				LED_off(1);
-				LED_status = 0;
-			}
 		}
 	#endif
 

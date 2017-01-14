@@ -23,6 +23,8 @@
 #include "spi_drv.h"
 #include "define.h"
 
+#include "Buttons_management.h"
+
 #define SIZE_BUFFER_CAN 40
 
 struct _SPI_DRV SPI[];
@@ -38,10 +40,22 @@ uint16_t Read_voltage_value(void){
 	return 0;
 }
 
-void Fin_Transmission () {
-	CAN_1.BUF[0].CS.B.CODE = 0b1000;
-	CAN_1.IFRL.B.BUF00I = 0;
+/*
+void Interrupt_Rx_CAN1 () {
+
+	uint8_t Data = ReceiveMsg();
+	if (Data==0xAA) {
+		if (LED_status==0) {
+			LED_on(1);
+			LED_status = 1;
+		}
+		else {
+			LED_off(1);
+			LED_status = 0;
+		}
+	}
 }
+*/
 
 
 //FlexCAN1 initialisation
@@ -49,8 +63,8 @@ void initCAN1 (void) {
 	
 	uint8_t j;
 	
-	//CAN_1.IMRL.B.BUF00M = 1;
-	//INTC_InstallINTCInterruptHandler(Fin_Transmission, 88, 12);
+	CAN_1.IMRL.B.BUF01M = 1;
+	INTC_InstallINTCInterruptHandler(Interrupt_Rx_CAN1, 88, 12);
 		
 	
 	/* Put in Freeze Mode, local priority disable, enable only 8 message buffers, common ID filter */
@@ -67,6 +81,7 @@ void initCAN1 (void) {
 	} 
 	/* MB 0 will be the TX buffer, so initialised with TX INACTIVE		*/
 	CAN_1.BUF[0].CS.B.CODE = 8;     /* Message Buffer 0 set to TX INACTIVE */
+	
 	/* MB 1 will be RX buffer		*/
 	CAN_1.BUF[1].CS.B.IDE = 0; 		/* MB 1 will look for a standard ID (11 bits) */
 #ifdef BCM

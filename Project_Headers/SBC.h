@@ -21,5 +21,9 @@ void Init_SBC_DBG(void);
 
 void initCAN1 (void);
 
+/*
+ * Fonction d'interruption activée à chaque réception de message
+ */
+void Interrupt_Rx_CAN1 ();
 
 #endif /* SBC_H_ */
