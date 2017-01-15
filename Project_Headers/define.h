@@ -10,11 +10,12 @@
 
 #include "MPC5604B.h"
 
+
+/************************ COMMON PART ***********************************/
 // Choix module
 //#define BCM //Recepteur tests CAN
 #define DCM //Emetteur tests CAN
 //#define IC
-
 
 /*
  * Application global declarations. Must at the end replace config.h. Functions of main.c must be declared here.
@@ -37,15 +38,15 @@ extern uint8_t LED_status;
  * ID : destinataire
  * Data (1 octet) :
  * 		- 2 premiers bits :
- * 							00 -> Donnée binaire (pluie, porte verouillée, etc.)
- * 							11 -> Donnée numérique (vitesse uniquement)
+ * 							00 -> DonnÃ©e binaire (pluie, porte verouillÃ©e, etc.)
+ * 							11 -> DonnÃ©e numÃ©rique (vitesse uniquement)
  * 		- 6 derniers bits : information
  */
 #define LENGTH_FRAME 1
 
-// Codes des infos à transmettre par le CAN
-// Attention ! : la fonction TransmitMsg(...) prend en paramètre un pointeur sur la donnée à transmettre,
-// il faut donc définir une variable ayant la valeur définie par le #define (voir BCM_appli.c).
+// Codes des infos Ã  transmettre par le CAN
+// Attention ! : la fonction TransmitMsg(...) prend en paramÃ¨tre un pointeur sur la donnÃ©e Ã  transmettre,
+// il faut donc dÃ©finir une variable ayant la valeur dÃ©finie par le #define (voir BCM_appli.c).
 // TODO Si quelqu'un a une meilleure, je prends
 
 // Statut portes : de DCM vers IC
@@ -63,7 +64,7 @@ extern uint8_t LED_status;
 #define antihijacking_active 		9
 #define antihijacking_desactive 	10
 
-// Statut fenêtres : de DCM vers IC
+// Statut fenÃªtres : de DCM vers IC
 #define vitres_en_fermeture 		11
 
 #define vitre_G_fermee 				12
@@ -93,13 +94,46 @@ extern uint8_t LED_status;
 #define pluie						30
 
 
-/*
- * Test functions
- */
-#define AD_PIN PB_4
+#ifdef DCM /********************* DCM PART *****************************/
 
-void adc_example();
-void ctu_trigger_example();
-void adc_watchdog_example();
+/* PIT utilization */
+#define PIT_ADC			3  // can't be changed !
+#define PIT_WTCH_TEMPO	1 // PIT used for tempo between motor start and start current monitoring
+#define PIT_MODE_W		2 // PIT used to select automatic or manual mode. 
+
+/* DCM pin mapping */
+
+// window H-bridge 
+#define IN1_W		PC_4
+#define IN2_W		PC_5
+#define EN_W		PC_6
+#define D2_W		PC_7
+#define FS_W		PC_8
+#define FB_W		PB_4
+
+// window buttons
+#define BUTTON_UP	PA_6		
+#define BUTTON_DOWN PA_7
+
+/* DCM ISR priority */
+#define WTCH_ISR_PRIORITY		10
+#define EOCTU_ISR_PRIORITY		5
+#define PIT_WTCH_TEMPO_PRIORITY 6
+#define EIRQ0_PRIORITY			4
+
+/* windows state definition */
+#define STOPPED		0
+#define UP			1
+#define DOWN		2
+#define CLOSED		3
+#define OPEN		4
+#define UNKNOW		5
+
+extern uint8_t window_position;
+extern uint8_t window_state;
+
+#endif /***************** END DCM PART ******************/
+
+
 
 #endif /* DEFINE_H_ */

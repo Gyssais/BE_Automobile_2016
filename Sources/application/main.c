@@ -1,7 +1,7 @@
 /************ Include *********************/
 #include "MPC5604B.h"
 #include "IntcInterrupts.h"
-#include "config.h" //TODO à supprimer (remplacé par define.h)
+#include "config.h" //TODO Ã  supprimer (remplacÃ© par define.h)
 #include "SBC.h"
 #include "Mode_manager.h"
 #include "MPC5604B_LED.h"
@@ -14,12 +14,18 @@
 #include "pit.h"
 #include "Buttons_management.h"
 #include "current_monitoring.h"
+#include "driver_example.h"
+#include "window.h"
 
 
 /*************** Private function prototype **********/
 
 /*************** Public function            **********/
 
+
+//TODO : mettre tous les pins mapping dans define.h
+//TODO : faire un fichier windows.c et windows.h
+//TODO : changer le threshold du watchdog selon le sens du moteur
 
 
 void init()
@@ -41,7 +47,7 @@ void init()
 
 /*
  * Fonction de gestion de l'interruption sur reception d'un message par le CAN
- * Utiliser la fonction ReceiveMsg() pour récupérer le message
+ * Utiliser la fonction ReceiveMsg() pour rÃ©cupÃ©rer le message
  */
 void Interrupt_Rx_CAN1 () {
 
@@ -85,7 +91,7 @@ void Interrupt_Rx_CAN1 () {
 	{
 #ifdef TEST_RECEPTION
 		if (bouton4()==1) {
-			TransmitMsg(&TxData, length, ID_BCM); //transmet message à BCM
+			TransmitMsg(&TxData, length, ID_BCM); //transmet message Ã  BCM
 		}
 #endif
 #ifdef BCM
@@ -96,7 +102,7 @@ void Interrupt_Rx_CAN1 () {
 #endif
 	}
 	
-}
+
 				
 
 

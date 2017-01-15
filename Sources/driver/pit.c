@@ -6,7 +6,8 @@
  */
 
 #include "pit.h"
-#include "MPC5604B.h"
+
+
 
 
 void setupChannelPIT(unsigned int channel, unsigned int period_ms)
@@ -20,6 +21,12 @@ void setupChannelPIT(unsigned int channel, unsigned int period_ms)
 			
 }
 
+void setupISRChannelPIT(unsigned int channel, INTCInterruptFn isr, int priority)
+{
+	INTC_InstallINTCInterruptHandler(isr, PIT_to_ISR_num(channel), priority);
+	PIT.CH[channel].TCTRL.B.TIE = 1; // enable interrupt for this channel
+}
+
 void startChannelPIT(unsigned int channel)
 {
 	PIT.CH[channel].TCTRL.B.TEN = 1;
@@ -28,4 +35,32 @@ void startChannelPIT(unsigned int channel)
 void stopChannelPIT(unsigned int channel)
 {
 	PIT.CH[channel].TCTRL.B.TEN = 0;
+}
+
+
+int PIT_to_ISR_num(int channel)
+{
+	switch (channel)
+	{
+	case 0:
+			return PIT0_IRQ;
+			break;
+	case 1:
+			return PIT1_IRQ;
+			break;
+	case 2:
+			return PIT2_IRQ;
+			break;
+	case 3:
+			return PIT3_IRQ; 
+			break;
+	case 4:
+			return PIT4_IRQ;
+			break;
+	case 5:
+			return PIT5_IRQ;
+			break;
+		
+	}
+	return -1;
 }
