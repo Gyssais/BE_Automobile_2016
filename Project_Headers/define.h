@@ -19,8 +19,8 @@
 
 /* PIT utilization */
 #define PIT_ADC			3  // can't be changed !
-#define PIT_WTCH_TEMPO	1
-#define PIT_MODE_W		2 // PIT to select automatic or manuel mode. 
+#define PIT_WTCH_TEMPO	1 // PIT used for tempo between motor start and start current monitoring
+#define PIT_MODE_W		2 // PIT used to select automatic or manual mode. 
 
 /* DCM pin mapping */
 
@@ -32,7 +32,7 @@
 #define FS_W		PC_8
 #define FB_W		PB_4
 
-//s window buttons
+// window buttons
 #define BUTTON_UP	PA_6		
 #define BUTTON_DOWN PA_7
 
@@ -56,7 +56,7 @@
 #define OPEN		4
 #define UNKNOW		5
 
-extern uint8_t  window_position;
+extern uint8_t window_position;
 extern uint8_t window_state;
 
 #endif

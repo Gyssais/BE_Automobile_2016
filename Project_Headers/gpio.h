@@ -13,20 +13,20 @@
 #include "interrupt_number.h"
 #include "IntcInterrupts.h"
 
-enum eirq_mode {RISING, FALLING, BOTH};
 
 #define INPUT			0
 #define OUTPUT			1
 
 #define WRONG_PIN		-1
 #define WRONG_MODE		-2
+#define WRONG_CONF		-3
 #define RISING			1
 #define FALLING			2
 #define BOTH			3
 
 
 void pinMode(int pin, int mode);
-void digitalWrite(int pin, int value);
+int digitalWrite(int pin, int value);
 int digitalRead(int pin); 
 
 int setup_EIRQ_pin(int pin, int mode);

@@ -27,14 +27,18 @@ void pinMode(int pin, int mode)
 	else if (mode == INPUT) SIU.PCR[pin].R = 0x0100;
 }
 
-void digitalWrite(int pin, int value)
+int digitalWrite(int pin, int value)
 {
 	if(SIU.PCR[pin].R == 0x0200) SIU.GPDO[pin].B.PDO = value;
+	else return WRONG_CONF;
+	
+	return 0;
 }
 
 int digitalRead(int pin)
 {
 	if(SIU.PCR[pin].R == 0x0100) return SIU.GPDI[pin].B.PDI;
+	else return WRONG_CONF;
 }
 
 
