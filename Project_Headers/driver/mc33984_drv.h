@@ -49,8 +49,8 @@
 #define _MC33984_DRV_H
 
 
-#include "MPC5604B.h"
-#include "spi_drv.h"
+#include "driver/MPC5604B.h"
+#include "driver/spi_drv.h"
 //#include <string.h>
 
 /**

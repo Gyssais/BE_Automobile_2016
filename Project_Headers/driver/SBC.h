@@ -8,7 +8,7 @@
 #ifndef SBC_H_
 #define SBC_H_
 
-#include "MPC5604B.h"
+#include "driver/MPC5604B.h"
 
 
 /*

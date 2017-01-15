@@ -9,14 +9,14 @@
 #define DRIVER_EXAMPLE_H_
 
 
-#include "pit.h"
+#include "driver/pit.h"
 #include "pin.h"
-#include "adc.h"
+#include "driver/adc.h"
 #include "define.h"
-#include "MPC5604B.h"
-#include "IntcInterrupts.h"
-#include "Buttons_management.h"
-#include "gpio.h"
+#include "driver/MPC5604B.h"
+#include "driver/IntcInterrupts.h"
+#include "service/Buttons_management.h"
+#include "driver/gpio.h"
 
 /* driver example */
 void adc_example();

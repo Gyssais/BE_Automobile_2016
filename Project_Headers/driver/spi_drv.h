@@ -129,8 +129,8 @@ int main(void) {
 
 #ifndef _SPI_DRV_H
 #define _SPI_DRV_H
-#include "MPC5604B.h"
-#include "IntcInterrupts.h"
+#include "driver/MPC5604B.h"
+#include "driver/IntcInterrupts.h"
 #include <string.h>
 
 /**

@@ -9,9 +9,9 @@
 #define GPIO_H_
 
 #include "pin.h"
-#include "MPC5604B.h"
+#include "driver/MPC5604B.h"
 #include "interrupt_number.h"
-#include "IntcInterrupts.h"
+#include "driver/IntcInterrupts.h"
 
 
 #define INPUT			0

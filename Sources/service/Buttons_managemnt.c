@@ -1,7 +1,7 @@
-#include "MPC5604B.h"
-#include "Buttons_management.h"
+#include "driver/MPC5604B.h"
+#include "service/Buttons_management.h"
 #include "pin.h"
-#include "adc.h"
+#include "driver/adc.h"
 
 
 void init_speed_button()

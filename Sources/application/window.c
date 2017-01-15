@@ -5,7 +5,7 @@
  *      Author: Theo
  */
 
-#include "window.h"
+#include "application/window.h"
 
 MC33887_pinout window_HB = {IN1_W, IN2_W, D2_W, EN_W, FS_W};
 

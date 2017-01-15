@@ -5,9 +5,9 @@
  *      Author: Theo
  */
 
-#include "driver_example.h"
-#include "current_monitoring.h"
-#include "gpio.h"
+#include "driver/driver_example.h"
+#include "service/current_monitoring.h"
+#include "driver/gpio.h"
 
 #define AD_PIN PB_4
 

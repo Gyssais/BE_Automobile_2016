@@ -5,12 +5,12 @@
  *  Created on: Nov 13, 2016
  *      Author: Julien
  */
-#include "SBC.h"
-#include "Mode_manager.h"
-#include "MPC5604B.h"
-#include "Buttons_management.h"
+#include "driver/SBC.h"
+#include "service/Mode_manager.h"
+#include "driver/MPC5604B.h"
+#include "service/Buttons_management.h"
 #include "pin.h"
-#include "BCM_appli.h"
+#include "application/BCM_appli.h"
 #include "define.h"
 
 
@@ -91,3 +91,4 @@ void send_informations(){
 	read_speed(); /*read speed’s values and send them to the instrument cluster via the CAN */
 	
 }
+

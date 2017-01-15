@@ -9,8 +9,8 @@
 #define PIT_H_
 
 #include "interrupt_number.h"
-#include "IntcInterrupts.h"
-#include "MPC5604B.h"
+#include "driver/IntcInterrupts.h"
+#include "driver/MPC5604B.h"
 
 #define F_PIT 64000000  // Hz 
 
