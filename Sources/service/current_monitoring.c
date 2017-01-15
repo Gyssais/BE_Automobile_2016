@@ -5,7 +5,7 @@
  *      Author: Theo
  */
 
-#include "current_monitoring.h"
+#include "service/current_monitoring.h"
 
 int16_t current_buffer[BUFFER_SIZE] = {0}; // circular buffer
 int16_t moving_avr_buffer[MOVING_AVR_DEPTH] = {0};

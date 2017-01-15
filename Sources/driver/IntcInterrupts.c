@@ -26,9 +26,9 @@
 /* Includes                                                                  */
 /*---------------------------------------------------------------------------*/
 
-#include "MPC5604B.h"         /* MCU platform development header       */
+#include "driver/MPC5604B.h"         /* MCU platform development header       */
 
-#include "IntcInterrupts.h"     /* Implement functions from this file */
+#include "driver/IntcInterrupts.h"     /* Implement functions from this file */
 
 /*---------------------------------------------------------------------------*/
 /* Inline Assembler Defines                                                  */
