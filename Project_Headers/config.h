@@ -8,7 +8,9 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+/*
 #define BCM // BCM or LCM
+*/
 
 // lights definiton
 #define BIT_NAVIGATION_LIGHTS 		0x01
@@ -26,9 +28,11 @@
 #define BIT_BUTTON_FLASHING_LIGHT_RIGHT 0x08
 #define BIT_BUTTON_FLASHING_LIGHT_LEFT	0x10
 
+
 //definition CAN id
 #define ID_CAN_BCM 	0b01000000001
 #define ID_CAN_LCM	0b01000000010
+
 
 #define LIGHT_MESSAGE 0x33
 #define CURRENT_MESSAGE 0x44
