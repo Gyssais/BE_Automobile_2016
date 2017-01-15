@@ -227,7 +227,7 @@ int main(void) {
  * 	The framesize is by default set to the maximum of 16 but can be altered, if needed,
  *  using the SPI_FRAMESIZE define(value betweeen 4 and 16).
 */
-#define SPI_FRAMESIZE 8
+#define SPI_FRAMESIZE 16
 /**
  *	\}
 */

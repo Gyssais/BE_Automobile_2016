@@ -8,15 +8,25 @@
  *  Date: December 2016
  */
 
+/*
+ * Utilisation dans le main.c
+ * 		initialise_SPI_DRIVER();
+		SPI[1].init(SPI_BAUD_62500, SPI_DELAY_DEFAULT);
+		Init_SBC_DBG();
+ */
+
 #include "MPC5604B.h"
 #include "IntcInterrupts.h"
 #include "config.h"
 #include "Driver_phare.h" 
 #include "SBC.h"
+#include "spi_drv.h"
+#include "define.h"
+
+#include "Buttons_management.h"
 
 #define SIZE_BUFFER_CAN 40
 
-//global variable
 struct _SPI_DRV SPI[];
 
 uint8_t get_flag_frame_received(void){
@@ -30,45 +40,63 @@ uint16_t Read_voltage_value(void){
 	return 0;
 }
 
-/*void initDSPI_1(void)
-{
-	DSPI_1.MCR.R = 0x80010001;		// Set Master Mode, CS select at LOW, HALT=1			   
-	DSPI_1.CTAR[0].R = 0x78024424;	// Set timing: Tcsc=Tasc=4µs, Tdt= 1µs, BR=100kbits/s 	
-  
- 	DSPI_1.MCR.B.HALT = 0x0;	    // Exit HALT mode: go from STOPPED to RUNNING state		
- 	
- 	SIU.PCR[113].R = 0x0A04;        // MPC56xxB: Config pad as DSPI_0 SOUT output - PH1		
- 	SIU.PCR[112].R = 0x0103;        // MPC56xxB: Config pad as DSPI_0 SIN input - PH0 		
- 	SIU.PSMI[8].R = 2;      	    // MPC56xxB: Select PCR 112 for DSPI_1 SIN input 		
- 	SIU.PCR[114].R = 0x0A04;        // MPC56xxB: Config pad as DSPI_0 SCK output - PH2 		
- 	SIU.PCR[115].R = 0x0A04;        // MPC56xxB: Config pad as DSPI_0 PCS0 output - PH3 	
-}*/
+/*
+void Interrupt_Rx_CAN1 () {
+
+	uint8_t Data = ReceiveMsg();
+	if (Data==0xAA) {
+		if (LED_status==0) {
+			LED_on(1);
+			LED_status = 1;
+		}
+		else {
+			LED_off(1);
+			LED_status = 0;
+		}
+	}
+}
+*/
+
 
 //FlexCAN1 initialisation
-	void initCAN1 (void) {
-	uint8_t   i;
+void initCAN1 (void) {
+	
+	uint8_t j;
+	
+	CAN_1.IMRL.B.BUF01M = 1;
+	INTC_InstallINTCInterruptHandler(Interrupt_Rx_CAN1, 88, 12);
+		
+	
 	/* Put in Freeze Mode, local priority disable, enable only 8 message buffers, common ID filter */
-	CAN_1.MCR.R = 0x50000007;  
+	//CAN_1.MCR.B.SOFTRST = 1;
+	//while (CAN_1.MCR.B.SOFTRST == 1) {}
+	CAN_1.MCR.R = 0x5000003F;  
+	while (CAN_1.MCR.B.FRZACK != 1) {}
 	/* Configure for 8MHz OSC, 100KHz bit time */     
-	CAN_1.CR.R = 0x04DB2003;        
+	CAN_1.CR.R = 0x04DB0006;     
 	/* Disactivate all 64 message buffers */
-	for (i=0; i<64; i++) {
-		CAN_1.BUF[i].CS.B.CODE = 0;   
+	
+	for (j=0; j<64; j++) {
+		CAN_1.BUF[j].CS.B.CODE = 0;   
 	} 
 	/* MB 0 will be the TX buffer, so initialised with TX INACTIVE		*/
 	CAN_1.BUF[0].CS.B.CODE = 8;     /* Message Buffer 0 set to TX INACTIVE */
+	
 	/* MB 1 will be RX buffer		*/
 	CAN_1.BUF[1].CS.B.IDE = 0; 		/* MB 1 will look for a standard ID (11 bits) */
 #ifdef BCM
-	CAN_1.BUF[1].ID.B.STD_ID = ID_CAN_BCM ; /* MB 1 will look for ID = 555 */
+	CAN_1.BUF[1].ID.B.STD_ID = ID_BCM; /* MB 1 will look for ID = 111 */
 #endif
-#ifdef LCM
-	CAN_1.BUF[1].ID.B.STD_ID = ID_CAN_LCM ; /* MB 1 will look for ID = 555 */
+#ifdef DCM
+	CAN_1.BUF[1].ID.B.STD_ID = ID_DCM; /* MB 1 will look for ID = 222 */
+#endif
+#ifdef IC
+	CAN_1.BUF[1].ID.B.STD_ID = IC_DCM; /* MB 1 will look for ID = 333 */
 #endif
 	CAN_1.BUF[1].CS.B.CODE = 4; 	 /* MB 1 set to RX EMPTY*/  
 
 	/*Common ID filtering: accept all bits if standard ID is used for matching*/
-	CAN_1.RXGMASK.R = 0x07FF0000; 
+	CAN_1.RXGMASK.R = 0x1FFFFFFF; 
 
 	/* Pin configuration		*/
 	SIU.PCR[42].R = 0x0624;         /* MPC56xxB: Config port C10 as CAN1TX, open drain */
@@ -76,15 +104,9 @@ uint16_t Read_voltage_value(void){
 	SIU.PSMI[0].R = 0x01;           /* MPC56xxB: Select PCR 43 for CAN1RX Input */
 
 	/* Leave Freeze mode			*/
-	CAN_1.MCR.R = 0x00000007;       /* Negate FlexCAN1 halt state for the 8 first message buffers */
+	CAN_1.MCR.R = 0x0000003F;       /* Negate FlexCAN1 halt state for the 8 first message buffers */
 }
 
-/*
-void ReadDataDSPI_1(void) {
-	while (DSPI_1.SR.B.RFDF != 1){} // Wait for Receive FIFO Drain Flag = 1 				
-  	DSPI_1.POPR.R; 					// Read data received by slave SPI 						
-  	DSPI_1.SR.R = 0x80020000;       // Clear TCF, RDRF flags by writing 1 to them 			
-}*/
 
 /* Init_SBC_DBG
  * 
@@ -94,14 +116,14 @@ void ReadDataDSPI_1(void) {
  */
 void Init_SBC_DBG(void) 			
 {
-		vuint32_t i;
+		uint32_t i;
 		uint16_t TData;
 		uint16_t RData;
 		uint16_t ID_prod;
-		initDSPI_1();
-		initCAN1();
+				
+		// Demande ID produit
+		// initCAN1();
 		
-		// Demande ID produit (Commande 'test')
 		TData = 0x2580;
 		SPI[1].write(&TData);
 		SPI[1].read(&RData);
@@ -124,26 +146,31 @@ void Init_SBC_DBG(void)
 		SPI[1].write(&TData);
 }
 
+
+
 void TransmitMsg(uint8_t * TxData, uint8_t length, uint16_t MsgID) {
 	uint8_t	i;
-	/* Assumption:  Message buffer CODE is INACTIVE --> done in initCAN1 */                                 
+	/* Assumption:  Message buffer CODE is INACTIVE --> done in initCAN1 */  
 	CAN_1.BUF[0].CS.B.IDE = 0;           /* Use standard ID length */
 	CAN_1.BUF[0].ID.B.STD_ID = MsgID;      /* Transmit ID */
 	CAN_1.BUF[0].CS.B.RTR = 0;           /* Data frame, not remote Tx request frame */
-	CAN_1.BUF[0].CS.B.LENGTH = length;
+	
 	for (i=0;i<length;i++){
-		CAN_1.BUF[0].DATA.B[i]=TxData[i]; /* Data to be transmitted */
+		CAN_1.BUF[0].DATA.B[i]=*TxData; /* Data to be transmitted */
 	}
 	for(i=length;i<8;i++){
-		CAN_1.BUF[0].DATA.B[i] = 0;	
+		CAN_1.BUF[0].DATA.B[i] = 0;	/* On remplit le reste avec des 0 */
 	}
+	CAN_1.BUF[0].CS.B.LENGTH = length;
 	CAN_1.BUF[0].CS.B.SRR = 1;           /* Tx frame (not required for standard frame)*/
-	CAN_1.BUF[0].CS.B.CODE =0xC;         /* Activate msg. buf. to transmit data frame */ 
+	CAN_1.BUF[0].CS.B.CODE =0b1100;        /* Activate msg. buf. to transmit data frame */ 
 }
 
-//Receive a message on MB 1 with data ID 555
+
+
+//Receive a message on MB 1 with data ID=ID_BCM, ID_DCM or ID_IC
 //Print 4 LSB bits of the first byte on PE4-PE7.
-void ReceiveMsg(void) {
+uint8_t ReceiveMsg(void) {
 	vuint8_t j;
 	vuint32_t dummy;
 	vuint32_t result32;
@@ -165,12 +192,12 @@ void ReceiveMsg(void) {
 	RxTIMESTAMP = CAN_1.BUF[1].CS.B.TIMESTAMP; 
 	dummy = CAN_1.TIMER.R;                	/* Read TIMER to unlock message buffers */    
 	CAN_1.IFRL.R = 0x00000002;           	/* Clear CAN 1 MB 0 flag */
+	
 #ifdef BCM
 	Data_treatment_BCM(RxLENGTH,RxDATA);
 #endif
-#ifdef LCM
-	Data_treatment_LCM(RxLENGTH,RxDATA);
-#endif
+	
+	return RxDATA[0];
 	
 	}
 	

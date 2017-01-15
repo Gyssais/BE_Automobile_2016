@@ -89,6 +89,9 @@ void initModesAndClock(void) {
 	CGM.FMPLL_MR.B.INC_STEP = 52; //cf  formule p107 -> modulation depth = 2%
 	//si jamais pb, remplir INC_STEP qui correspond à l'indice de modulation
 	
+	// Intêret de cette ligne ?
+	CGM.SC_DC[1].R = 0x80; //InitPeriClkGen
+	
 	// Peri. Cfg. 8 configurations au max :
 	// p162 RM
 	ME.RUNPC[0].R = 0x00000000; //les périph qui prennent cette config ne sont actifs dans aucun des modes
@@ -124,6 +127,8 @@ void initModesAndClock(void) {
    	
     ME.PCTL[32].B.RUN_CFG = 5; //ADC_0
     // ADC_0 actifs en RUN0 et en RUN1 et RUN2
+    
+    ME.PCTL[57].B.RUN_CFG =5; // CTU
     
 #ifdef LCM
     ME.PCTL[92].B.RUN_CFG = 5 ;

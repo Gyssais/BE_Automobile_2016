@@ -7,6 +7,7 @@
 
 #include "current_monitoring.h"
 #include "Buttons_management.h"
+#include "define.h"
 
 
 void adc_example()
@@ -14,12 +15,11 @@ void adc_example()
 	int result;
 	
 	result = setupADC();
-	result =  setupPin_ADC(AD_PIN);
 	enableADC();
 	
 	while(1)
 	{
-		result = analogRead(AD_PIN);
+		//result = analogRead(AD_PIN);
 	}
 }
 
@@ -47,7 +47,6 @@ void ctu_trigger_example()
 	LED_off(4);
 	
 	result = setupADC();
-	result = setupPin_ADC(AD_PIN);
 	
 	setupPin_ADC_Interrupt(PB_4, EOCTU_MASK);	// enable EOC_CTU interrupt from pin PB_4 
 	attachInterrupt_ADC_EOC(adc_eoc_isr, 8);	// set the ISR to be called for adc EOC interrupt
@@ -65,9 +64,8 @@ void adc_watchdog_example()
 	int result;
 		
 	result = setupADC();
-	result =  setupPin_ADC(AD_PIN);
 	
-	result = setupAnalogWatchdog(AD_PIN, 700, 100, 0); // high_treshold =700, low = 100, first watchdog (0)
+	//result = setupAnalogWatchdog(AD_PIN, 700, 100, 0); // high_treshold =700, low = 100, first watchdog (0)
 	attachInterrupt_ADC_WTCH(adc_wtch_isr, 7);
 	startAnalogWatchdog(0);
 	
@@ -76,6 +74,6 @@ void adc_watchdog_example()
 	
 	while(1)
 		{
-			result = analogRead(AD_PIN);
+			//result = analogRead(AD_PIN);
 		}
 }
