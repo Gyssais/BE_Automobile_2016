@@ -100,6 +100,7 @@ extern uint8_t LED_status;
 #define PIT_ADC			3  // can't be changed !
 #define PIT_WTCH_TEMPO	1 // PIT used for tempo between motor start and start current monitoring
 #define PIT_MODE_W		2 // PIT used to select automatic or manual mode. 
+#define PIT_LOCKING		4
 
 /* DCM pin mapping */
 
@@ -111,15 +112,27 @@ extern uint8_t LED_status;
 #define FS_W		PC_8
 #define FB_W		PB_4
 
+
+// door locking H-bridge
+#define IN1_L		PC_9
+#define IN2_L		PC_10
+#define EN_L		PC_11
+#define D2_L		PC_12
+#define FS_L		PC_13
+
 // window buttons
 #define BUTTON_UP	PA_6		
 #define BUTTON_DOWN PA_7
+
+// locking button
+#define LOCK_BUTTON	PF_15
 
 /* DCM ISR priority */
 #define WTCH_ISR_PRIORITY		10
 #define EOCTU_ISR_PRIORITY		5
 #define PIT_WTCH_TEMPO_PRIORITY 6
 #define EIRQ0_PRIORITY			4
+#define EIRQ1_PRIORITY			3
 
 /* windows state definition */
 #define STOPPED		0
@@ -129,8 +142,13 @@ extern uint8_t LED_status;
 #define OPEN		4
 #define UNKNOW		5
 
+/* Door state definition */
+#define LOCKED		0
+#define UNLOCKED	1
+
 extern uint8_t window_position;
 extern uint8_t window_state;
+extern uint8_t door_state;
 
 #endif /***************** END DCM PART ******************/
 

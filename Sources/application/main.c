@@ -23,11 +23,6 @@
 /*************** Public function            **********/
 
 
-//TODO : mettre tous les pins mapping dans define.h
-//TODO : faire un fichier windows.c et windows.h
-//TODO : changer le threshold du watchdog selon le sens du moteur
-
-
 void init()
 {
 	disableWatchdog();
@@ -98,7 +93,7 @@ void Interrupt_Rx_CAN1 () {
 		appli_bcm();
 #endif
 #ifdef DCM
-		//TODO: appli_dcm();
+		init_window();
 #endif
 	}
  }

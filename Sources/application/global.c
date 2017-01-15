@@ -13,6 +13,8 @@ uint8_t LED_status=0;
 #ifdef DCM
 uint8_t window_position = UNKNOW;
 uint8_t window_state = STOPPED;
+
+unint8_t door_state = UNLOCKED;
 #endif
 
 

@@ -21,7 +21,7 @@ int init_window()
 	window_state = STOPPED;
 	window_position = UNKNOW;
 	setupChannelPIT(PIT_MODE_W, PIT_MODE_W_TEMPO);
-	setup_buttons();
+	setup_buttons_w();
 	init_HBridge(&window_HB);
 	cm_initialize();
 }
@@ -37,7 +37,7 @@ void pit_wtch_tempo_isr()
 }
 
 
-void buttons_isr()
+void buttons_w_isr()
 {
 	
 	if((SIU.ISR.R & 0x1))  // if isr raised by PA_3
@@ -122,7 +122,7 @@ void buttons_isr()
 	
 	/* clear interrupt flag */
 		// clear all isr
-	SIU.ISR.R = 0xFFFF;
+	SIU.ISR.R = 0x00FF;
 	
 	/* toggle LED_1 */
 	if(SIU.GPDO[PE_4].R == 1) SIU.GPDO[PE_4].R = 0;
@@ -130,7 +130,7 @@ void buttons_isr()
 	
 }
 
-int setup_buttons()
+int setup_buttons_w()
 {
 	int result=0;
 	
@@ -139,7 +139,7 @@ int setup_buttons()
 	
 	result = setup_EIRQ_pin(BUTTON_UP, BOTH);
 	result = setup_EIRQ_pin(BUTTON_DOWN, BOTH);
-	attachInterrupt_EIRQ0(buttons_isr, EIRQ0_PRIORITY);
+	attachInterrupt_EIRQ0(buttons_w_isr, EIRQ0_PRIORITY);
 	
 	return result;
 }
