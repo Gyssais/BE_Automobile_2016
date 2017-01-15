@@ -91,4 +91,3 @@ void send_informations(){
 	read_speed(); /*read speed’s values and send them to the instrument cluster via the CAN */
 	
 }
-
