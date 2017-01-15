@@ -5,10 +5,10 @@
  *      Author: Antoine
  */
 /************* Include *****************/
-#include "MPC5604B.h"
-#include "IntcInterrupts.h"
+#include "driver/MPC5604B.h"
+#include "driver/IntcInterrupts.h"
 #include "config.h"
-#include "Mode_manager.h"
+#include "service/Mode_manager.h"
 
 
 /************* Private function ********/
