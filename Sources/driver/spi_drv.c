@@ -11,8 +11,8 @@
 */
 
 
-#include "driver/spi_drv.h"
-#include "driver/IntcInterrupts.h"
+#include "spi_drv.h"
+#include "IntcInterrupts.h"
 
 extern struct _SPI_DRV SPI[3];
 

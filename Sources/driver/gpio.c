@@ -5,7 +5,7 @@
  *      Author: Theo
  */
 
-#include "driver/gpio.h"
+#include "gpio.h"
 
 char eirq_to_pin[16] = {PA_3, PA_6, PA_7, PA_8, PA_14, PC_2, PC_3, PC_5, PC_14, PE_4, PE_10, PE_12, PE_14, PF_15, PG_1, PG_8};
 

@@ -1,20 +1,20 @@
 /************ Include *********************/
-#include "driver/MPC5604B.h"
-#include "driver/IntcInterrupts.h"
+#include "MPC5604B.h"
+#include "IntcInterrupts.h"
 #include "config.h" //TODO à supprimer (remplacé par define.h)
-#include "driver/SBC.h"
-#include "service/Mode_manager.h"
-#include "application/BCM_appli.h"
-#include "application/DCM_appli.h"
+#include "SBC.h"
+#include "Mode_manager.h"
+#include "BCM_appli.h"
+#include "DCM_appli.h"
 #include "pin.h"
-#include "driver/adc.h"
+#include "adc.h"
 #include "define.h"
-#include "driver/spi_drv.h"
-#include "driver/pit.h"
-#include "service/Buttons_management.h"
-#include "service/current_monitoring.h"
-#include "driver/driver_example.h"
-#include "application/window.h"
+#include "spi_drv.h"
+#include "pit.h"
+#include "Buttons_management.h"
+#include "current_monitoring.h"
+#include "driver_example.h"
+#include "window.h"
 
 
 /*************** Private function prototype **********/

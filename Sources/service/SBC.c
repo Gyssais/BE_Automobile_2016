@@ -15,14 +15,14 @@
 		Init_SBC_DBG();
  */
 
-#include "driver/MPC5604B.h"
-#include "driver/IntcInterrupts.h"
+#include "MPC5604B.h"
+#include "IntcInterrupts.h"
 #include "config.h"
-#include "driver/SBC.h"
-#include "driver/spi_drv.h"
+#include "SBC.h"
+#include "spi_drv.h"
 #include "define.h"
 
-#include "service/Buttons_management.h"
+#include "Buttons_management.h"
 
 #define SIZE_BUFFER_CAN 40
 

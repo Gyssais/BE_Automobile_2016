@@ -6,7 +6,7 @@
  */
 
 
-#include "driver/MC33887.h"
+#include "MC33887.h"
 
 
 void init_HBridge(const MC33887_pinout * pinout)

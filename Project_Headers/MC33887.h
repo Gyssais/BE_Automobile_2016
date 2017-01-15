@@ -9,7 +9,7 @@
 #define MC33887_H_
 
 #include "define.h"
-#include "driver/MPC5604B.h"
+#include "MPC5604B.h"
 
 #define SENS1		0
 #define SENS2		1

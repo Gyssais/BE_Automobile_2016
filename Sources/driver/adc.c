@@ -5,9 +5,9 @@
  *      Author: Theo
  */
 
-#include "driver/adc.h"
+#include "adc.h"
 #include "pin.h"
-#include "driver/MPC5604B.h"
+#include "MPC5604B.h"
 #include "interrupt_number.h"
 
 

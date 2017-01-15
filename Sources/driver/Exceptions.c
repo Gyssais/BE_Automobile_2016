@@ -12,7 +12,7 @@
 /* Includes                                                                   */
 /*----------------------------------------------------------------------------*/
 
-#include "driver/Exceptions.h" /* Implement functions from this file */
+#include "Exceptions.h" /* Implement functions from this file */
 
 /*----------------------------------------------------------------------------*/
 /* Function Implementations                                                   */

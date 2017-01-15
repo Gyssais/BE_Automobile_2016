@@ -8,7 +8,7 @@
 #ifndef DEFINE_H_
 #define DEFINE_H_
 
-#include "driver/MPC5604B.h"
+#include "MPC5604B.h"
 
 
 /************************ COMMON PART ***********************************/

@@ -8,7 +8,7 @@
 #ifndef ADC_H_
 #define ADC_H_
 
-#include "driver/IntcInterrupts.h"
+#include "IntcInterrupts.h"
 
 // ADC error code
 #define WRONG_PIN			-1

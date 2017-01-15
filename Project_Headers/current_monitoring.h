@@ -9,15 +9,15 @@
 #define CURRENT_MONITORING_H_
 
 
-#include "driver/pit.h"
+#include "pit.h"
 #include "pin.h"
-#include "driver/adc.h"
+#include "adc.h"
 #include "define.h"
-#include "driver/MPC5604B.h"
-#include "driver/IntcInterrupts.h"
-#include "service/Buttons_management.h"
-#include "driver/MC33887.h"
-#include "application/window.h"
+#include "MPC5604B.h"
+#include "IntcInterrupts.h"
+#include "Buttons_management.h"
+#include "MC33887.h"
+#include "window.h"
 
 #define CURRENT_SAMPLING_RATE	5 		//ms
 #define BUFFER_TIME_LENGTH		3000 	//ms

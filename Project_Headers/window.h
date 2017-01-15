@@ -9,10 +9,10 @@
 #define WINDOW_H_
 
 #include "define.h"
-#include "service/current_monitoring.h"
-#include "driver/MC33887.h"
-#include "driver/gpio.h"
-#include "driver/pit.h"
+#include "current_monitoring.h"
+#include "MC33887.h"
+#include "gpio.h"
+#include "pit.h"
 
 
 // mode : automatic or manual
