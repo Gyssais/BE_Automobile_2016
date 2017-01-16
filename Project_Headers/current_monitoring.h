@@ -18,6 +18,7 @@
 #include "Buttons_management.h"
 #include "MC33887.h"
 #include "window.h"
+#include "SBC.h"
 
 #define CURRENT_SAMPLING_RATE	5 		//ms
 #define BUFFER_TIME_LENGTH		3000 	//ms

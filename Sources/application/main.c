@@ -74,10 +74,10 @@ void Interrupt_Rx_CAN1 () {
 	switch (Data)
 	{
 	case fermer_fenetre_G:
-		
+		window_up();
 		break;
 	case fermer_porte_G:
-		
+		lock_door();
 		break;
 		
 	}

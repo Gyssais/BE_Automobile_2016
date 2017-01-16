@@ -55,8 +55,8 @@ extern uint8_t LED_status;
 #define probleme_porte_G 			3
 #define pas_probleme_porte_G 		4
 
-#define porte_D_verrouillee 		5
-#define porte_D_deverouille 		6
+#define porte_D_verrouillee 		5  // DCM :done
+#define porte_D_deverouille 		6  // DCM :done
 #define probleme_porte_D 			7
 #define pas_probleme_porte_D 		8
 
@@ -67,11 +67,11 @@ extern uint8_t LED_status;
 // Statut fenêtres : de DCM vers IC
 #define vitres_en_fermeture 		11
 
-#define vitre_G_fermee 				12
-#define vitre_G_ouverte 			13
+#define vitre_G_fermee 				12	// DCM :done
+#define vitre_G_ouverte 			13	// DCM :done
 #define probleme_vitre_G 			14
 #define pas_probleme_vitre_G 		15
-#define pincement_vitre_G 			16
+#define pincement_vitre_G 			16	// DCM :done
 #define pas_pincement_vitre_G 		17
 
 #define vitre_D_fermee 				18
@@ -86,9 +86,9 @@ extern uint8_t LED_status;
 #define pas_probleme_batterie 		25
 
 // De BCM vers DCM
-#define fermer_fenetre_G			26
+#define fermer_fenetre_G			26	// DCM :done
 #define fermer_fenetre_D			27
-#define fermer_porte_G				28
+#define fermer_porte_G				28	// DCM :done
 #define fermer_porte_D				29
 
 #define pluie						30
@@ -145,8 +145,8 @@ extern uint8_t LED_status;
 #define UNKNOW		5
 
 /* Door state definition */
-#define LOCKED		0
-#define UNLOCKED	1
+#define LOCKED		porte_G_verrouillee
+#define UNLOCKED	porte_G_deverouille
 
 extern uint8_t window_position;
 extern uint8_t window_state;

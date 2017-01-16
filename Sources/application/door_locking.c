@@ -43,11 +43,13 @@ void buttons_l_isr()
 }
 
 void pit_locking_isr()
-{
+{	
+	uint8_t msg = door_state;	
 	/* clear interrupt flag */
 	PIT.CH[PIT_LOCKING].TFLG.B.TIF = 1;
 	stopChannelPIT(PIT_LOCKING);
 	stop_HBridge(&locking_HB);
+	TransmitMsg(&msg, LENGTH_FRAME, ID_BCM);
 }
 
 void lock_door()

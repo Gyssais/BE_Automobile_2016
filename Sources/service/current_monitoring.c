@@ -81,10 +81,13 @@ void cm_adc_watchdog_isr()
 {
 	int i = 0;
 	int closed = 0; 
+	uint8_t msg =0;
 	
 	/* clear interrupt flags */			
 	ADC.WTISR.R = (1 << (CM_WTCH+4));
 	
+	/* get the window motor status before it goes on STOPPED */
+	msg = window_state;
 	
 	/* turn off the motor */
 	window_stop();
@@ -125,17 +128,21 @@ void cm_adc_watchdog_isr()
 	{
 		// case windows has closed normally
 		LED_on(4);
+		if(msg ==UP) msg = vitre_G_fermee;
+		else if (msg == DOWN)  msg = vitre_G_ouverte;
+		TransmitMsg(&msg, LENGTH_FRAME, ID_BCM);
 	}
 	else 
 	{
 		// case pinch has occured
 		LED_off(4);
+		window_down();
+		msg = pincement_vitre_G;
+		TransmitMsg(&msg, LENGTH_FRAME, ID_BCM);
 	}
 	
 	if(window_state == UP) window_position = CLOSED;
 	if(window_state == DOWN) window_position =OPEN;
-	
-	window_state = STOPPED;
 }
 
 
