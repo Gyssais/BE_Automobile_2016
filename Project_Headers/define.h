@@ -114,11 +114,11 @@ extern uint8_t LED_status;
 
 
 // door locking H-bridge
-#define IN1_L		PC_9
-#define IN2_L		PC_10
-#define EN_L		PC_11
-#define D2_L		PC_12
-#define FS_L		PC_13
+#define IN1_L		PG_9
+#define IN2_L		PG_10
+#define EN_L		PG_11
+#define D2_L		PG_12
+#define FS_L		PG_13
 
 // window buttons
 #define BUTTON_UP	PA_6		
@@ -131,6 +131,7 @@ extern uint8_t LED_status;
 #define WTCH_ISR_PRIORITY		10
 #define EOCTU_ISR_PRIORITY		5
 #define PIT_WTCH_TEMPO_PRIORITY 6
+#define PIT_LOCKING_PRIOTITY	7
 #define EIRQ0_PRIORITY			4
 #define EIRQ1_PRIORITY			3
 

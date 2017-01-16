@@ -14,7 +14,7 @@
 #include "gpio.h"
 #include "pin.h"
 
-#define LOCKING_TIME	50 // ms. motor on time for locking/unlocking
+#define LOCKING_TIME	70 // ms. motor on time for locking/unlocking
 
 int init_locking();
 int setup_buttons_l();

@@ -26,6 +26,7 @@ int setup_buttons_l()
 int init_locking()
 {
 	setupChannelPIT(PIT_LOCKING, LOCKING_TIME);
+	setupISRChannelPIT(PIT_LOCKING, pit_locking_isr, PIT_LOCKING_PRIOTITY);
 	setup_buttons_l();
 	init_HBridge(&locking_HB);
 }
@@ -33,7 +34,7 @@ int init_locking()
 void buttons_l_isr()
 {
 	/* clear interrupt flag */
-			// clear all isr
+	// clear all EIRQ1 isr
 	SIU.ISR.R = 0xFF00;
 	
 	

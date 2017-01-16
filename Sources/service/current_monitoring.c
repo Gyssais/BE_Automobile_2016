@@ -49,7 +49,7 @@ int cm_initialize()
 	
 	setupChannelPIT(CM_PIT_WTCH_TEMPO, CM_WTCH_TEMPO);
 	setupISRChannelPIT(CM_PIT_WTCH_TEMPO, pit_wtch_tempo_isr, PIT_WTCH_TEMPO_PRIORITY);
-	//startChannelPIT(CM_PIT); // the PIT will be started by the hbridge_tempo_isr() in order to not detect the motor start pick current
+	 // the PIT will be started by the hbridge_tempo_isr() in order to not detect the motor start pick current
 	
 	
 	enableADC();	
@@ -139,9 +139,6 @@ void cm_adc_watchdog_isr()
 	if(window_state == DOWN) window_position =OPEN;
 	
 	window_state = STOPPED;
-	
-	
-	//startChannelPIT(CM_PIT); //TODO decide if the current monitoring should run when the windows is stopped
 }
 
 

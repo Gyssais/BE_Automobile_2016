@@ -52,16 +52,17 @@ void buttons_w_isr()
 		if(window_state == STOPPED) 
 		{
 			start_HBridge(&window_HB,SENS1); 
-			window_state = DOWN;
+			window_state = UP;
 			startChannelPIT(CM_PIT_WTCH_TEMPO);
 			startChannelPIT(PIT_MODE_W);
 		}
-		else if(window_state == DOWN) 
+		else 
 		{
 			stop_HBridge(&window_HB);
 			stop_PITs();
 			window_state = STOPPED;
 		}
+		
 		
 	}
 	
@@ -72,11 +73,11 @@ void buttons_w_isr()
 		if(window_state == STOPPED) 
 		{ 
 			start_HBridge(&window_HB, SENS2); 
-			window_state = UP;
+			window_state = DOWN;
 			startChannelPIT(CM_PIT_WTCH_TEMPO);
 			startChannelPIT(PIT_MODE_W);
 		}
-		else if(window_state == UP) 
+		else
 		{
 			stop_HBridge(&window_HB);
 			stop_PITs();
@@ -92,8 +93,9 @@ void buttons_w_isr()
 				//  check if PIT_MOD_W > 100ms
 				stopChannelPIT(PIT_MODE_W);
 				/* if more than 100 ms has elapsed since the motor has started => manual mode => stop the motor. Else automatic mode */
-				if(PIT.CH[PIT_MODE_W].CVAL.R < MODE_W_THRESHOLD) 
-				{
+				//if(PIT.CH[PIT_MODE_W].CVAL.R < MODE_W_THRESHOLD) 
+				if(PIT.CH[PIT_MODE_W].TFLG.B.TIF == 1)
+				{	
 					stop_HBridge(&window_HB);
 					stop_PITs();
 					window_state = STOPPED;
@@ -103,15 +105,16 @@ void buttons_w_isr()
 	
 	
 	/* if isr raised by BUTTON_DOWN falling edge */
-	if((SIU.ISR.R & button_down_irq_mask) && (SIU.GPDI[BUTTON_UP].B.PDI== 0) ) 
+	if((SIU.ISR.R & button_down_irq_mask) && (SIU.GPDI[BUTTON_DOWN].B.PDI== 0)) 
 		{
 			if(window_state == DOWN)
 			{
 				//  check if PIT_MOD_W > 100ms
 				stopChannelPIT(PIT_MODE_W);
 				/* if more than 100 ms has elapsed since the motor has started => manual mode => stop the motor. Else automatic mode */
-				if(PIT.CH[PIT_MODE_W].CVAL.R < MODE_W_THRESHOLD) 
-				{
+				//if(PIT.CH[PIT_MODE_W].CVAL.R < MODE_W_THRESHOLD)
+				if(PIT.CH[PIT_MODE_W].TFLG.B.TIF == 1)
+				{	
 					stop_HBridge(&window_HB);
 					stop_PITs();
 					window_state = STOPPED;
@@ -121,7 +124,7 @@ void buttons_w_isr()
 		}
 	
 	/* clear interrupt flag */
-		// clear all isr
+		// clear all EIRQ0 isr
 	SIU.ISR.R = 0x00FF;
 	
 	/* toggle LED_1 */
@@ -149,4 +152,5 @@ void stop_PITs()
 	stopChannelPIT(CM_PIT_CTU);
 	stopChannelPIT(CM_PIT_WTCH_TEMPO);
 	stopChannelPIT(PIT_MODE_W);
+	PIT.CH[PIT_MODE_W].TFLG.B.TIF= 1 ; 
 }
