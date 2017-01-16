@@ -26,6 +26,7 @@ void init()
 {
 	  enlever_watchdog();
 	  initialisation_du_mode_et_du_clock();
+	  initModesAndClock();
 	  faire_fonctionner_l_interuption();
 	  setupChannelPIT(0,6000);
 	  setupISRChannelPIT(0,interruption,15);

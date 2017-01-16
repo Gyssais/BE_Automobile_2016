@@ -26,7 +26,7 @@ int setup_buttons_l()
 int init_locking()
 {
 
-		stopChannelPIT(0);
+	stopChannelPIT(0);
 	setupChannelPIT(PIT_LOCKING, LOCKING_TIME);
 	setupISRChannelPIT(PIT_LOCKING, pit_locking_isr, PIT_LOCKING_PRIOTITY);
 	setup_buttons_l();
