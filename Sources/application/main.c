@@ -67,7 +67,7 @@ void Interrupt_Rx_CAN1 () {
 	}
 #endif
 #ifdef BCM
-	//TODO: Rx_management_bcm(Data);
+	Rx_management_bcm(Data);
 #endif
 #ifdef DCM
 	//TODO: Rx_mangement_dcm();
