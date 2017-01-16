@@ -78,10 +78,13 @@ void Interrupt_Rx_CAN1 () {
 	LED_status=0;
 #endif
 	
-	init();
+	//init();
+	disableWatchdog();
+	initModesAndClock();
 	
+	init_LED();
+	init_window();
 	
-
 	while (1)
 	{
 #ifdef TEST_RECEPTION
@@ -93,7 +96,7 @@ void Interrupt_Rx_CAN1 () {
 		appli_bcm();
 #endif
 #ifdef DCM
-		init_window();
+		
 #endif
 	}
  }

@@ -110,7 +110,7 @@ extern uint8_t LED_status;
 #define EN_W		PC_6
 #define D2_W		PC_7
 #define FS_W		PC_8
-#define FB_W		PB_4
+#define FB_W		PB_4 // analog
 
 
 // door locking H-bridge

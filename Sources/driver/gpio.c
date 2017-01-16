@@ -53,6 +53,8 @@ int setup_EIRQ_pin(int pin, int mode)
 	else if(mode == BOTH) {SIU.IREER.R |=(1<<irq); SIU.IFEER.R |=(1<<irq);}
 	else return WRONG_MODE;
 	
+	SIU.IRER.R |=(1<<irq);
+	
 	return 0;
 }
 
