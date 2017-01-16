@@ -143,7 +143,7 @@ void window_management(){
 
 void send_informations(){
 	uint8_t TxData;
-	uint16_t speed;
+	//uint16_t speed;
 
 	if(bat_min() == 1){/*send to  the instrument cluster “Low battery” via the CAN*/
 		TxData = probleme_batterie;
