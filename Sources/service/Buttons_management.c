@@ -35,7 +35,7 @@ void init_buttons()
 }
 
 
-uint8_t  lock_door()
+uint8_t  button_lock_door()
 {   
 	uint8_t  B_door = 0;
 	
@@ -131,7 +131,7 @@ void test_buttons_management()
 	init_buttons();
 	
 	while(1) {
-		 if(lock_door() == 1) {
+		 if(button_lock_door() == 1) {
 			LED_on(1); 
 		 }
 		 else LED_off(1);
