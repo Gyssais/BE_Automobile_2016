@@ -25,15 +25,9 @@ int init_window()
 	setupChannelPIT(PIT_MODE_W, PIT_MODE_W_TEMPO);
 
 
-	//init_HBridge(&window_HB); //TODO toujours utile avec gestion PWM ?
-
 	setup_buttons_w();
 	init_HBridge(&window_HB);
 	cm_initialize();
-	
-	//pinMode(PA_0, OUTPUT); // IN2 for H-bridge of window
-	//pinMode(PA_1, OUTPUT); // ENABLE for H-bridge of window
-	//init_PWM_0();
 }
 
 
@@ -50,49 +44,41 @@ void pit_wtch_tempo_isr()
 void buttons_w_isr()
 {
 	
-	if((SIU.ISR.R & 0x1))  // if isr raised by PA_3
-	{
-		stop_HBridge(&window_HB); 
-	}
-	
-	
 	/* if isr raised by BUTTON_UP rising edge */
 	if((SIU.ISR.R & button_up_irq_mask) && SIU.GPDI[BUTTON_UP].B.PDI) 
 	{
-		if(window_state == STOPPED) 
-		{
+		if(window_state == STOPPED) window_up();
+		/*{
 			start_HBridge(&window_HB,SENS1); 
 			window_state = UP;
 			startChannelPIT(CM_PIT_WTCH_TEMPO);
 			startChannelPIT(PIT_MODE_W);
-		}
-		else 
-		{
+		}*/
+		else window_stop();
+		/*{
 			stop_HBridge(&window_HB);
 			stop_PITs();
 			window_state = STOPPED;
-		}
-		
-		
+		}*/
 	}
 	
 	
 	/* if isr raised by BUTTON_DOWN rising edge */
 	if((SIU.ISR.R & button_down_irq_mask) && SIU.GPDI[BUTTON_DOWN].B.PDI) 
 	{
-		if(window_state == STOPPED) 
-		{ 
+		if(window_state == STOPPED)  window_down();
+		/*{ 
 			start_HBridge(&window_HB, SENS2); 
 			window_state = DOWN;
 			startChannelPIT(CM_PIT_WTCH_TEMPO);
 			startChannelPIT(PIT_MODE_W);
-		}
-		else
-		{
+		}*/
+		else window_stop();
+		/*{
 			stop_HBridge(&window_HB);
 			stop_PITs();
 			window_state = STOPPED;
-		}
+		}*/
 	}
 	
 	/* if isr raised by BUTTON_UP falling edge  */
@@ -104,12 +90,12 @@ void buttons_w_isr()
 				stopChannelPIT(PIT_MODE_W);
 				/* if more than 100 ms has elapsed since the motor has started => manual mode => stop the motor. Else automatic mode */
 				//if(PIT.CH[PIT_MODE_W].CVAL.R < MODE_W_THRESHOLD) 
-				if(PIT.CH[PIT_MODE_W].TFLG.B.TIF == 1)
-				{	
+				if(PIT.CH[PIT_MODE_W].TFLG.B.TIF == 1) window_stop();
+				/*{	
 					stop_HBridge(&window_HB);
 					stop_PITs();
 					window_state = STOPPED;
-				}
+				}*/
 			}
 		}
 	
@@ -122,13 +108,12 @@ void buttons_w_isr()
 				//  check if PIT_MOD_W > 100ms
 				stopChannelPIT(PIT_MODE_W);
 				/* if more than 100 ms has elapsed since the motor has started => manual mode => stop the motor. Else automatic mode */
-				//if(PIT.CH[PIT_MODE_W].CVAL.R < MODE_W_THRESHOLD)
-				if(PIT.CH[PIT_MODE_W].TFLG.B.TIF == 1)
-				{	
+				if(PIT.CH[PIT_MODE_W].TFLG.B.TIF == 1) window_stop();
+				/*{	
 					stop_HBridge(&window_HB);
 					stop_PITs();
 					window_state = STOPPED;
-				}
+				}*/
 			}
 		
 		}
@@ -137,6 +122,7 @@ void buttons_w_isr()
 		// clear all EIRQ0 isr
 	SIU.ISR.R = 0x00FF;
 	
+	/* for test & debug */
 	/* toggle LED_1 */
 	if(SIU.GPDO[PE_4].R == 1) SIU.GPDO[PE_4].R = 0;
 	else SIU.GPDO[PE_4].R = 1;
@@ -169,22 +155,45 @@ void stop_PITs()
 
 void window_up()
 {
+#ifdef PWM
 	digitalWrite(PA_1,1);
 	digitalWrite(PA_0,0);   
 	//initEMIOS_0ch21(900);
 	start_PWM_0(21, 90); //Rapport cyclique de 90% à cause de PA_0 à 0
+#endif
+	
+	start_HBridge(&window_HB, SENS2); 
+	window_state = DOWN;
+	startChannelPIT(CM_PIT_WTCH_TEMPO);
+	startChannelPIT(PIT_MODE_W);
+	
 }
 
 void window_down()
 {
+#ifdef PWM
 	digitalWrite(PA_1,1);
 	digitalWrite(PA_0,1); 
 	//initEMIOS_0ch21(300);
 	start_PWM_0(21, 30); //Rapport cyclique de 70% à cause de PA_0 à 1
+#endif
+	
+	start_HBridge(&window_HB, SENS2); 
+	window_state = DOWN;
+	startChannelPIT(CM_PIT_WTCH_TEMPO);
+	startChannelPIT(PIT_MODE_W);
+	
 }
 
 void window_stop()
 {
+#ifdef PWM
 	digitalWrite(PA_1,0);
 	digitalWrite(PA_0,0); //Utile ?
+#endif
+	
+	stop_HBridge(&window_HB);
+	stop_PITs();
+	window_state = STOPPED;
+	
 }

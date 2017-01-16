@@ -87,10 +87,7 @@ void cm_adc_watchdog_isr()
 	
 	
 	/* turn off the motor */
-	stop_HBridge(&window_HB);
-	
-	/* stop all PIT timer */
-	stop_PITs();
+	window_stop();
 	
 	
 	//// analyse the current_buffer data to determine if it's a pinch or a normal closure ////

@@ -69,6 +69,19 @@ void Interrupt_Rx_CAN1 () {
 #endif
 #ifdef DCM
 	//TODO: Rx_mangement_dcm();
+	uint8_t Data = ReceiveMsg();
+	
+	switch (Data)
+	{
+	case fermer_fenetre_G:
+		
+		break;
+	case fermer_porte_G:
+		
+		break;
+		
+	}
+	
 #endif
 }
 
