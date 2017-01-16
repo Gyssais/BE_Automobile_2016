@@ -32,15 +32,15 @@ void Rx_management_bcm (uint8_t Data) {
 	
 	uint8_t TxData;
 	
-	switch(data) {
+	switch(Data) {
 	
 	case porte_G_verrouillee:
 		TxData = porte_G_verrouillee;
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 		break;
 		
-	case porte_G_deverrouillee:
-		TxData = porte_G_deverrouillee;
+	case porte_G_deverouille:
+		TxData = porte_G_deverouille;
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 		TxData = antihijacking_desactive;
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
@@ -116,6 +116,7 @@ void window_management(){
 	
 	uint8_t t=0;
 	uint8_t i=0;
+	uint8_t TxData;
 	
     if (det_rain() == 1){
     	// speed <= 3 considere comme a l'arret

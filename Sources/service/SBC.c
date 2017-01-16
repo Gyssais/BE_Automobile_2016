@@ -193,13 +193,9 @@ uint8_t ReceiveMsg(void) {
 	dummy = CAN_1.TIMER.R;                	/* Read TIMER to unlock message buffers */    
 	CAN_1.IFRL.R = 0x00000002;           	/* Clear CAN 1 MB 0 flag */
 	
-#ifdef BCM
-	Data_treatment_BCM(RxLENGTH,RxDATA);
-#endif
-	
 	return RxDATA[0];
 	
-	}
+}
 	
 /*	
 void Data_treatment_BCM( uint8_t length , uint8_t * data){
@@ -219,6 +215,4 @@ void Data_treatment_BCM( uint8_t length , uint8_t * data){
 	}
 }*/
 
-
-}
 

@@ -43,8 +43,10 @@ void init()
 	LED_off(3);
 	LED_off(4);
 	init_buttons();
+#ifdef DCM
 	init_window();
 	init_locker();
+#endif
 }
 
 /*
@@ -67,6 +69,7 @@ void Interrupt_Rx_CAN1 () {
 	}
 #endif
 #ifdef BCM
+	uint8_t Data = ReceiveMsg();
 	Rx_management_bcm(Data);
 #endif
 #ifdef DCM
@@ -97,7 +100,7 @@ void Interrupt_Rx_CAN1 () {
 		}
 #endif
 #ifdef BCM
-		appli_bcm();
+		appli_BCM();
 #endif
 #ifdef DCM
 		//TODO: appli_dcm();

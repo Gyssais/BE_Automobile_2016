@@ -4,6 +4,7 @@
  *  Created on: Jan 11, 2017
  *      Author: Theo
  */
+#ifdef DCM
 
 #include "window.h"
 #include "pwm.h"
@@ -180,3 +181,5 @@ void window_stop()
 	digitalWrite(PA_1,0);
 	digitalWrite(PA_0,0); //Utile ?
 }
+
+#endif

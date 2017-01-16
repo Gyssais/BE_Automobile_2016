@@ -7,6 +7,7 @@
 
 #include "current_monitoring.h"
 
+#ifdef DCM
 int16_t current_buffer[BUFFER_SIZE] = {0}; // circular buffer
 int16_t moving_avr_buffer[MOVING_AVR_DEPTH] = {0};
 
@@ -156,4 +157,4 @@ int16_t mving_avr(int16_t new_data)
 	return (valMoy >> AVR_SHIFT);
 }
 
-
+#endif
