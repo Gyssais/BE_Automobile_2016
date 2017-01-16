@@ -37,10 +37,10 @@ extern uint8_t LED_status;
  * Structure des trame CAN :
  * ID : destinataire
  * Data (1 octet) :
- * 		- 2 premiers bits :
- * 							00 -> Donnée binaire (pluie, porte verouillée, etc.)
- * 							11 -> Donnée numérique (vitesse uniquement)
- * 		- 6 derniers bits : information
+ * 		- premier bits :
+ * 							0 -> Donnée binaire (pluie, porte verouillée, etc.)
+ * 							1 -> Donnée numérique (vitesse uniquement)
+ * 		- 7 derniers bits : information
  */
 #define LENGTH_FRAME 1
 
