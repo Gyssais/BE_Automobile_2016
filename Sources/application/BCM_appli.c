@@ -98,17 +98,17 @@ void Rx_management_bcm (uint8_t Data) {
 
 void door_management() {
 	uint8_t TxData;
-     if (bouton4() == 1) {
-    	 TxData = fermer_porte_G;
-    	 /*send lock_door to DCM via the CAN*/
-    	 TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+    if (bouton4() == 1) {
+    	TxData = fermer_porte_G;
+    	/*send lock_door to DCM via the CAN*/
+    	TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
    	 }
-     if(read_speed() >= 10){
-    	 TxData = fermer_porte_G;
-    	 /*send lock_door to  DCM via the CAN*/
-    	 TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
-    	 TxData = antihijacking_active;
-    	 TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
+     if (read_speed() >= 10) {
+    	TxData = fermer_porte_G;
+    	/*send lock_door to  DCM via the CAN*/
+    	TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+    	TxData = antihijacking_active;
+    	TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
      }
 }
 
@@ -145,7 +145,8 @@ void send_informations(){
 	if(bat_min() == 1){/*send to  the instrument cluster “Low battery” via the CAN*/
 		TxData = probleme_batterie;
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
-	} else {
+	}
+	else {
 		TxData = pas_probleme_batterie;
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 	}
@@ -153,10 +154,11 @@ void send_informations(){
 	if(det_rain() == 1) {/*send  to  the instrument cluster that’s raining via the  CAN */
 		TxData = pluie;
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
-		// TODO : Il ne faut pas fermer les fenêtres aussi ? C'est fait dans window_management
 	}
-	// TODO : read_speed() juste comme ça ne sert à rien, à compléter
-	TxData = (uint8_t)read_speed(); /*read speed’s values and send them to the instrument cluster via the CAN */
+	
+	/*read speed’s values and send them to the instrument cluster via the CAN */
+	TxData = (uint8_t) read_speed();
+	TxData = TxData|0b10000000; // Bit de poids fort à 1 -> Trame de vitesse
 	TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 }
 
