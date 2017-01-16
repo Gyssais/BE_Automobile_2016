@@ -30,7 +30,6 @@ void init()
 	  setupChannelPIT(0,6000);
 	  setupISRChannelPIT(0,interruption,15);
 	  initialisation_du_timer_PIT(1600000);// INTERRUPTION DE 10 s
-	  startChannelPIT(0);
 	  initialise_SPI_DRIVER();
 	  SPI[1].init(SPI_BAUD_62500, SPI_DELAY_DEFAULT);
 	  Init_SBC_DBG();
@@ -46,6 +45,7 @@ void init()
 
 	init_window();
 	init_locking();
+	startChannelPIT(0);
 
 }
 
