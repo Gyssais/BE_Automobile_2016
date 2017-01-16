@@ -1,6 +1,8 @@
 #ifndef Buttons_H_
 #define Buttons_H_
 
+#include "door_locking.h"
+
 /* 
  * Initialisation de l'ADC pour lecture vitesse (potentiomètre de la carte)
  */
@@ -25,7 +27,9 @@ void init_buttons();
 /*
  * Test bouton verouillage portière (BCM). Renvoie 1 si bouton 1 de la carte appuyé.
  */
+
 uint8_t button_lock_door();
+
 
 /*
  * Simulation détection pluie. Renvoie 1 si bouton 2 appuyé.

@@ -15,17 +15,12 @@
 #include "current_monitoring.h"
 #include "driver_example.h"
 #include "window.h"
-#include "locker.h"
+
 
 
 /*************** Private function prototype **********/
 
 /*************** Public function            **********/
-
-
-//TODO : mettre tous les pins mapping dans define.h
-//TODO : faire un fichier windows.c et windows.h
-//TODO : changer le threshold du watchdog selon le sens du moteur
 
 
 void init()
@@ -47,6 +42,7 @@ void init()
 	init_window();
 	init_locker();
 #endif
+
 }
 
 /*
@@ -89,9 +85,12 @@ void Interrupt_Rx_CAN1 () {
 #endif
 	
 	init();
+	//disableWatchdog();
+	//initModesAndClock();
 	
-	
-
+	init_LED();
+	init_window();
+	init_locking();
 	while (1)
 	{
 #ifdef TEST_RECEPTION
@@ -103,7 +102,7 @@ void Interrupt_Rx_CAN1 () {
 		appli_BCM();
 #endif
 #ifdef DCM
-		//TODO: appli_dcm();
+		
 #endif
 	}
  }

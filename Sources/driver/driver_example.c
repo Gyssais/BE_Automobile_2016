@@ -44,11 +44,11 @@ void eirq0_isr()
 		else if(window_state == UP) {stop_Hbridge(); window_state = STOPPED;}
 	}
 	
-	/* clear interrupt flag */
+	// clear interrupt flag
 		// clear all isr
 	SIU.ISR.R = 0xFFFF;
 	
-	/* toggle LED_1 */
+	// toggle LED_1 
 	if(SIU.GPDO[PE_4].R == 1) SIU.GPDO[PE_4].R = 0;
 	else SIU.GPDO[PE_4].R = 1;
 	
@@ -88,7 +88,7 @@ void h_bridge_test()
 
 
 
-/* functions for a simple driver for MC33887 H-bridge. */
+// functions for a simple driver for MC33887 H-bridge.
 
 
 void init_Hbridge()
@@ -160,12 +160,12 @@ void adc_wtch_isr()
 
 void adc_eoc_isr()
 {
-	/* clear interrupt flags */
+	// clear interrupt flags 
 	
 	ADC.ISR.B.EOCTU = 1;  // in this example, the interrupt source can only be the EOC from a CTU triggered conversion.
 	ADC.CEOCFR[0].B.EOC_CH0 =1; // here, we use only the channel 0.
 	
-	/* toggle LED_1 */
+	// toggle LED_1 
 	if(SIU.GPDO[PE_4].R == 1) SIU.GPDO[PE_4].R = 0;
 	else SIU.GPDO[PE_4].R = 1;
 	
@@ -387,3 +387,4 @@ void test_filter()
 }
 
 #endif
+

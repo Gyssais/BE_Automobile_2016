@@ -10,9 +10,11 @@
 // Pour debug
 uint8_t LED_status=0;
 
-#ifdef DCM
+//#ifdef DCM
 uint8_t window_position = UNKNOW;
 uint8_t window_state = STOPPED;
-#endif
+uint8_t door_state = UNLOCKED;
+//#endif
+
 
 

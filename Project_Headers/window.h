@@ -16,14 +16,14 @@
 
 
 // mode : automatic or manual
-#define PIT_MODE_W_TEMPO	100 //ms
+#define PIT_MODE_W_TEMPO	200 //ms
 #define MODE_W_THRESHOLD	(0xFFFFFFFF - PIT_MODE_W_TEMPO*(F_PIT/1000))
 
 
-void buttons_isr();
+void buttons_w_isr();
 void pit_wtch_tempo_isr();
 
-int setup_buttons();
+int setup_buttons_w();
 void stop_PITs();
 
 int init_window();
