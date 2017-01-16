@@ -148,7 +148,10 @@ void Init_SBC_DBG(void)
 
 
 void TransmitMsg(uint8_t * TxData, uint8_t length, uint16_t MsgID) {
+
+		
 	uint8_t	i;
+	stopChannelPIT(0);
 	/* Assumption:  Message buffer CODE is INACTIVE --> done in initCAN1 */  
 	CAN_1.BUF[0].CS.B.IDE = 0;           /* Use standard ID length */
 	CAN_1.BUF[0].ID.B.STD_ID = MsgID;      /* Transmit ID */
@@ -162,7 +165,8 @@ void TransmitMsg(uint8_t * TxData, uint8_t length, uint16_t MsgID) {
 	}
 	CAN_1.BUF[0].CS.B.LENGTH = length;
 	CAN_1.BUF[0].CS.B.SRR = 1;           /* Tx frame (not required for standard frame)*/
-	CAN_1.BUF[0].CS.B.CODE =0b1100;        /* Activate msg. buf. to transmit data frame */ 
+	CAN_1.BUF[0].CS.B.CODE =0b1100; /* Activate msg. buf. to transmit data frame */ 
+	startChannelPIT(0);
 }
 
 

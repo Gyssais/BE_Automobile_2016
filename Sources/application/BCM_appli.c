@@ -29,9 +29,11 @@ uint8_t p=pluie;
 void appli_BCM()
 {
 
+		stopChannelPIT(0);
 	door_management();//door locking
 	window_management();//the rise of the door window glass’s 
 	send_informations();// send information (rain,battery,speed)
+	startChannelPIT(0);
 	
 }
 

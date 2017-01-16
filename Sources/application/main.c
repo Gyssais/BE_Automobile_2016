@@ -1,7 +1,7 @@
 /************ Include *********************/
 #include "MPC5604B.h"
 #include "IntcInterrupts.h"
-#include "config.h" //TODO Ã  supprimer (remplacÃ© par define.h)
+#include "config.h" //TODO à supprimer (remplacé par define.h)
 #include "SBC.h"
 #include "Mode_manager.h"
 #include "BCM_appli.h"
@@ -15,8 +15,7 @@
 #include "current_monitoring.h"
 #include "driver_example.h"
 #include "window.h"
-
-
+#include "modeinchaalah.h"
 
 /*************** Private function prototype **********/
 
@@ -25,12 +24,17 @@
 
 void init()
 {
-	disableWatchdog();
-	initModesAndClock();
-	initialise_SPI_DRIVER();
-	SPI[1].init(SPI_BAUD_62500, SPI_DELAY_DEFAULT);
-	Init_SBC_DBG();
-	initCAN1();
+	  enlever_watchdog();
+	  initialisation_du_mode_et_du_clock();
+	  faire_fonctionner_l_interuption();
+	  setupChannelPIT(0,6000);
+	  setupISRChannelPIT(0,interruption,15);
+	  initialisation_du_timer_PIT(1600000);// INTERRUPTION DE 10 s
+	  startChannelPIT(0);
+	  initialise_SPI_DRIVER();
+	  SPI[1].init(SPI_BAUD_62500, SPI_DELAY_DEFAULT);
+	  Init_SBC_DBG();
+	  initCAN1();
 	
 	init_LED();
 	LED_off(1);
@@ -47,7 +51,7 @@ void init()
 
 /*
  * Fonction de gestion de l'interruption sur reception d'un message par le CAN
- * Utiliser la fonction ReceiveMsg() pour rÃ©cupÃ©rer le message
+ * Utiliser la fonction ReceiveMsg() pour récupérer le message
  */
 void Interrupt_Rx_CAN1 () {
 
@@ -94,7 +98,7 @@ void Interrupt_Rx_CAN1 () {
 	{
 #ifdef TEST_RECEPTION
 		if (bouton4()==1) {
-			TransmitMsg(&TxData, length, ID_BCM); //transmet message Ã  BCM
+			TransmitMsg(&TxData, length, ID_BCM); //transmet message à BCM
 		}
 #endif
 #ifdef BCM
@@ -104,20 +108,7 @@ void Interrupt_Rx_CAN1 () {
 		
 #endif
 	}
- }
-	
-
-				
-
-
-
-
-
- 
-	
-	
-	
-
+}
 
 
 
