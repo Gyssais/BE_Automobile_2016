@@ -97,7 +97,7 @@ void Interrupt_Rx_CAN1 () {
 		}
 #endif
 #ifdef BCM
-		appli_bcm();
+		appli_BCM();
 #endif
 #ifdef DCM
 		//TODO: appli_dcm();
