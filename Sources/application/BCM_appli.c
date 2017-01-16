@@ -13,6 +13,8 @@
 #include "BCM_appli.h"
 #include "define.h"
 
+#ifdef BCM
+
 uint8_t Ack_Leve_Vitre=0;
 
 /*
@@ -163,3 +165,4 @@ void send_informations(){
 	TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 }
 
+#endif
