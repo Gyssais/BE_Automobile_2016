@@ -14,7 +14,7 @@ uint8_t LED_status=0;
 uint8_t window_position = UNKNOW;
 uint8_t window_state = STOPPED;
 
-unint8_t door_state = UNLOCKED;
+uint8_t door_state = UNLOCKED;
 #endif
 
 

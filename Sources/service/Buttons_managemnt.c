@@ -34,7 +34,7 @@ void init_buttons()
 	 SIU.PCR[PE_3].R = 0x0100;
 }
 
-
+/*
 uint8_t  lock_door()
 {   
 	uint8_t  B_door = 0;
@@ -45,7 +45,7 @@ uint8_t  lock_door()
     else  B_door = 1   ;
 	return B_door;
 }
-
+*/
 
 
 uint8_t det_rain()
@@ -122,6 +122,8 @@ void LED_on(uint8_t numLED)
 	}
 }
 
+/*
+
 void test_buttons_management()
 {
 	//disableWatchdog();
@@ -152,7 +154,7 @@ void test_buttons_management()
 		 else LED_off(4);
 	}
 }
-
+*/
 void test_speed()
 {
 	init_LED();
