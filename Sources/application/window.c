@@ -17,6 +17,7 @@ char button_down_irq_mask;
 
 int init_window()
 {
+	startChannelPIT(0);
 	button_up_irq_mask = (1<<pin_to_EIRQ(BUTTON_UP));
 	button_down_irq_mask = (1<<pin_to_EIRQ(BUTTON_DOWN));
 	
@@ -34,6 +35,7 @@ int init_window()
 	//pinMode(PA_0, OUTPUT); // IN2 for H-bridge of window
 	//pinMode(PA_1, OUTPUT); // ENABLE for H-bridge of window
 	//init_PWM_0();
+	startChannelPIT(0);
 }
 
 

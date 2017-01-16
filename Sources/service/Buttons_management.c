@@ -20,18 +20,22 @@ uint16_t read_speed()
 
 void init_LED()
 {
+	 stopChannelPIT(0);
 	 SIU.PCR[PE_4].R = 0x0200;
 	 SIU.PCR[PE_5].R = 0x0200;
 	 SIU.PCR[PE_6].R = 0x0200;
 	 SIU.PCR[PE_7].R = 0x0200;
+	 startChannelPIT(0);
 }
 
 void init_buttons()
 {
+	 stopChannelPIT(0);
 	 SIU.PCR[PE_0].R = 0x0100;
 	 SIU.PCR[PE_1].R = 0x0100; 
 	 SIU.PCR[PE_2].R = 0x0100;
 	 SIU.PCR[PE_3].R = 0x0100;
+	 startChannelPIT(0);
 }
 
 

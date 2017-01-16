@@ -29,6 +29,7 @@ void setupISRChannelPIT(unsigned int channel, INTCInterruptFn isr, int priority)
 
 void startChannelPIT(unsigned int channel)
 {
+	PIT.CH[channel].LDVAL.R = 10000 *( F_PIT/1000);
 	PIT.CH[channel].TCTRL.B.TEN = 1;
 }
 
