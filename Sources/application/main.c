@@ -32,16 +32,17 @@ void init()
 	Init_SBC_DBG();
 	initCAN1();
 	
-	//ctu_trigger_example();
-	
 	init_LED();
 	LED_off(1);
 	LED_off(2);
 	LED_off(3);
 	LED_off(4);
 	init_buttons();
-	init_window();
 	
+
+	init_window();
+	init_locking();
+
 }
 
 /*
@@ -82,9 +83,9 @@ void Interrupt_Rx_CAN1 () {
 	LED_status=0;
 #endif
 	
-	//init();
-	disableWatchdog();
-	initModesAndClock();
+	init();
+	//disableWatchdog();
+	//initModesAndClock();
 	
 	init_LED();
 	init_window();
