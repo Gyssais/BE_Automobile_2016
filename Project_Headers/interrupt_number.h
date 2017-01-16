@@ -19,4 +19,5 @@
 #define PIT3_IRQ	127
 #define PIT4_IRQ	128
 #define PIT5_IRQ	129
+#define CAN_BUF_00_03 88
 #endif /* INTERRUPT_NUMBER_H_ */
