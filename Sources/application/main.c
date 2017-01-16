@@ -15,7 +15,7 @@
 #include "current_monitoring.h"
 #include "driver_example.h"
 #include "window.h"
-#include "locker.h"
+
 
 
 /*************** Private function prototype **********/
@@ -44,7 +44,7 @@ void init()
 	LED_off(4);
 	init_buttons();
 	init_window();
-	init_locker();
+	
 }
 
 /*
