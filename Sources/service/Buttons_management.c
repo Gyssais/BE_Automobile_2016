@@ -122,6 +122,8 @@ void LED_on(uint8_t numLED)
 	}
 }
 
+/*
+
 void test_buttons_management()
 {
 	//disableWatchdog();
@@ -152,7 +154,7 @@ void test_buttons_management()
 		 else LED_off(4);
 	}
 }
-
+*/
 void test_speed()
 {
 	init_LED();

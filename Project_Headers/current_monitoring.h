@@ -41,5 +41,9 @@ void cm_adc_eoctu_isr();
 int cm_initialize(); // initialize and start the monitoring of the motor's current.
 int16_t mving_avr(int16_t data);
 
+void adc_example();
+void adc_wtch_isr();
+void adc_eoc_isr();
+void ctu_trigger_example();
 
 #endif /* CURRENT_MONITORING_H_ */

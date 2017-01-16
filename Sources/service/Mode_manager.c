@@ -9,7 +9,7 @@
 #include "IntcInterrupts.h"
 #include "config.h"
 #include "Mode_manager.h"
-
+#include "define.h"
 
 /************* Private function ********/
 
@@ -130,7 +130,7 @@ void initModesAndClock(void) {
     
     ME.PCTL[57].B.RUN_CFG =5; // CTU
     
-#ifdef LCM
+#ifdef DCM
     ME.PCTL[92].B.RUN_CFG = 5 ;
     ME.PCTL[92].B.LP_CFG = 1;
 #endif

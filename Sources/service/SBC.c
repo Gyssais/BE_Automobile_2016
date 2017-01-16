@@ -21,7 +21,7 @@
 #include "SBC.h"
 #include "spi_drv.h"
 #include "define.h"
-
+#include "interrupt_number.h"
 #include "Buttons_management.h"
 
 #define SIZE_BUFFER_CAN 40
@@ -63,7 +63,7 @@ void initCAN1 (void) {
 	uint8_t j;
 	
 	CAN_1.IMRL.B.BUF01M = 1;
-	INTC_InstallINTCInterruptHandler(Interrupt_Rx_CAN1, 88, 12);
+	INTC_InstallINTCInterruptHandler(Interrupt_Rx_CAN1, CAN_BUF_00_03, CAN_BUF_ISR_PRIORITY);
 		
 	
 	/* Put in Freeze Mode, local priority disable, enable only 8 message buffers, common ID filter */

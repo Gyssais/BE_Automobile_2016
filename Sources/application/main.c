@@ -23,11 +23,6 @@
 /*************** Public function            **********/
 
 
-//TODO : mettre tous les pins mapping dans define.h
-//TODO : faire un fichier windows.c et windows.h
-//TODO : changer le threshold du watchdog selon le sens du moteur
-
-
 void init()
 {
 	disableWatchdog();
@@ -36,6 +31,8 @@ void init()
 	SPI[1].init(SPI_BAUD_62500, SPI_DELAY_DEFAULT);
 	Init_SBC_DBG();
 	initCAN1();
+	
+	//ctu_trigger_example();
 	
 	init_LED();
 	LED_off(1);
@@ -85,10 +82,13 @@ void Interrupt_Rx_CAN1 () {
 	LED_status=0;
 #endif
 	
-	init();
+	//init();
+	disableWatchdog();
+	initModesAndClock();
 	
-	
-
+	init_LED();
+	init_window();
+	init_locking();
 	while (1)
 	{
 #ifdef TEST_RECEPTION
@@ -100,7 +100,7 @@ void Interrupt_Rx_CAN1 () {
 		appli_BCM();
 #endif
 #ifdef DCM
-		//TODO: appli_dcm();
+		
 #endif
 	}
  }
