@@ -4,7 +4,6 @@
 #include "config.h" //TODO à supprimer (remplacé par define.h)
 #include "SBC.h"
 #include "Mode_manager.h"
-#include "MPC5604B_LED.h"
 #include "BCM_appli.h"
 #include "DCM_appli.h"
 #include "pin.h"
@@ -16,6 +15,7 @@
 #include "current_monitoring.h"
 #include "driver_example.h"
 #include "window.h"
+
 
 
 /*************** Private function prototype **********/
@@ -45,6 +45,8 @@ void init()
 	LED_off(3);
 	LED_off(4);
 	init_buttons();
+	init_window();
+	
 }
 
 /*
@@ -97,12 +99,13 @@ void Interrupt_Rx_CAN1 () {
 		}
 #endif
 #ifdef BCM
-		appli_bcm();
+		appli_BCM();
 #endif
 #ifdef DCM
 		//TODO: appli_dcm();
 #endif
 	}
+ }
 	
 
 				

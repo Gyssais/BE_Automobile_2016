@@ -35,7 +35,7 @@
 #define _MPC5604B_H_
     
 #include "typedefs.h"
-    
+
 #ifdef  __cplusplus
 extern "C" {
     

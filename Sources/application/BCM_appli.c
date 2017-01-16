@@ -68,8 +68,10 @@ void window_management(){
             }
             else i++;
             
-            if (i<6){ //TODO : utiliser un timer !
+            if (i<6){
             	/*resend to DCM again via the CAN*/
+            	TransmitMsg(&f_f_G, LENGTH_FRAME, ID_DCM);
+            	TransmitMsg(&f_f_D, LENGTH_FRAME, ID_DCM);
             }
             else /*BCM give up*/  ;
         }
@@ -85,7 +87,7 @@ void send_informations(){
 
 	if(det_rain() == 1) {/*send  to  the instrument cluster that’s raining via the  CAN */
 		TransmitMsg(&p, LENGTH_FRAME, ID_IC);
-		// TODO : Il ne faut pas fermer les fenêtres aussi ?
+
 	}
 	// TODO : read_speed() juste comme ça ne sert à rien, à compéter
 	read_speed(); /*read speed’s values and send them to the instrument cluster via the CAN */

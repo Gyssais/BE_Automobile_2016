@@ -13,8 +13,8 @@
 
 /************************ COMMON PART ***********************************/
 // Choix module
-//#define BCM //Recepteur tests CAN
-#define DCM //Emetteur tests CAN
+#define BCM //Recepteur tests CAN
+//#define DCM //Emetteur tests CAN
 //#define IC
 
 /*
@@ -37,10 +37,10 @@ extern uint8_t LED_status;
  * Structure des trame CAN :
  * ID : destinataire
  * Data (1 octet) :
- * 		- 2 premiers bits :
- * 							00 -> Donnée binaire (pluie, porte verouillée, etc.)
- * 							11 -> Donnée numérique (vitesse uniquement)
- * 		- 6 derniers bits : information
+ * 		- premier bits :
+ * 							0 -> Donnée binaire (pluie, porte verouillée, etc.)
+ * 							1 -> Donnée numérique (vitesse uniquement)
+ * 		- 7 derniers bits : information
  */
 #define LENGTH_FRAME 1
 
@@ -94,7 +94,7 @@ extern uint8_t LED_status;
 #define pluie						30
 
 
-#ifdef DCM /********************* DCM PART *****************************/
+//#ifdef DCM /********************* DCM PART *****************************/
 
 /* PIT utilization */
 #define PIT_ADC			3  // can't be changed !
@@ -132,7 +132,7 @@ extern uint8_t LED_status;
 extern uint8_t window_position;
 extern uint8_t window_state;
 
-#endif /***************** END DCM PART ******************/
+//#endif /***************** END DCM PART ******************/
 
 
 

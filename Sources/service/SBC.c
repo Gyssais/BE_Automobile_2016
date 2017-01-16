@@ -18,7 +18,6 @@
 #include "MPC5604B.h"
 #include "IntcInterrupts.h"
 #include "config.h"
-#include "Driver_phare.h" 
 #include "SBC.h"
 #include "spi_drv.h"
 #include "define.h"
@@ -219,68 +218,3 @@ void Data_treatment_BCM( uint8_t length , uint8_t * data){
 	}
 }
 
-void Data_treatment_LCM( uint8_t length , uint8_t * data){
-	if (length==2){
-		if(data[0]==LIGHT_MESSAGE){
-			//BIT_NAVIGATION_LIGHTS
-			if(data[1]&BIT_NAVIGATION_LIGHTS){
-				Position_ON();
-			}
-			else{
-				Position_OFF();
-			}
-			//BIT_DIMMED_HEADLIGHT
-			if(data[1]&BIT_DIMMED_HEADLIGHT) //croisement
-			{
-				Croisement_ON();
-			}
-			else{
-				Croisement_OFF();
-			}
-			//BIT_HEADLIGHT
-			if(data[1]&BIT_HEADLIGHT) //route
-			{
-				Route_ON();
-			}
-			else{
-				Route_OFF();
-			}
-			//BIT_FLASHING_LIGHT_RIGHT
-			if(data[1]&BIT_FLASHING_LIGHT_RIGHT) //clignotant
-			{
-				Clignotant_droit_ON();
-			}
-			else{
-				Clignotant_droit_OFF();
-			}
-			//BIT_FLASHING_LIGHT_LEFT
-			if(data[1]&BIT_FLASHING_LIGHT_LEFT)
-			{
-				Clignotant_gauche_ON();
-			}
-			else{
-				Clignotant_gauche_OFF();
-			}
-			//BIT_DIRECTION_LIGHT_RIGHT
-			if(data[1]&BIT_DIRECTION_LIGHT_RIGHT) //direction
-			{
-				Direction_droit_ON();
-			}
-			else{
-				Direction_droit_OFF();
-			}
-			//BIT_DIRECTION_LIGHT_LEFT
-			if(data[1]&BIT_DIRECTION_LIGHT_LEFT)
-			{
-				Direction_gauche_ON();
-			}
-			else{
-				Direction_gauche_OFF();
-			}
-		
-		
-		}
-		// A completer
-		
-	}
-}
