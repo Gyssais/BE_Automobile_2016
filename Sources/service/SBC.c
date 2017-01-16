@@ -13,6 +13,7 @@
  * 		initialise_SPI_DRIVER();
 		SPI[1].init(SPI_BAUD_62500, SPI_DELAY_DEFAULT);
 		Init_SBC_DBG();
+		
  */
 
 #include "MPC5604B.h"
@@ -200,7 +201,7 @@ uint8_t ReceiveMsg(void) {
 	
 	}
 	
-	
+/*	
 void Data_treatment_BCM( uint8_t length , uint8_t * data){
 	if (length==2){
 		switch(data[0]){
@@ -216,5 +217,8 @@ void Data_treatment_BCM( uint8_t length , uint8_t * data){
 			
 		}
 	}
+}*/
+
+
 }
 
