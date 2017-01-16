@@ -93,6 +93,7 @@ extern uint8_t LED_status;
 
 #define pluie						30
 
+#define CAN_BUF_ISR_PRIORITY 		12 // priority for the CAN interruption. Same for all platform
 
 #ifdef DCM /********************* DCM PART *****************************/
 
