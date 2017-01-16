@@ -6,6 +6,8 @@
  */
 
 #include "window.h"
+#include "pwm.h"
+#include "gpio.h"
 
 MC33887_pinout window_HB = {IN1_W, IN2_W, D2_W, EN_W, FS_W};
 
@@ -22,8 +24,12 @@ int init_window()
 	window_position = UNKNOW;
 	setupChannelPIT(PIT_MODE_W, PIT_MODE_W_TEMPO);
 	setup_buttons();
-	init_HBridge(&window_HB);
+	init_HBridge(&window_HB); //TODO toujours utile avec gestion PWM ?
 	cm_initialize();
+	
+	pinMode(PA_0, OUTPUT); // IN2 for H-bridge of window
+	pinMode(PA_1, OUTPUT); // ENABLE for H-bridge of window
+	init_PWM_0();
 }
 
 
@@ -149,4 +155,28 @@ void stop_PITs()
 	stopChannelPIT(CM_PIT_CTU);
 	stopChannelPIT(CM_PIT_WTCH_TEMPO);
 	stopChannelPIT(PIT_MODE_W);
+}
+
+
+
+void window_up()
+{
+	digitalWrite(PA_1,1);
+	digitalWrite(PA_0,0);   
+	//initEMIOS_0ch21(900);
+	start_PWM_0(21, 90); //Rapport cyclique de 90% à cause de PA_0 à 0
+}
+
+void window_down()
+{
+	digitalWrite(PA_1,1);
+	digitalWrite(PA_0,1); 
+	//initEMIOS_0ch21(300);
+	start_PWM_0(21, 30); //Rapport cyclique de 70% à cause de PA_0 à 1
+}
+
+void window_stop()
+{
+	digitalWrite(PA_1,0);
+	digitalWrite(PA_0,0); //Utile ?
 }
