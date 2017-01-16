@@ -162,8 +162,8 @@ void window_up()
 	start_PWM_0(21, 90); //Rapport cyclique de 90% à cause de PA_0 à 0
 #endif
 	
-	start_HBridge(&window_HB, SENS2); 
-	window_state = DOWN;
+	start_HBridge(&window_HB, SENS1); 
+	window_state = UP;
 	startChannelPIT(CM_PIT_WTCH_TEMPO);
 	startChannelPIT(PIT_MODE_W);
 	
