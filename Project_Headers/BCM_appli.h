@@ -15,11 +15,12 @@
  * Fonction pricipale du BCM, doit tourner en permanance
  */
 void appli_BCM();
-void Rx_management_bcm(uint8_t Data);
 
+void Rx_management_bcm(uint8_t Data);
+void send_rain_message();
 void door_management();// locking door management 
 void window_management();//the rise of the door window glass’s 
 void send_informations();// send information (rain,battery,speed)
 
-#endif
+#endif /* BCM */
 #endif /* BCM_APPLI_H_ */

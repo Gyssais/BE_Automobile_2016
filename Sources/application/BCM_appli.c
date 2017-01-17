@@ -16,6 +16,7 @@
 #ifdef BCM
 
 uint8_t Ack_Leve_Vitre=0;
+uint8_t nb_sending_try=0;
 
 /*
  * Fonction principale du BCM, doit tourner en permanence
@@ -23,12 +24,12 @@ uint8_t Ack_Leve_Vitre=0;
 void appli_BCM()
 {
 	door_management();		//door locking
-	window_management();	//the rise of the door window glass’s 
+	window_management();	//the rise of the door window glassâ€™s 
 	send_informations();	//send information (rain,battery,speed)
 }
 
 /*
- * Interruption lors de la réception d'un message pour le BCM
+ * Interruption lors de la rÃ©ception d'un message pour le BCM
  */
 void Rx_management_bcm (uint8_t Data) {
 	
@@ -114,40 +115,39 @@ void door_management() {
      }
 }
 
-void window_management(){
+void send_rain_message() // Executée sur interruption timer
+{
+	uint8_t TxData = fermer_fenetre_G;
+	TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+	// Pas de porte droite dans demo
+	nb_sending_try++;
+}
+
+
+void window_management() {
 	
-	uint8_t t=0;
-	uint8_t i=0;
-	uint8_t TxData;
+	setupChannelPIT(4,5000); // 5 secondes
+	setupISRChannelPIT(4, send_rain_message,10);
 	
-    if (det_rain() == 1){
-    	// speed <= 3 considere comme a l'arret
-        if(read_speed() <= 2){
+    if (det_rain() == 1) {
+        if(read_speed() == 0) {
         	/*send close_window to DCM via the CAN*/
-        	TxData = fermer_fenetre_G;
-        	TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
-        	
-            if(Ack_Leve_Vitre=1 && t<5){ //TODO : utiliser un timer !
-            	/*it’s what we want */
-            	//TODO : à finir (à quoi sert DCM_Stat ?)
-            }
-            else i++;
-            
-            if (i<6){
-            	/*resend to DCM again via the CAN*/
-            	TransmitMsg(&f_f_G, LENGTH_FRAME, ID_DCM);
-            	TransmitMsg(&f_f_D, LENGTH_FRAME, ID_DCM);
-            }
-            else /*BCM give up*/  ;
+        	send_rain_message();
+        	startChannelPIT(4);
+        	while(Ack_Leve_Vitre == 0 && nb_sending_try<6)
+        	{}	// Attente reception ACK
+        	stopChannelPIT(4);
+        	nb_sending_try = 0;
         }
     }
 }
+
 
 void send_informations(){
 	uint8_t TxData;
 	//uint16_t speed;
 
-	if(bat_min() == 1){/*send to  the instrument cluster “Low battery” via the CAN*/
+	if(bat_min() == 1){/*send to  the instrument cluster â€œLow batteryâ€� via the CAN*/
 		TxData = probleme_batterie;
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 	}
@@ -156,14 +156,14 @@ void send_informations(){
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 	}
 
-	if(det_rain() == 1) {/*send  to  the instrument cluster that’s raining via the  CAN */
+	if(det_rain() == 1) {/*send  to  the instrument cluster thatâ€™s raining via the  CAN */
 		TxData = pluie;
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 	}
 	
-	/*read speed’s values and send them to the instrument cluster via the CAN */
+	/*read speedâ€™s values and send them to the instrument cluster via the CAN */
 	TxData = (uint8_t) read_speed();
-	TxData = TxData|0b10000000; // Bit de poids fort à 1 -> Trame de vitesse
+	TxData = TxData|0b10000000; // Bit de poids fort Ã  1 -> Trame de vitesse
 	TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 }
 
