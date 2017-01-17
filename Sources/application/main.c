@@ -47,7 +47,7 @@ void init()
 
 /*
  * Fonction de gestion de l'interruption sur reception d'un message par le CAN
- * Utiliser la fonction ReceiveMsg() pour rÃ©cupÃ©rer le message
+ * Utiliser la fonction ReceiveMsg() pour récupérer le message
  */
 void Interrupt_Rx_CAN1 () {
 
