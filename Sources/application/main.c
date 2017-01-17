@@ -47,7 +47,7 @@ void init()
 
 /*
  * Fonction de gestion de l'interruption sur reception d'un message par le CAN
- * Utiliser la fonction ReceiveMsg() pour rÃ©cupÃ©rer le message
+ * Utiliser la fonction ReceiveMsg() pour récupérer le message
  */
 void Interrupt_Rx_CAN1 () {
 
@@ -85,12 +85,7 @@ void Interrupt_Rx_CAN1 () {
 #endif
 	
 	init();
-	//disableWatchdog();
-	//initModesAndClock();
-	
-	init_LED();
-	init_window();
-	init_locking();
+
 	while (1)
 	{
 #ifdef TEST_RECEPTION
