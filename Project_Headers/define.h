@@ -13,8 +13,8 @@
 
 /************************ COMMON PART ***********************************/
 // Choix module
-#define BCM //Recepteur tests CAN
-//#define DCM //Emetteur tests CAN
+//#define BCM //Recepteur tests CAN
+#define DCM //Emetteur tests CAN
 //#define IC
 
 /*
@@ -63,8 +63,8 @@ extern uint8_t LED_status;
 #define probleme_porte_G 			3
 #define pas_probleme_porte_G 		4
 
-#define porte_D_verrouillee 		5
-#define porte_D_deverouille 		6
+#define porte_D_verrouillee 		5  // DCM :done
+#define porte_D_deverouille 		6  // DCM :done
 #define probleme_porte_D 			7
 #define pas_probleme_porte_D 		8
 
@@ -75,11 +75,11 @@ extern uint8_t LED_status;
 // Statut fenêtres : de DCM vers BCM
 #define vitres_en_fermeture 		11
 
-#define vitre_G_fermee 				12
-#define vitre_G_ouverte 			13
+#define vitre_G_fermee 				12	// DCM :done
+#define vitre_G_ouverte 			13	// DCM :done
 #define probleme_vitre_G 			14
 #define pas_probleme_vitre_G 		15
-#define pincement_vitre_G 			16
+#define pincement_vitre_G 			16	// DCM :done
 #define pas_pincement_vitre_G 		17
 
 #define vitre_D_fermee 				18
@@ -94,15 +94,26 @@ extern uint8_t LED_status;
 #define pas_probleme_batterie 		25
 
 // De BCM vers DCM
-#define fermer_fenetre_G			26
+#define fermer_fenetre_G			26	// DCM :done
 #define fermer_fenetre_D			27
-#define fermer_porte_G				28
+#define fermer_porte_G				28	// DCM :done
 #define fermer_porte_D				29
 #define ouvrir_porte_G				31
 
 #define pluie						30
 
 #define CAN_BUF_ISR_PRIORITY 		12 // priority for the CAN interruption. Same for all platform
+
+#define SBC_INT						PE_10 // Jump this pin to PA_1 because SBC is mapped to it on the board. Also put PA_1 as input
+
+
+ /* EIRQ isr priority */
+
+#define BUTTON_PRIORITY				3
+#define FAULT_PRIORITY				14 // FS from H-bridge and SBC
+
+
+
 
 //#ifdef DCM /********************* DCM PART *****************************/
 
@@ -135,27 +146,27 @@ extern uint8_t LED_status;
 #define BUTTON_DOWN PA_7
 
 // locking button
-#define LOCK_BUTTON	PF_15
+#define LOCK_BUTTON	PA_8
 
 /* DCM ISR priority */
 #define WTCH_ISR_PRIORITY		10
 #define EOCTU_ISR_PRIORITY		5
 #define PIT_WTCH_TEMPO_PRIORITY 6
 #define PIT_LOCKING_PRIOTITY	7
-#define EIRQ0_PRIORITY			4
-#define EIRQ1_PRIORITY			3
+
 
 /* windows state definition */
 #define STOPPED		0
 #define UP			1
 #define DOWN		2
+/* windows position definition */
 #define CLOSED		3
 #define OPEN		4
 #define UNKNOW		5
 
 /* Door state definition */
-#define LOCKED		0
-#define UNLOCKED	1
+#define LOCKED		porte_G_verrouillee
+#define UNLOCKED	porte_G_deverouille
 
 extern uint8_t window_position;
 extern uint8_t window_state;
