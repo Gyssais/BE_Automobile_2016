@@ -79,7 +79,9 @@ void Interrupt_Rx_CAN1 () {
 	case fermer_porte_G:
 		lock_door();
 		break;
-		
+	case ouvrir_fenetre_G:
+		unlock_door();
+		break;	
 	}
 	
 #endif
@@ -97,12 +99,6 @@ void Interrupt_Rx_CAN1 () {
 #endif
 	
 	init();
-	//disableWatchdog();
-	//initModesAndClock();
-	
-	init_LED();
-	init_window();
-	init_locking();
 	while (1)
 	{
 #ifdef TEST_RECEPTION

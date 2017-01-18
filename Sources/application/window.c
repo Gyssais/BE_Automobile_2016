@@ -48,18 +48,7 @@ void buttons_w_isr()
 	if((SIU.ISR.R & button_up_irq_mask) && SIU.GPDI[BUTTON_UP].B.PDI) 
 	{
 		if(window_state == STOPPED) window_up();
-		/*{
-			start_HBridge(&window_HB,SENS1); 
-			window_state = UP;
-			startChannelPIT(CM_PIT_WTCH_TEMPO);
-			startChannelPIT(PIT_MODE_W);
-		}*/
 		else window_stop();
-		/*{
-			stop_HBridge(&window_HB);
-			stop_PITs();
-			window_state = STOPPED;
-		}*/
 	}
 	
 	
@@ -67,18 +56,8 @@ void buttons_w_isr()
 	if((SIU.ISR.R & button_down_irq_mask) && SIU.GPDI[BUTTON_DOWN].B.PDI) 
 	{
 		if(window_state == STOPPED)  window_down();
-		/*{ 
-			start_HBridge(&window_HB, SENS2); 
-			window_state = DOWN;
-			startChannelPIT(CM_PIT_WTCH_TEMPO);
-			startChannelPIT(PIT_MODE_W);
-		}*/
 		else window_stop();
-		/*{
-			stop_HBridge(&window_HB);
-			stop_PITs();
-			window_state = STOPPED;
-		}*/
+
 	}
 	
 	/* if isr raised by BUTTON_UP falling edge  */
@@ -89,13 +68,7 @@ void buttons_w_isr()
 				//  check if PIT_MOD_W > 100ms
 				stopChannelPIT(PIT_MODE_W);
 				/* if more than 100 ms has elapsed since the motor has started => manual mode => stop the motor. Else automatic mode */
-				//if(PIT.CH[PIT_MODE_W].CVAL.R < MODE_W_THRESHOLD) 
 				if(PIT.CH[PIT_MODE_W].TFLG.B.TIF == 1) window_stop();
-				/*{	
-					stop_HBridge(&window_HB);
-					stop_PITs();
-					window_state = STOPPED;
-				}*/
 			}
 		}
 	
@@ -109,11 +82,6 @@ void buttons_w_isr()
 				stopChannelPIT(PIT_MODE_W);
 				/* if more than 100 ms has elapsed since the motor has started => manual mode => stop the motor. Else automatic mode */
 				if(PIT.CH[PIT_MODE_W].TFLG.B.TIF == 1) window_stop();
-				/*{	
-					stop_HBridge(&window_HB);
-					stop_PITs();
-					window_state = STOPPED;
-				}*/
 			}
 		
 		}
@@ -162,7 +130,8 @@ void window_up()
 	start_PWM_0(21, 90); //Rapport cyclique de 90% à cause de PA_0 à 0
 #endif
 	
-	ADC.THRHLR[CM_WTCH].B.THRH = CM_WTCH_HIGH_T_UP;
+	//ADC.THRHLR[CM_WTCH].B.THRH = CM_WTCH_HIGH_T_UP; // test two threshold
+	
 	start_HBridge(&window_HB, SENS1); 
 	window_state = UP;
 	startChannelPIT(CM_PIT_WTCH_TEMPO);
@@ -179,7 +148,8 @@ void window_down()
 	start_PWM_0(21, 30); //Rapport cyclique de 70% à cause de PA_0 à 1
 #endif
 	
-	ADC.THRHLR[CM_WTCH].B.THRH = CM_WTCH_HIGH_T_DOWN;
+	//ADC.THRHLR[CM_WTCH].B.THRH = CM_WTCH_HIGH_T_DOWN; // test two threshold
+	
 	start_HBridge(&window_HB, SENS2); 
 	window_state = DOWN;
 	startChannelPIT(CM_PIT_WTCH_TEMPO);

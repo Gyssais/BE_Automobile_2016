@@ -90,10 +90,12 @@ extern uint8_t LED_status;
 #define fermer_fenetre_D			27
 #define fermer_porte_G				28	// DCM :done
 #define fermer_porte_D				29
-
+#define ouvrir_fenetre_G			31
 #define pluie						30
 
 #define CAN_BUF_ISR_PRIORITY 		12 // priority for the CAN interruption. Same for all platform
+
+#define SBC_INT						PE_10 // Jump this pin to PA_1 because SBC is mapped to it on the board. Also put PA_1 as input
 
 //#ifdef DCM /********************* DCM PART *****************************/
 
