@@ -93,7 +93,7 @@ void buttons_w_isr()
 	
 	/* clear interrupt flag */
 		// clear all EIRQ0 isr
-	SIU.ISR.R = 0x00FF;
+	//SIU.ISR.R = 0x00FF;  // now done in the global isr in the main
 	
 	/* for test & debug */
 	/* toggle LED_1 */
@@ -111,7 +111,7 @@ int setup_buttons_w()
 	
 	result = setup_EIRQ_pin(BUTTON_UP, BOTH);
 	result = setup_EIRQ_pin(BUTTON_DOWN, BOTH);
-	attachInterrupt_EIRQ0(buttons_w_isr, EIRQ0_PRIORITY);
+	//attachInterrupt_EIRQ0(buttons_w_isr, EIRQ0_PRIORITY); now done in with  the global ISR  in the main
 	
 	return result;
 }

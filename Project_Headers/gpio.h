@@ -14,6 +14,10 @@
 #include "IntcInterrupts.h"
 
 
+#define EIRQ0_PRIORITY		BUTTON_PRIORITY
+#define EIRQ1_PRIORITY		FAULT_PRIORITY   
+
+
 #define INPUT			0
 #define OUTPUT			1
 

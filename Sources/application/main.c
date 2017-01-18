@@ -23,6 +23,23 @@
 /*************** Public function            **********/
 
 
+void buttons_isr()
+{
+#ifdef BCM
+
+#endif	
+#ifdef DCM
+	
+	buttons_w_isr();
+	buttons_l_isr();
+#endif
+	
+	/* clear interrupt flag */
+	// clear all EIRQ0 isr
+	SIU.ISR.R = 0xFFFF;
+}
+
+
 void init()
 {
 	disableWatchdog();
@@ -39,10 +56,17 @@ void init()
 	LED_off(4);
 	init_buttons();
 #ifdef DCM
+	
+	
+	
 	init_window();
 	init_locking();
+	
+	/* setup the EIRQ0 for button */
+	
+	
 #endif
-
+	attachInterrupt_EIRQ0(buttons_isr, EIRQ0_PRIORITY);
 }
 
 /*
