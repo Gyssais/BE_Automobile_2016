@@ -14,7 +14,8 @@ void init_speed_button()
 
 uint16_t read_speed()  
 { 
-    return analogRead(PB_10)/32;
+	uint16_t speed= analogRead(PB_10)/32;
+    return speed;
 }
 
 

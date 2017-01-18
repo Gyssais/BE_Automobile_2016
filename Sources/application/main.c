@@ -33,14 +33,17 @@ void init()
 	initCAN1();
 	
 	init_LED();
-	LED_off(1);
-	LED_off(2);
+	LED_on(1);
+	LED_on(2);
 	LED_off(3);
 	LED_off(4);
 	init_buttons();
 #ifdef DCM
 	init_window();
 	init_locker();
+#endif
+#ifdef BCM
+	init_appli_BCM();
 #endif
 
 }

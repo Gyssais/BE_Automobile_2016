@@ -98,6 +98,7 @@ extern uint8_t LED_status;
 #define fermer_fenetre_D			27
 #define fermer_porte_G				28
 #define fermer_porte_D				29
+#define ouvrir_porte_G				31
 
 #define pluie						30
 
