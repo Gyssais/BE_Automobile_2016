@@ -16,6 +16,10 @@
 #ifndef CAN_DRV_H_
 #define CAN_DRV_H_
 
+#include "MPC5604B.h"
+
+#define SIZE_BUFFER_CAN 40
+
 /*
  * initCAN1
 This function initialises the FlexCAN1 module. 

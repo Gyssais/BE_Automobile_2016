@@ -26,8 +26,6 @@
 #include "interrupt_number.h"
 #include "Buttons_management.h"
 
-#define SIZE_BUFFER_CAN 40
-
 struct _SPI_DRV SPI[];
 
 uint8_t get_flag_frame_received(void){
