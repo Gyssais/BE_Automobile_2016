@@ -1,7 +1,7 @@
 /************ Include *********************/
 #include "MPC5604B.h"
 #include "IntcInterrupts.h"
-#include "config.h" //TODO à supprimer (remplacé par define.h)
+#include "config.h" //TODO Ã  supprimer (remplacÃ© par define.h)
 #include "SBC.h"
 #include "Mode_manager.h"
 #include "BCM_appli.h"
@@ -47,7 +47,7 @@ void init()
 
 /*
  * Fonction de gestion de l'interruption sur reception d'un message par le CAN
- * Utiliser la fonction ReceiveMsg() pour r�cup�rer le message
+ * Utiliser la fonction ReceiveMsg() pour récupérer le message
  */
 void Interrupt_Rx_CAN1 () {
 
@@ -70,6 +70,21 @@ void Interrupt_Rx_CAN1 () {
 #endif
 #ifdef DCM
 	//TODO: Rx_mangement_dcm();
+	uint8_t Data = ReceiveMsg();
+	
+	switch (Data)
+	{
+	case fermer_fenetre_G:
+		window_up();
+		break;
+	case fermer_porte_G:
+		lock_door();
+		break;
+	case ouvrir_fenetre_G:
+		unlock_door();
+		break;	
+	}
+	
 #endif
 }
 
@@ -85,12 +100,12 @@ void Interrupt_Rx_CAN1 () {
 #endif
 	
 	init();
-
+   
 	while (1)
 	{
 #ifdef TEST_RECEPTION
 		if (bouton4()==1) {
-			TransmitMsg(&TxData, length, ID_BCM); //transmet message à BCM
+			TransmitMsg(&TxData, length, ID_BCM); //transmet message Ã  BCM
 		}
 #endif
 #ifdef BCM

@@ -13,6 +13,7 @@
 #include "pit.h"
 #include "gpio.h"
 #include "pin.h"
+#include "SBC.h"
 
 #define LOCKING_TIME	70 // ms. motor on time for locking/unlocking
 
