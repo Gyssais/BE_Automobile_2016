@@ -10,6 +10,7 @@
 
 #include "define.h"
 #include "MPC5604B.h"
+#include "gpio.h"
 
 #define SENS1		0
 #define SENS2		1
@@ -21,10 +22,11 @@ struct MC33887_pinout
 	uint8_t D2;
 	uint8_t EN;
 	uint8_t FS;
+	uint8_t FS_irq_mask;
 };
 typedef struct MC33887_pinout MC33887_pinout;
 
-void init_HBridge(const MC33887_pinout * pinout);
+void init_HBridge(MC33887_pinout * pinout);
 void stop_HBridge(const MC33887_pinout * pinout);
 void start_HBridge(const MC33887_pinout * pinout, int sens);
 

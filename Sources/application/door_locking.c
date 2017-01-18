@@ -8,7 +8,7 @@
 #include "door_locking.h"
 
 
-MC33887_pinout locking_HB = {IN1_L, IN2_L, D2_L, EN_L, FS_L};
+MC33887_pinout locking_HB = {IN1_L, IN2_L, D2_L, EN_L, FS_L, 0};
 
 char button_lock_irq_mask; 
 
