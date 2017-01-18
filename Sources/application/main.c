@@ -40,7 +40,7 @@ void init()
 	init_buttons();
 #ifdef DCM
 	init_window();
-	init_locker();
+	init_locking();
 #endif
 
 }

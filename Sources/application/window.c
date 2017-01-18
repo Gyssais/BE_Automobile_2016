@@ -4,11 +4,15 @@
  *  Created on: Jan 11, 2017
  *      Author: Theo
  */
-#ifdef DCM
+
+
+
 
 #include "window.h"
 #include "pwm.h"
 #include "gpio.h"
+
+#ifdef DCM
 
 MC33887_pinout window_HB = {IN1_W, IN2_W, D2_W, EN_W, FS_W};
 
@@ -124,6 +128,7 @@ void stop_PITs()
 
 void window_up()
 {
+	uint8_t msg = vitres_en_fermeture;
 #ifdef PWM
 	digitalWrite(PA_1,1);
 	digitalWrite(PA_0,0);   
@@ -137,7 +142,7 @@ void window_up()
 	window_state = UP;
 	startChannelPIT(CM_PIT_WTCH_TEMPO);
 	startChannelPIT(PIT_MODE_W);
-	
+	TransmitMsg(&msg, LENGTH_FRAME, ID_BCM);
 }
 
 void window_down()
@@ -172,3 +177,4 @@ void window_stop()
 }
 
 #endif
+

@@ -13,8 +13,8 @@
 
 /************************ COMMON PART ***********************************/
 // Choix module
-#define BCM //Recepteur tests CAN
-//#define DCM //Emetteur tests CAN
+//#define BCM //Recepteur tests CAN
+#define DCM //Emetteur tests CAN
 //#define IC
 
 /*
