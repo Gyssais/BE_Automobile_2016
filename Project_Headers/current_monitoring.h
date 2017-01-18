@@ -28,6 +28,9 @@
 
 #define CM_PIN 					FB_W
 #define CM_WTCH_HIGH_T			780
+#define CM_WTCH_HIGH_T_UP		850
+#define CM_WTCH_HIGH_T_DOWN		780
+
 #define CM_WTCH_LOW_T			-1	// the low threshold trigger is not used, set a value < to ADC_MIN to disable
 #define CM_WTCH					0
 #define CM_PIT_CTU				PIT_ADC

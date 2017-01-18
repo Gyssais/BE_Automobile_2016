@@ -140,6 +140,7 @@ extern uint8_t LED_status;
 #define STOPPED		0
 #define UP			1
 #define DOWN		2
+/* windows position definition */
 #define CLOSED		3
 #define OPEN		4
 #define UNKNOW		5
