@@ -105,6 +105,15 @@ extern uint8_t LED_status;
 
 #define SBC_INT						PE_10 // Jump this pin to PA_1 because SBC is mapped to it on the board. Also put PA_1 as input
 
+
+ /* EIRQ isr priority */
+
+#define BUTTON_PRIORITY				3
+#define FAULT_PRIORITY				14 // FS from H-bridge and SBC
+
+
+
+
 //#ifdef DCM /********************* DCM PART *****************************/
 
 /* PIT utilization */
@@ -136,15 +145,14 @@ extern uint8_t LED_status;
 #define BUTTON_DOWN PA_7
 
 // locking button
-#define LOCK_BUTTON	PF_15
+#define LOCK_BUTTON	PA_8
 
 /* DCM ISR priority */
 #define WTCH_ISR_PRIORITY		10
 #define EOCTU_ISR_PRIORITY		5
 #define PIT_WTCH_TEMPO_PRIORITY 6
 #define PIT_LOCKING_PRIOTITY	7
-#define EIRQ0_PRIORITY			4
-#define EIRQ1_PRIORITY			3
+
 
 /* windows state definition */
 #define STOPPED		0

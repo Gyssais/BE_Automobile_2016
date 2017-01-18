@@ -26,5 +26,6 @@ void pit_locking_isr();
 void lock_door();
 void unlock_door();
 
+extern char button_lock_irq_mask;
 
 #endif /* DOOR_LOCKING_H_ */

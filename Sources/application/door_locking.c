@@ -10,6 +10,8 @@
 
 MC33887_pinout locking_HB = {IN1_L, IN2_L, D2_L, EN_L, FS_L};
 
+char button_lock_irq_mask; 
+
 
 int setup_buttons_l()
 {
@@ -18,13 +20,14 @@ int setup_buttons_l()
 	pinMode(LOCK_BUTTON, INPUT);
 	
 	result = setup_EIRQ_pin(LOCK_BUTTON, RISING);
-	attachInterrupt_EIRQ1(buttons_l_isr, EIRQ1_PRIORITY);
+	//attachInterrupt_EIRQ1(buttons_l_isr, EIRQ1_PRIORITY); done in the main
 		
 	return result;
 }
 
 int init_locking()
 {
+	button_lock_irq_mask = (1<<pin_to_EIRQ(LOCK_BUTTON));
 	setupChannelPIT(PIT_LOCKING, LOCKING_TIME);
 	setupISRChannelPIT(PIT_LOCKING, pit_locking_isr, PIT_LOCKING_PRIOTITY);
 	setup_buttons_l();
@@ -33,13 +36,14 @@ int init_locking()
 
 void buttons_l_isr()
 {
-	/* clear interrupt flag */
-	// clear all EIRQ1 isr
-	SIU.ISR.R = 0xFF00;
 	
+	if(SIU.ISR.R & button_lock_irq_mask) 
+	{
+		if(door_state == UNLOCKED) lock_door();
+		else if (door_state == LOCKED) unlock_door();
+	}
+	// flag cleared with the global interrupt in the main
 	
-	if(door_state == UNLOCKED) lock_door();
-	else if (door_state == LOCKED) unlock_door();	
 }
 
 void pit_locking_isr()
