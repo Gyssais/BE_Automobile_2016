@@ -13,8 +13,8 @@
 
 /************************ COMMON PART ***********************************/
 // Choix module
-//#define BCM //Recepteur tests CAN
-#define DCM //Emetteur tests CAN
+#define BCM //Recepteur tests CAN
+//#define DCM //Emetteur tests CAN
 //#define IC
 
 /*
@@ -44,12 +44,20 @@ extern uint8_t LED_status;
  */
 #define LENGTH_FRAME 1
 
-// Codes des infos Ã  transmettre par le CAN
-// Attention ! : la fonction TransmitMsg(...) prend en paramÃ¨tre un pointeur sur la donnÃ©e Ã  transmettre,
-// il faut donc dÃ©finir une variable ayant la valeur dÃ©finie par le #define (voir BCM_appli.c).
-// TODO Si quelqu'un a une meilleure, je prends
+// Codes des infos à transmettre par le CAN - TOUT PASSE PAR LE BCM
+// Attention ! : la fonction TransmitMsg(...) prend en paramètre un pointeur sur la donnée Ã  transmettre,
+// il faut donc définir une variable ayant la valeur définie par le #define (voir BCM_appli.c).
 
-// Statut portes : de DCM vers IC
+/* EXEMPLE:
+ * 		void ma_fonction () {
+ * 			uint8_t TxData;
+ * 			...
+ * 			TxData = Ma_Data;
+ * 			TransmitMsg (&TxData, LENGTH_FRAME, ID_Destinataire);
+ * 		}
+ */
+
+// Statut portes : de DCM vers BCM
 #define porte_G_verrouillee  		1
 #define porte_G_deverouille 		2
 #define probleme_porte_G 			3
@@ -64,7 +72,7 @@ extern uint8_t LED_status;
 #define antihijacking_active 		9
 #define antihijacking_desactive 	10
 
-// Statut fenÃªtres : de DCM vers IC
+// Statut fenêtres : de DCM vers BCM
 #define vitres_en_fermeture 		11
 
 #define vitre_G_fermee 				12	// DCM :done
@@ -81,7 +89,7 @@ extern uint8_t LED_status;
 #define pincement_vitre_D 			22
 #define pas_pincement_vitre_D 		23
 
-// De DCM vers IC
+// De BCM vers IC
 #define probleme_batterie 			24
 #define pas_probleme_batterie 		25
 

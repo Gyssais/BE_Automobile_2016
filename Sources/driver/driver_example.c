@@ -9,9 +9,10 @@
 #include "current_monitoring.h"
 #include "gpio.h"
 
+#ifdef DEBUG_DCM
+
 #define AD_PIN PB_4
 
-/*
 void eirq0_isr()
 {
 	
@@ -385,4 +386,5 @@ void test_filter()
 	}
 }
 
-*/
+#endif
+

@@ -4,6 +4,7 @@
  *  Created on: Jan 11, 2017
  *      Author: Theo
  */
+#ifdef DCM
 
 #include "window.h"
 #include "pwm.h"
@@ -127,7 +128,7 @@ void window_up()
 	digitalWrite(PA_1,1);
 	digitalWrite(PA_0,0);   
 	//initEMIOS_0ch21(900);
-	start_PWM_0(21, 90); //Rapport cyclique de 90% à cause de PA_0 à 0
+	start_PWM_0(21, 90); //Rapport cyclique de 90% Ã  cause de PA_0 Ã  0
 #endif
 	
 	//ADC.THRHLR[CM_WTCH].B.THRH = CM_WTCH_HIGH_T_UP; // test two threshold
@@ -145,7 +146,7 @@ void window_down()
 	digitalWrite(PA_1,1);
 	digitalWrite(PA_0,1); 
 	//initEMIOS_0ch21(300);
-	start_PWM_0(21, 30); //Rapport cyclique de 70% à cause de PA_0 à 1
+	start_PWM_0(21, 30); //Rapport cyclique de 70% Ã  cause de PA_0 Ã  1
 #endif
 	
 	//ADC.THRHLR[CM_WTCH].B.THRH = CM_WTCH_HIGH_T_DOWN; // test two threshold
@@ -170,3 +171,4 @@ void window_stop()
 	
 }
 
+#endif

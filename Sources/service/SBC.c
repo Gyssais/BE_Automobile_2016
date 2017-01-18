@@ -13,6 +13,7 @@
  * 		initialise_SPI_DRIVER();
 		SPI[1].init(SPI_BAUD_62500, SPI_DELAY_DEFAULT);
 		Init_SBC_DBG();
+		
  */
 
 #include "MPC5604B.h"
@@ -192,15 +193,11 @@ uint8_t ReceiveMsg(void) {
 	dummy = CAN_1.TIMER.R;                	/* Read TIMER to unlock message buffers */    
 	CAN_1.IFRL.R = 0x00000002;           	/* Clear CAN 1 MB 0 flag */
 	
-#ifdef BCM
-	Data_treatment_BCM(RxLENGTH,RxDATA);
-#endif
-	
 	return RxDATA[0];
 	
-	}
+}
 	
-	
+/*	
 void Data_treatment_BCM( uint8_t length , uint8_t * data){
 	if (length==2){
 		switch(data[0]){
@@ -216,5 +213,6 @@ void Data_treatment_BCM( uint8_t length , uint8_t * data){
 			
 		}
 	}
-}
+}*/
+
 
