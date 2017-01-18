@@ -20,6 +20,25 @@ uint8_t nb_sending_try=0;
 uint8_t etat_porte=0;
 uint8_t status_antihijacking=0;
 
+void button_bcm()
+{
+	uint8_t TxData;
+	if (etat_porte==0)
+			{
+				TxData = fermer_porte_G;
+				/*send lock_door to DCM via the CAN*/
+				TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+				etat_porte=1;
+			}
+			else
+			{
+				TxData = ouvrir_porte_G;
+				/*send unlock_door to DCM via the CAN*/
+				TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+				etat_porte=0;
+			}
+}
+
 /*
  * Fonction principale du BCM, doit tourner en permanence
  */
@@ -109,22 +128,24 @@ void Rx_management_bcm (uint8_t Data) {
 
 void door_management() {
 	uint8_t TxData;
+	/* Gere par interruption (button_bcm)
     if (bouton4() == 1) {
     	if (etat_porte==0)
     	{
     		TxData = fermer_porte_G;
-    		/*send lock_door to DCM via the CAN*/
+    		//send lock_door to DCM via the CAN
     		TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
     		etat_porte=1;
     	}
     	else
     	{
     		TxData = ouvrir_porte_G;
-    		/*send unlock_door to DCM via the CAN*/
+    		//send unlock_door to DCM via the CAN
     		TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
     		etat_porte=0;
     	}
     }
+    */
     
     if ( (etat_porte==0) && (read_speed() >= 10))
     {

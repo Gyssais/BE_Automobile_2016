@@ -2,7 +2,10 @@
 #include "Buttons_management.h"
 #include "pin.h"
 #include "adc.h"
+#include "gpio.h"
 
+
+#define BUTTON_LOCK PA_3
 
 void init_speed_button()
 {
@@ -29,10 +32,15 @@ void init_LED()
 
 void init_buttons()
 {
+	int error;
+	
 	 SIU.PCR[PE_0].R = 0x0100;
 	 SIU.PCR[PE_1].R = 0x0100; 
 	 SIU.PCR[PE_2].R = 0x0100;
 	 SIU.PCR[PE_3].R = 0x0100;
+	 
+	 SIU.PCR[BUTTON_LOCK].R = 0x0100;
+	 error = setup_EIRQ_pin(BUTTON_LOCK, FALLING);
 }
 
 

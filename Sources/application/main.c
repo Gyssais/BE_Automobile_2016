@@ -26,17 +26,17 @@
 void buttons_isr()
 {
 #ifdef BCM
-
+	button_bcm();
 #endif	
 #ifdef DCM
 	
-	buttons_w_isr();
-	buttons_l_isr();
+	buttons_w_isr(); // boutons fenetre
+	buttons_l_isr(); // boutons verrou
 #endif
 	
 	/* clear interrupt flag */
 	// clear all EIRQ0 isr
-	SIU.ISR.R = 0xFFFF;
+	SIU.ISR.R = 0x00FF;
 }
 
 
@@ -61,7 +61,7 @@ void init()
 	init_window();
 	init_locking();
 	
-	/* setup the EIRQ0 for button */
+	
 	
 	
 #endif
@@ -69,6 +69,7 @@ void init()
 #ifdef BCM
 	init_appli_BCM();
 #endif
+	/* setup the EIRQ0 for button */
 	attachInterrupt_EIRQ0(buttons_isr, EIRQ0_PRIORITY);
 }
 
