@@ -21,6 +21,7 @@
 #include "config.h"
 #include "SBC.h"
 #include "spi_drv.h"
+#include "can_drv.h"
 #include "define.h"
 #include "interrupt_number.h"
 #include "Buttons_management.h"
