@@ -40,7 +40,6 @@ uint16_t Read_voltage_value(void){
 	return 0;
 }
 
-
 /*
 void Interrupt_Rx_CAN1 () {
 
