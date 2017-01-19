@@ -133,24 +133,6 @@ void Rx_management_bcm (uint8_t Data) {
 
 void door_management() {
 	uint8_t TxData;
-	
-	//Gere par interruption (button_bcm)
-    if (bouton4() == 1) {
-    	if (etat_porte==0)
-    	{
-    		TxData = fermer_porte_G;
-    		//send lock_door to DCM via the CAN
-    		TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
-    		etat_porte=1;
-    	}
-    	else
-    	{
-    		TxData = ouvrir_porte_G;
-    		//send unlock_door to DCM via the CAN
-    		TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
-    		etat_porte=0;
-    	}
-    }
     
     
     if ( (etat_porte==0) && (read_speed() >= 10))
