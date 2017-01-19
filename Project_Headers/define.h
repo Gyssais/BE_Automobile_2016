@@ -124,7 +124,7 @@ extern uint8_t LED_status;
 
 
 
-//#ifdef DCM /********************* DCM PART *****************************/
+#ifdef DCM /********************* DCM PART *****************************/
 
 /* PIT utilization */
 #define PIT_ADC			3  // can't be changed !
@@ -181,8 +181,13 @@ extern uint8_t window_position;
 extern uint8_t window_state;
 extern uint8_t door_state;
 
-//#endif /***************** END DCM PART ******************/
+#endif /***************** END DCM PART ******************/
 
+#ifdef BCM
 
+#define PIT_RAIN 4
+#define PIT_LOCK 5
+
+#endif
 
 #endif /* DEFINE_H_ */

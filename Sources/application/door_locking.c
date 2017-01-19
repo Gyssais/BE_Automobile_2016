@@ -7,6 +7,7 @@
 
 #include "door_locking.h"
 
+#ifdef DCM
 
 MC33887_pinout locking_HB = {IN1_L, IN2_L, D2_L, EN_L, FS_L, 0};
 
@@ -69,3 +70,5 @@ void unlock_door()
 	start_HBridge(&locking_HB, SENS2);
 	door_state = UNLOCKED;
 }
+
+#endif /* DCM */

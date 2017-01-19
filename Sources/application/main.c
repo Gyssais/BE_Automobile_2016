@@ -103,7 +103,7 @@ void init()
 #endif
 	/* setup the EIRQ0 for button */
 	attachInterrupt_EIRQ0(buttons_isr, EIRQ0_PRIORITY);
-	attachInterrupt_EIRQ1(fault_isr, EIRQ1_PRIORITY);
+	//attachInterrupt_EIRQ1(fault_isr, EIRQ1_PRIORITY);
 }
 
 /*
