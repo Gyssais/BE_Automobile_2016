@@ -188,6 +188,8 @@ extern uint8_t door_state;
 #define PIT_RAIN 4
 #define PIT_LOCK 5
 
+#define SPEED_SENSOR PB_10
+
 #endif
 
 #endif /* DEFINE_H_ */

@@ -176,8 +176,8 @@ void send_rain_message() // Executée sur interruption timer
 
 void window_management() {
 	
-	setupChannelPIT(4,5000); // 5 secondes
-	setupISRChannelPIT(4, send_rain_message,10);
+	setupChannelPIT(PIT_RAIN,5000); // 5 secondes
+	setupISRChannelPIT(PIT_RAIN, send_rain_message,10);
 	
     if (det_rain() == 1) {
         if(read_speed() < 2) {
