@@ -9,15 +9,17 @@
 #include "MC33887.h"
 
 
-void init_HBridge(const MC33887_pinout * pinout)
-{
-
+void init_HBridge(MC33887_pinout * pinout)
+{	
+	(pinout->FS_irq_mask) = (1<<pin_to_EIRQ(pinout->FS));
+	
 	SIU.PCR[pinout->IN1].R = 0x0200;  // out
 	SIU.PCR[pinout->IN2].R = 0x0200;  // out
 	SIU.PCR[pinout->EN].R = 0x0200;	 // out
 	SIU.PCR[pinout->D2].R = 0x0200;   // out
 	SIU.PCR[pinout->FS].R = 0x0100;   // in
 
+	setup_EIRQ_pin(pinout->FS, FALLING);
 	
 	SIU.GPDO[pinout->IN1].B.PDO = 0;
 	SIU.GPDO[pinout->IN2].B.PDO = 0;

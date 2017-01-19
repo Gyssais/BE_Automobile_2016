@@ -24,20 +24,51 @@
 /*************** Public function            **********/
 
 
+void fault_isr()
+{
+	uint8_t msg =0;
+	
+#ifdef BCM
+	//TODO SBC fault signal handling
+#endif
+	
+#ifdef DCM
+	//TODO SBC fault signal handling
+	
+	if(SIU.ISR.R & window_HB.FS_irq_mask) 
+	{
+		msg = probleme_vitre_G;
+		TransmitMsg(&msg, LENGTH_FRAME, ID_BCM);
+	}
+	
+	if(SIU.ISR.R & locking_HB.FS_irq_mask)
+	{
+		msg = probleme_lock_G;
+		TransmitMsg(&msg, LENGTH_FRAME, ID_BCM);
+	}
+	
+#endif
+	
+	/* clear interrupt flag */
+	// clear all EIRQ1 isr
+	SIU.ISR.R = 0xFF00;
+}
+
+
 void buttons_isr()
 {
 #ifdef BCM
-
+	button_bcm();
 #endif	
 #ifdef DCM
 	
-	buttons_w_isr();
-	buttons_l_isr();
+	buttons_w_isr(); // boutons fenetre
+	buttons_l_isr(); // boutons verrou
 #endif
 	
 	/* clear interrupt flag */
 	// clear all EIRQ0 isr
-	SIU.ISR.R = 0xFFFF;
+	SIU.ISR.R = 0x00FF;
 }
 
 
@@ -51,23 +82,28 @@ void init()
 	initCAN1();
 	
 	init_LED();
-	LED_off(1);
-	LED_off(2);
+	LED_on(1);
+	LED_on(2);
 	LED_off(3);
 	LED_off(4);
 	init_buttons();
+	
 #ifdef DCM
-	
-	
 	
 	init_window();
 	init_locking();
 	
-	/* setup the EIRQ0 for button */
+	
 	
 	
 #endif
+
+#ifdef BCM
+	init_appli_BCM();
+#endif
+	/* setup the EIRQ0 for button */
 	attachInterrupt_EIRQ0(buttons_isr, EIRQ0_PRIORITY);
+	attachInterrupt_EIRQ1(fault_isr, EIRQ1_PRIORITY);
 }
 
 /*
@@ -94,7 +130,7 @@ void Interrupt_Rx_CAN1 () {
 	Rx_management_bcm(Data);
 #endif
 #ifdef DCM
-	//TODO: Rx_mangement_dcm();
+	
 	uint8_t Data = ReceiveMsg();
 	
 	switch (Data)

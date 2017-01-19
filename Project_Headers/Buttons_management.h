@@ -3,6 +3,8 @@
 
 #include "door_locking.h"
 
+void button_bcm();
+
 /* 
  * Initialisation de l'ADC pour lecture vitesse (potentiomètre de la carte)
  */

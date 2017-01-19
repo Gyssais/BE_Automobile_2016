@@ -17,6 +17,9 @@
 
 #define LOCKING_TIME	70 // ms. motor on time for locking/unlocking
 
+
+extern MC33887_pinout locking_HB;
+
 int init_locking();
 int setup_buttons_l();
 
