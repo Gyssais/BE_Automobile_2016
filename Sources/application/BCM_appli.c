@@ -17,6 +17,27 @@
 
 uint8_t Ack_Leve_Vitre=0;
 uint8_t nb_sending_try=0;
+uint8_t etat_porte=0;
+uint8_t status_antihijacking=0;
+
+void button_bcm()
+{
+	uint8_t TxData;
+	if (etat_porte==0)
+			{
+				TxData = fermer_porte_G;
+				/*send lock_door to DCM via the CAN*/
+				TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+				etat_porte=1;
+			}
+			else
+			{
+				TxData = ouvrir_porte_G;
+				/*send unlock_door to DCM via the CAN*/
+				TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+				etat_porte=0;
+			}
+}
 
 /*
  * Fonction principale du BCM, doit tourner en permanence
@@ -27,6 +48,12 @@ void appli_BCM()
 	window_management();	//the rise of the door window glass's 
 	send_informations();	//send information (rain,battery,speed)
 }
+
+void init_appli_BCM()
+{
+	init_speed_button();
+}
+
 
 /*
  * Interruption lors de la réception d'un message pour le BCM
@@ -101,18 +128,34 @@ void Rx_management_bcm (uint8_t Data) {
 
 void door_management() {
 	uint8_t TxData;
+	/* Gere par interruption (button_bcm)
     if (bouton4() == 1) {
-    	TxData = fermer_porte_G;
-    	/*send lock_door to DCM via the CAN*/
-    	TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
-   	 }
-     if (read_speed() >= 10) {
+    	if (etat_porte==0)
+    	{
+    		TxData = fermer_porte_G;
+    		//send lock_door to DCM via the CAN
+    		TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+    		etat_porte=1;
+    	}
+    	else
+    	{
+    		TxData = ouvrir_porte_G;
+    		//send unlock_door to DCM via the CAN
+    		TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+    		etat_porte=0;
+    	}
+    }
+    */
+    
+    if ( (etat_porte==0) && (read_speed() >= 10))
+    {
     	TxData = fermer_porte_G;
     	/*send lock_door to  DCM via the CAN*/
     	TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
     	TxData = antihijacking_active;
     	TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
-     }
+    	etat_porte = 1;
+    }
 }
 
 void send_rain_message() // Executée sur interruption timer
@@ -130,8 +173,8 @@ void window_management() {
 	setupISRChannelPIT(4, send_rain_message,10);
 	
     if (det_rain() == 1) {
-        if(read_speed() == 0) {
-        	/*send close_window to DCM via the CAN*/
+        if(read_speed() < 2) {
+        	//send close_window to DCM via the CAN
         	send_rain_message();
         	startChannelPIT(4);
         	while(Ack_Leve_Vitre == 0 && nb_sending_try<6)

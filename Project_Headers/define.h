@@ -13,8 +13,8 @@
 
 /************************ COMMON PART ***********************************/
 // Choix module
-//#define BCM //Recepteur tests CAN
-#define DCM //Emetteur tests CAN
+#define BCM //Recepteur tests CAN
+//#define DCM //Emetteur tests CAN
 //#define IC
 
 /*
@@ -99,6 +99,8 @@ extern uint8_t LED_status;
 #define fermer_porte_G				28	// DCM :done
 #define fermer_porte_D				29
 
+#define ouvrir_porte_G				31
+
 #define pluie						30
 #define ouvrir_fenetre_G			31
 
@@ -114,7 +116,7 @@ extern uint8_t LED_status;
 
  /* EIRQ isr priority */
 
-#define BUTTON_PRIORITY				3
+#define BUTTON_PRIORITY				15
 #define FAULT_PRIORITY				14 // FS from H-bridge and SBC
 
 #define EIRQ0_PRIORITY		BUTTON_PRIORITY

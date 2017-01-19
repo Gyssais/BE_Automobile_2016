@@ -15,6 +15,9 @@
  * Fonction pricipale du BCM, doit tourner en permanance
  */
 void appli_BCM();
+void init_appli_BCM();
+
+//void buttons_w_isr();
 
 void Rx_management_bcm(uint8_t Data);
 void send_rain_message();
