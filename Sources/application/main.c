@@ -10,6 +10,7 @@
 #include "adc.h"
 #include "define.h"
 #include "spi_drv.h"
+#include "can_drv.h"
 #include "pit.h"
 #include "Buttons_management.h"
 #include "current_monitoring.h"
