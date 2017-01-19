@@ -15,7 +15,7 @@
 #include "current_monitoring.h"
 #include "driver_example.h"
 #include "window.h"
-#include "modeinchaalah.h"
+#include "mode_power.h"
 
 /*************** Private function prototype **********/
 
