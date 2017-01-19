@@ -10,6 +10,7 @@
 #include "adc.h"
 #include "define.h"
 #include "spi_drv.h"
+#include "can_drv.h"
 #include "pit.h"
 #include "Buttons_management.h"
 #include "current_monitoring.h"
@@ -21,6 +22,37 @@
 /*************** Private function prototype **********/
 
 /*************** Public function            **********/
+
+
+void fault_isr()
+{
+	uint8_t msg =0;
+	
+#ifdef BCM
+	//TODO SBC fault signal handling
+#endif
+	
+#ifdef DCM
+	//TODO SBC fault signal handling
+	
+	if(SIU.ISR.R & window_HB.FS_irq_mask) 
+	{
+		msg = probleme_vitre_G;
+		TransmitMsg(&msg, LENGTH_FRAME, ID_BCM);
+	}
+	
+	if(SIU.ISR.R & locking_HB.FS_irq_mask)
+	{
+		msg = probleme_lock_G;
+		TransmitMsg(&msg, LENGTH_FRAME, ID_BCM);
+	}
+	
+#endif
+	
+	/* clear interrupt flag */
+	// clear all EIRQ1 isr
+	SIU.ISR.R = 0xFF00;
+}
 
 
 void buttons_isr()
@@ -71,6 +103,7 @@ void init()
 #endif
 	/* setup the EIRQ0 for button */
 	attachInterrupt_EIRQ0(buttons_isr, EIRQ0_PRIORITY);
+	//attachInterrupt_EIRQ1(fault_isr, EIRQ1_PRIORITY);
 }
 
 /*
@@ -97,7 +130,7 @@ void Interrupt_Rx_CAN1 () {
 	Rx_management_bcm(Data);
 #endif
 #ifdef DCM
-	//TODO: Rx_mangement_dcm();
+	
 	uint8_t Data = ReceiveMsg();
 	
 	switch (Data)

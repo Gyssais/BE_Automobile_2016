@@ -98,9 +98,16 @@ extern uint8_t LED_status;
 #define fermer_fenetre_D			27
 #define fermer_porte_G				28	// DCM :done
 #define fermer_porte_D				29
+
 #define ouvrir_porte_G				31
 
 #define pluie						30
+#define ouvrir_fenetre_G			31
+
+#define probleme_lock_G				32
+
+
+
 
 #define CAN_BUF_ISR_PRIORITY 		12 // priority for the CAN interruption. Same for all platform
 
@@ -112,10 +119,12 @@ extern uint8_t LED_status;
 #define BUTTON_PRIORITY				15
 #define FAULT_PRIORITY				14 // FS from H-bridge and SBC
 
+#define EIRQ0_PRIORITY		BUTTON_PRIORITY
+#define EIRQ1_PRIORITY		FAULT_PRIORITY   
 
 
 
-//#ifdef DCM /********************* DCM PART *****************************/
+#ifdef DCM /********************* DCM PART *****************************/
 
 /* PIT utilization */
 #define PIT_ADC			3  // can't be changed !
@@ -130,7 +139,7 @@ extern uint8_t LED_status;
 #define IN2_W		PC_5
 #define EN_W		PC_6
 #define D2_W		PC_7
-#define FS_W		PC_8
+#define FS_W		PC_14 // must support EIRQ1 
 #define FB_W		PB_4 // analog
 
 
@@ -139,7 +148,7 @@ extern uint8_t LED_status;
 #define IN2_L		PG_10
 #define EN_L		PG_11
 #define D2_L		PG_12
-#define FS_L		PG_13
+#define FS_L		PG_1 	// must support EIRQ1
 
 // window buttons
 #define BUTTON_UP	PA_6		
@@ -172,8 +181,13 @@ extern uint8_t window_position;
 extern uint8_t window_state;
 extern uint8_t door_state;
 
-//#endif /***************** END DCM PART ******************/
+#endif /***************** END DCM PART ******************/
 
+#ifdef BCM
 
+#define PIT_RAIN 4
+#define PIT_LOCK 5
+
+#endif
 
 #endif /* DEFINE_H_ */

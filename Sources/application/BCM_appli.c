@@ -24,19 +24,19 @@ void button_bcm()
 {
 	uint8_t TxData;
 	if (etat_porte==0)
-			{
-				TxData = fermer_porte_G;
-				/*send lock_door to DCM via the CAN*/
-				TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
-				etat_porte=1;
-			}
-			else
-			{
-				TxData = ouvrir_porte_G;
-				/*send unlock_door to DCM via the CAN*/
-				TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
-				etat_porte=0;
-			}
+	{
+		TxData = fermer_porte_G;
+		/*send lock_door to DCM via the CAN*/
+		TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+		etat_porte=1;
+	}
+	else
+	{
+		TxData = ouvrir_porte_G;
+		/*send unlock_door to DCM via the CAN*/
+		TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
+		etat_porte=0;
+	}
 }
 
 /*
@@ -46,12 +46,17 @@ void appli_BCM()
 {
 	door_management();		//door locking
 	window_management();	//the rise of the door window glass's 
-	send_informations();	//send information (rain,battery,speed)
+	//send_informations();	//send information (rain,battery,speed) -> gere par interruption sur timer
+
 }
 
 void init_appli_BCM()
 {
 	init_speed_button();
+	// Timer pour send_informations
+	setupChannelPIT(PIT_LOCK,10); // 5 secondes
+	setupISRChannelPIT(PIT_LOCK, send_informations, 100);
+	startChannelPIT(PIT_LOCK);
 }
 
 
@@ -128,7 +133,8 @@ void Rx_management_bcm (uint8_t Data) {
 
 void door_management() {
 	uint8_t TxData;
-	/* Gere par interruption (button_bcm)
+	
+	//Gere par interruption (button_bcm)
     if (bouton4() == 1) {
     	if (etat_porte==0)
     	{
@@ -145,7 +151,7 @@ void door_management() {
     		etat_porte=0;
     	}
     }
-    */
+    
     
     if ( (etat_porte==0) && (read_speed() >= 10))
     {
@@ -164,6 +170,7 @@ void send_rain_message() // Executée sur interruption timer
 	TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
 	// Pas de porte droite dans demo
 	nb_sending_try++;
+	PIT.CH[PIT_RAIN].TFLG.B.TIF =1;
 }
 
 
@@ -176,10 +183,10 @@ void window_management() {
         if(read_speed() < 2) {
         	//send close_window to DCM via the CAN
         	send_rain_message();
-        	startChannelPIT(4);
+        	startChannelPIT(PIT_RAIN);
         	while(Ack_Leve_Vitre == 0 && nb_sending_try<6)
         	{}	// Attente reception ACK
-        	stopChannelPIT(4);
+        	stopChannelPIT(PIT_RAIN);
         	nb_sending_try = 0;
         }
     }
@@ -208,6 +215,8 @@ void send_informations(){
 	TxData = (uint8_t) read_speed();
 	TxData = TxData|0b10000000; // Bit de poids fort Ã  1 -> Trame de vitesse
 	TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
+	
+	PIT.CH[PIT_LOCK].TFLG.B.TIF =1;
 }
 
 #endif
