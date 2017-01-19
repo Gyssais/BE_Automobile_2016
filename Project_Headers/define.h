@@ -21,7 +21,7 @@
  * Application global declarations. Must at the end replace config.h. Functions of main.c must be declared here.
  */
 void init();
-
+void delay(int ms); 
 
 // Pour debug
 extern uint8_t LED_status;
@@ -185,9 +185,12 @@ extern uint8_t door_state;
 
 #ifdef BCM
 
-#define PIT_RAIN 4
-#define PIT_LOCK 5
+#define PIT_RAIN 	4
+#define PIT_LOCK	5
+#define PIT_DELAYF	0
+#define SPEED_SENSOR	PB_10
 
+extern uint16_t speed;
 #endif
 
 #endif /* DEFINE_H_ */

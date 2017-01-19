@@ -24,6 +24,18 @@
 /*************** Public function            **********/
 
 
+void delay(int ms)
+{
+	setupChannelPIT(PIT_DELAYF, ms);
+	startChannelPIT(PIT_DELAYF);
+	
+	while(PIT.CH[PIT_DELAYF].TFLG.B.TIF !=1) {}
+	
+	stopChannelPIT(PIT_DELAYF);
+	clearInterruptFlagPIT(PIT_DELAYF);
+}
+
+
 void fault_isr()
 {
 	uint8_t msg =0;
@@ -152,6 +164,7 @@ void Interrupt_Rx_CAN1 () {
 
  int main(void) {
 	
+
 #ifdef TEST_EMISSION
 	uint8_t TxData;
 	uint8_t length;
@@ -170,7 +183,9 @@ void Interrupt_Rx_CAN1 () {
 		}
 #endif
 #ifdef BCM
-		appli_BCM();
+		//delay(50);
+		//speed = read_speed();
+		//appli_BCM();
 #endif
 #ifdef DCM
 		

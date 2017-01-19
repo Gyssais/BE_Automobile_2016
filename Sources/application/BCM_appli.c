@@ -20,6 +20,7 @@ uint8_t nb_sending_try=0;
 uint8_t etat_porte=0;
 uint8_t status_antihijacking=0;
 
+
 void button_bcm()
 {
 	uint8_t TxData;
@@ -44,10 +45,11 @@ void button_bcm()
  */
 void appli_BCM()
 {
+	speed = read_speed();
 	door_management();		//door locking
 	window_management();	//the rise of the door window glass's 
 	//send_informations();	//send information (rain,battery,speed) -> gere par interruption sur timer
-
+	PIT.CH[PIT_LOCK].TFLG.B.TIF =1;
 }
 
 void init_appli_BCM()
@@ -55,7 +57,7 @@ void init_appli_BCM()
 	init_speed_button();
 	// Timer pour send_informations
 	setupChannelPIT(PIT_LOCK,10); // 5 secondes
-	setupISRChannelPIT(PIT_LOCK, send_informations, 100);
+	setupISRChannelPIT(PIT_LOCK, appli_BCM, 100);
 	startChannelPIT(PIT_LOCK);
 }
 
@@ -135,7 +137,7 @@ void door_management() {
 	uint8_t TxData;
 	
 	//Gere par interruption (button_bcm)
-    if (bouton4() == 1) {
+   /* if (bouton4() == 1) {
     	if (etat_porte==0)
     	{
     		TxData = fermer_porte_G;
@@ -151,9 +153,9 @@ void door_management() {
     		etat_porte=0;
     	}
     }
+    */
     
-    
-    if ( (etat_porte==0) && (read_speed() >= 10))
+    if ( (etat_porte==0) && (speed >= 10))
     {
     	TxData = fermer_porte_G;
     	/*send lock_door to  DCM via the CAN*/
@@ -176,11 +178,11 @@ void send_rain_message() // Executée sur interruption timer
 
 void window_management() {
 	
-	setupChannelPIT(4,5000); // 5 secondes
-	setupISRChannelPIT(4, send_rain_message,10);
+	setupChannelPIT(PIT_RAIN,5000); // 5 secondes
+	setupISRChannelPIT(PIT_RAIN, send_rain_message,10);
 	
     if (det_rain() == 1) {
-        if(read_speed() < 2) {
+        if(speed < 2) {
         	//send close_window to DCM via the CAN
         	send_rain_message();
         	startChannelPIT(PIT_RAIN);
@@ -212,11 +214,11 @@ void send_informations(){
 	}
 	
 	/*read speed values and send them to the instrument cluster via the CAN */
-	TxData = (uint8_t) read_speed();
+	TxData = (uint8_t) speed;
 	TxData = TxData|0b10000000; // Bit de poids fort Ã  1 -> Trame de vitesse
 	TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 	
-	PIT.CH[PIT_LOCK].TFLG.B.TIF =1;
+	//PIT.CH[PIT_LOCK].TFLG.B.TIF =1; // now the isr is appli_BCM
 }
 
 #endif

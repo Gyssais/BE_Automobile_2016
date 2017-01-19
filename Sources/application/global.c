@@ -10,6 +10,10 @@
 // Pour debug
 uint8_t LED_status=0;
 
+#ifdef BCM
+uint16_t speed =0;
+#endif
+
 #ifdef DCM
 uint8_t window_position = UNKNOW;
 uint8_t window_state = STOPPED;

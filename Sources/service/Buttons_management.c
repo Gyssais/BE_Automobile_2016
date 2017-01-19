@@ -10,14 +10,14 @@
 void init_speed_button()
 {
     setupADC();
-    setupPin_ADC(PB_10);
+    setupPin_ADC(SPEED_SENSOR);
     enableADC();
 }
 
 
 uint16_t read_speed()  
 { 
-	uint16_t speed= analogRead(PB_10)/32;
+	uint16_t speed= analogRead(SPEED_SENSOR)/32;
     return speed;
 }
 
