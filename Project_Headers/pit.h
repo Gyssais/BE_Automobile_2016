@@ -18,5 +18,6 @@ void setupChannelPIT(unsigned int channel, unsigned int period_ms); // setup the
 void startChannelPIT(unsigned int channel);
 void stopChannelPIT(unsigned int channel);
 void setupISRChannelPIT(unsigned int channel, INTCInterruptFn isr, int priority);
+void clearInterruptFlagPIT(unsigned int channel);
 int PIT_to_ISR_num(int channel);
 #endif /* PIT_H_ */

@@ -37,6 +37,11 @@ void stopChannelPIT(unsigned int channel)
 	PIT.CH[channel].TCTRL.B.TEN = 0;
 }
 
+void clearInterruptFlagPIT(unsigned int channel)
+{
+	if(channel <6) PIT.CH[channel].TFLG.B.TIF =1;
+}
+
 
 int PIT_to_ISR_num(int channel)
 {
