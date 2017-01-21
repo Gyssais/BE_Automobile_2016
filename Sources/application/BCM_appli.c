@@ -177,7 +177,7 @@ void window_management() {
 	setupISRChannelPIT(4, send_rain_message,10);
 	
     if (det_rain() == 1) {
-        if(read_speed() < 2) {
+        if(speed < 2) {
         	//send close_window to DCM via the CAN
         	send_rain_message();
         	startChannelPIT(PIT_RAIN);
