@@ -18,11 +18,16 @@
 uint8_t Ack_Leve_Vitre=0;
 uint8_t nb_sending_try=0;
 uint8_t etat_porte=0;
-uint8_t status_antihijacking=0;
+uint8_t autoriser_antihijacking=1; //autorise par defaut
+uint8_t speed=0;
+uint8_t antihijacking_actif=0;
+uint8_t old_antihijacking_actif=0;
 
 void button_bcm()
 {
 	uint8_t TxData;
+	autoriser_antihijacking=0; //desactivation antihijacking -> mode manuel prioritaire
+	antihijacking_actif=0;
 	if (etat_porte==0)
 	{
 		TxData = fermer_porte_G;
@@ -44,7 +49,7 @@ void button_bcm()
  */
 void appli_BCM()
 {
-	door_management();		//door locking
+	//door_management();		//door locking
 	window_management();	//the rise of the door window glass's 
 	//send_informations();	//send information (rain,battery,speed) -> gere par interruption sur timer
 
@@ -54,9 +59,14 @@ void init_appli_BCM()
 {
 	init_speed_button();
 	// Timer pour send_informations
-	setupChannelPIT(PIT_LOCK,10); // 5 secondes
-	setupISRChannelPIT(PIT_LOCK, send_informations, 100);
+	setupChannelPIT(PIT_LOCK,10); // 10 ms
+	setupISRChannelPIT(PIT_LOCK, send_informations, 20);
 	startChannelPIT(PIT_LOCK);
+	// Timer pour antihijacking
+	setupChannelPIT(PIT_HIJACK,1000); // 1 s
+	setupISRChannelPIT(PIT_HIJACK, door_management, 50);
+	startChannelPIT(PIT_HIJACK);
+	
 }
 
 
@@ -133,17 +143,22 @@ void Rx_management_bcm (uint8_t Data) {
 
 void door_management() {
 	uint8_t TxData;
-    
-    
-    if ( (etat_porte==0) && (read_speed() >= 10))
+    if ( (autoriser_antihijacking==1) && (etat_porte==0) && (speed >= 10))
     {
     	TxData = fermer_porte_G;
     	/*send lock_door to  DCM via the CAN*/
     	TransmitMsg(&TxData, LENGTH_FRAME, ID_DCM);
-    	TxData = antihijacking_active;
-    	TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
+    	//TxData = antihijacking_active;
+    	//TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
+    	antihijacking_actif=1;
     	etat_porte = 1;
     }
+    else if (speed < 10)
+    {
+    	autoriser_antihijacking=1;
+    	antihijacking_actif=0;
+    }
+    PIT.CH[PIT_HIJACK].TFLG.B.TIF =1;
 }
 
 void send_rain_message() // Executée sur interruption timer
@@ -193,9 +208,23 @@ void send_informations(){
 		TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 	}
 	
+	if (old_antihijacking_actif != antihijacking_actif)
+	{
+		if (antihijacking_actif == 1) {
+			TxData = antihijacking_active;
+			TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);	
+		}
+		else {
+			TxData = antihijacking_desactive;
+			TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);	
+		}
+		
+		old_antihijacking_actif = antihijacking_actif;
+	}
+	
 	/*read speed values and send them to the instrument cluster via the CAN */
-	TxData = (uint8_t) read_speed();
-	TxData = TxData|0b10000000; // Bit de poids fort Ã  1 -> Trame de vitesse
+	speed = (uint8_t) read_speed();
+	TxData = speed|0b10000000; // Bit de poids fort Ã  1 -> Trame de vitesse
 	TransmitMsg(&TxData, LENGTH_FRAME, ID_IC);
 	
 	PIT.CH[PIT_LOCK].TFLG.B.TIF =1;
